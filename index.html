@@ -10,7 +10,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250611';
+  const APP_VERSION = '20250612';
   const cached = localStorage.getItem('app_version');
   if (cached && cached !== APP_VERSION) {
     localStorage.setItem('app_version', APP_VERSION);
@@ -1882,7 +1882,7 @@ img,video{max-width:100%;height:auto}
               <span class="material-symbols-outlined text-on-surface-variant text-lg">psychology_alt</span>My Predictions
             </button>
             <div class="border-t border-surface-container-highest">
-              <button onclick='signOut(auth)' class="w-full text-left px-4 py-3 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center gap-3 text-error">
+              <button onclick='doSignOut()' class="w-full text-left px-4 py-3 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center gap-3 text-error">
                 <span class="material-symbols-outlined text-lg">logout</span>Sign Out
               </button>
             </div>
@@ -2140,7 +2140,7 @@ img,video{max-width:100%;height:auto}
     // If already signed in as admin, open admin panel directly
     if (state.isAdmin) { openAdminPanel(); return; }
     // If signed in but not admin, this button signs them out
-    if (state.currentUser) { signOut(auth); return; }
+    if (state.currentUser) { doSignOut(); return; }
     // Not signed in — open the dedicated admin login modal
     document.getElementById('auth-modal').classList.remove('hidden');
     document.getElementById('auth-modal').classList.add('flex');
@@ -2279,6 +2279,8 @@ img,video{max-width:100%;height:auto}
       t.classList.remove('translate-y-0', 'opacity-100');
     }, 3000);
   }
+  // Expose signOut globally for inline onclick handlers
+  window.doSignOut = () => signOut(auth);
   window.showSaveToast = showSaveToast;
 
   // ── Book note (any logged-in user can edit) ────────────────────────────
