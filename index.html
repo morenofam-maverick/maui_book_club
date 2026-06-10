@@ -10,7 +10,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250701';
+  const APP_VERSION = '20250702';
   const cached = localStorage.getItem('app_version');
   if (cached && cached !== APP_VERSION) {
     localStorage.setItem('app_version', APP_VERSION);
@@ -1125,25 +1125,27 @@ img,video{max-width:100%;height:auto}
           <span id="buy-link-book-label">Purchase Book</span>
         </a>
       </div>
-      <!-- Chapter Overview — always visible, admin-editable inline -->
-      <div class="max-w-2xl mt-6 bg-surface-container-low rounded-xl p-6 border border-outline-variant">
-        <h3 class="font-label-md text-primary uppercase tracking-widest mb-4">Chapter Overview</h3>
-        <p id="chapter-overview-intro"
-           class="font-body-md text-on-surface-variant text-sm leading-relaxed mb-4 cursor-pointer hover:opacity-70 transition-opacity"
-           onclick="editBookNote('chapter-overview-intro')"
-           title="Click to edit">The book features a split-timeline that alternates between the past and the present, told by seven different characters.</p>
+      <!-- Chapter Overview — always visible, fully inline-editable by admins -->
+      <div id="chapter-overview-wrap" class="max-w-2xl mt-6 bg-surface-container-low rounded-xl p-6 border border-outline-variant">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-label-md text-primary uppercase tracking-widest">Chapter Overview</h3>
+          <button id="chapter-add-bullet-btn" onclick="chapterAddBullet()" class="hidden items-center gap-1 text-secondary font-label-md text-xs hover:opacity-70 transition-opacity">
+            <span class="material-symbols-outlined text-sm">add_circle</span>Add bullet
+          </button>
+        </div>
+        <p id="chapter-overview-intro" class="font-body-md text-on-surface-variant text-sm leading-relaxed mb-4">The book features a split-timeline that alternates between the past and the present, told by seven different characters.</p>
         <ul id="chapter-overview-bullets" class="space-y-2">
-          <li class="flex items-start gap-2 font-body-md text-sm text-on-surface">
+          <li class="chapter-bullet flex items-start gap-2 font-body-md text-sm text-on-surface" data-index="0">
             <span class="material-symbols-outlined text-secondary text-sm mt-0.5 shrink-0">radio_button_checked</span>
-            <span>Chapters 1–21: Sets the scene and explores the arrival of the wedding party and their individual dark secrets.</span>
+            <span class="flex-1">Chapters 1–21: Sets the scene and explores the arrival of the wedding party and their individual dark secrets.</span>
           </li>
-          <li class="flex items-start gap-2 font-body-md text-sm text-on-surface">
+          <li class="chapter-bullet flex items-start gap-2 font-body-md text-sm text-on-surface" data-index="1">
             <span class="material-symbols-outlined text-secondary text-sm mt-0.5 shrink-0">radio_button_checked</span>
-            <span>Chapters 22–42: Focuses on the escalating drama and tension leading up to the night of the wedding.</span>
+            <span class="flex-1">Chapters 22–42: Focuses on the escalating drama and tension leading up to the night of the wedding.</span>
           </li>
-          <li class="flex items-start gap-2 font-body-md text-sm text-on-surface">
+          <li class="chapter-bullet flex items-start gap-2 font-body-md text-sm text-on-surface" data-index="2">
             <span class="material-symbols-outlined text-secondary text-sm mt-0.5 shrink-0">radio_button_checked</span>
-            <span>Chapters 43–73: The climax and unraveling of exactly who ended up dead and why.</span>
+            <span class="flex-1">Chapters 43–73: The climax and unraveling of exactly who ended up dead and why.</span>
           </li>
         </ul>
       </div>
@@ -1504,13 +1506,14 @@ img,video{max-width:100%;height:auto}
       const bulletsEl = document.getElementById('chapter-overview-bullets');
       if (bulletsEl) {
         bulletsEl.innerHTML = book.chapterBullets.map(b =>
-          `<li class="flex items-start gap-2 font-body-md text-sm text-on-surface">
+          `<li class="chapter-bullet flex items-start gap-2 font-body-md text-sm text-on-surface">
             <span class="material-symbols-outlined text-secondary text-sm mt-0.5 shrink-0">radio_button_checked</span>
-            <span>${escHtml(b)}</span>
+            <span class="flex-1">${escHtml(b)}</span>
           </li>`
         ).join('');
       }
     }
+    applyChapterOverview(book);
     const coverSize = book.coverSize || 'medium';
     const sizeMap = { small: '120px', medium: '180px', large: '260px' };
     const maxW = sizeMap[coverSize] || sizeMap.medium;
@@ -1818,6 +1821,7 @@ img,video{max-width:100%;height:auto}
         renderHomeMemberRows(state.members);
         renderProgressCards(state.members);
       }
+      applyChapterOverview(state.book);
     } else {
       state.userProfile = null;
       state.isAdmin = false;
@@ -2451,6 +2455,91 @@ img,video{max-width:100%;height:auto}
       bar.classList.add('hidden');
     }
   }
+  // ── Chapter Overview inline editing ───────────────────────────────────
+  function applyChapterOverview(book) {
+    const intro = document.getElementById('chapter-overview-intro');
+    const bulletsList = document.getElementById('chapter-overview-bullets');
+    const addBtn = document.getElementById('chapter-add-bullet-btn');
+    if (intro && book.chapterIntro) intro.textContent = book.chapterIntro;
+    if (bulletsList && book.chapterBullets?.length) {
+      bulletsList.innerHTML = book.chapterBullets.map((b, i) =>
+        `<li class="chapter-bullet flex items-start gap-2 font-body-md text-sm text-on-surface" data-index="${i}">
+          <span class="material-symbols-outlined text-secondary text-sm mt-0.5 shrink-0">radio_button_checked</span>
+          <span class="flex-1">${escHtml(b)}</span>
+        </li>`).join('');
+    }
+    if (state.isAdmin) {
+      if (addBtn) { addBtn.classList.remove('hidden'); addBtn.classList.add('flex'); }
+      if (intro) { intro.classList.add('cursor-pointer','hover:opacity-70','transition-opacity'); intro.title='Click to edit'; intro.onclick = () => chapterEditIntro(); }
+      rebuildBulletListeners();
+    } else {
+      if (addBtn) { addBtn.classList.add('hidden'); addBtn.classList.remove('flex'); }
+    }
+  }
+
+  function rebuildBulletListeners() {
+    document.querySelectorAll('.chapter-bullet').forEach(li => {
+      const span = li.querySelector('span.flex-1');
+      if (!span) return;
+      if (!li.querySelector('.chapter-del-btn')) {
+        const del = document.createElement('button');
+        del.className = 'chapter-del-btn w-6 h-6 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-error hover:text-white transition-colors shrink-0 ml-1';
+        del.innerHTML = '<span class="material-symbols-outlined text-sm">remove_circle</span>';
+        del.onclick = e => { e.stopPropagation(); li.remove(); chapterSaveToFirebase(); };
+        li.appendChild(del);
+      }
+      span.classList.add('cursor-pointer','hover:opacity-70','transition-opacity');
+      span.title = 'Click to edit';
+      span.onclick = () => chapterEditBullet(span);
+    });
+  }
+
+  async function chapterSaveToFirebase() {
+    const intro = document.getElementById('chapter-overview-intro')?.textContent?.trim();
+    const bullets = Array.from(document.querySelectorAll('.chapter-bullet span.flex-1')).map(s => s.textContent.trim()).filter(Boolean);
+    try { await updateDoc(doc(db, 'config', 'currentBook'), { chapterIntro: intro, chapterBullets: bullets }); showSaveToast('Chapter overview saved!'); } catch(e) { console.error(e); }
+  }
+
+  function chapterEditIntro() {
+    const el = document.getElementById('chapter-overview-intro');
+    if (!el || el.querySelector('textarea')) return;
+    const current = el.textContent.trim();
+    const ta = document.createElement('textarea');
+    ta.value = current; ta.rows = 3;
+    ta.className = 'w-full bg-white border-2 border-primary rounded-lg px-3 py-2 text-sm font-body-md text-on-surface focus:outline-none resize-none';
+    el.textContent = ''; el.appendChild(ta); ta.focus(); ta.select();
+    const save = async () => { el.textContent = ta.value.trim() || current; await chapterSaveToFirebase(); if (state.isAdmin) { el.classList.add('cursor-pointer'); el.onclick = () => chapterEditIntro(); } };
+    ta.addEventListener('blur', save);
+    ta.addEventListener('keydown', e => { if (e.key === 'Escape') el.textContent = current; });
+  }
+
+  function chapterEditBullet(span) {
+    if (span.querySelector('input')) return;
+    const current = span.textContent.trim();
+    const inp = document.createElement('input');
+    inp.type = 'text'; inp.value = current;
+    inp.className = 'w-full bg-white border-2 border-primary rounded-lg px-2 py-1 text-sm font-body-md text-on-surface focus:outline-none';
+    span.textContent = ''; span.appendChild(inp); inp.focus(); inp.select();
+    const save = async () => { span.textContent = inp.value.trim() || current; span.classList.add('cursor-pointer','hover:opacity-70'); span.onclick = () => chapterEditBullet(span); await chapterSaveToFirebase(); };
+    inp.addEventListener('blur', save);
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); inp.blur(); } if (e.key === 'Escape') span.textContent = current; });
+  }
+
+  async function chapterAddBullet() {
+    const list = document.getElementById('chapter-overview-bullets');
+    if (!list) return;
+    const li = document.createElement('li');
+    li.className = 'chapter-bullet flex items-start gap-2 font-body-md text-sm text-on-surface';
+    li.innerHTML = `<span class="material-symbols-outlined text-secondary text-sm mt-0.5 shrink-0">radio_button_checked</span><span class="flex-1 cursor-pointer hover:opacity-70 transition-opacity">New bullet — click to edit</span>`;
+    list.appendChild(li);
+    rebuildBulletListeners();
+    const span = li.querySelector('span.flex-1');
+    if (span) chapterEditBullet(span);
+    await chapterSaveToFirebase();
+  }
+  window.chapterAddBullet = chapterAddBullet;
+
+  // ── Checkpoint editing (admin only) ───────────────────────────────────
   function editCheckpoint(event, fieldId) {
     event.stopPropagation(); // prevent card navigating to predictions
     if (!state.isAdmin) return;
