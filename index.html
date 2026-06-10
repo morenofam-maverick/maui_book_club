@@ -10,7 +10,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250615';
+  const APP_VERSION = '20250616';
   const cached = localStorage.getItem('app_version');
   if (cached && cached !== APP_VERSION) {
     localStorage.setItem('app_version', APP_VERSION);
@@ -1023,21 +1023,8 @@ img,video{max-width:100%;height:auto}
               <div class="h-full bg-secondary transition-all duration-1000 w-[64%]"></div>
             </div>
           </div>
-          <div class="space-y-4">
-            <div class="flex items-center gap-3">
-              <img alt="Grandpa" data-editable="img" data-edit-id="member-arthur" class="w-8 h-8 rounded-full border border-surface-container-highest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbcjh4An31TPfvoLEoeBh44yka1D8vXGLgVvHoOEKb-k57Y1QyPX0wqv5codIX1Ml4BlHeRbpZHd6DjSFjxPICV4ltg_NHU2z-5KtHp0QlnZepN9sPCPEN5DyGUqv3e6qhttLI6DGL_dtMM6voV7lPSBwE5OHCXj9uyvyjyNrwGEpqN20_GuYbCA0kiOiCkBTKUN2aftejz63ofj1lPyCpPu-JhslaZMnQ-BwFIiv4wprf8s6PVb5m3ZAUVMZJKSMC84SNxOpSo_s"/>
-              <div class="flex-1">
-                <div class="flex justify-between text-xs font-label-md"><span data-home-member-name="arthur">Grandpa Arthur</span><span data-member-chapter="arthur">Chapter 14</span></div>
-                <div class="h-1 w-full bg-surface-container-highest rounded-full mt-1"><div class="h-full bg-primary rounded-full" data-member-progress="arthur" style="width:85%"></div></div>
-              </div>
-            </div>
-            <div class="flex items-center gap-3">
-              <img alt="Sarah" data-editable="img" data-edit-id="member-sarah" class="w-8 h-8 rounded-full border border-surface-container-highest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqHEYI2Z-XIxDLT-X4kDTAt-qckTiVabed6S5SHNMKLTLu-m5elhyhWqNtd14I5t_1CgcVRLGWi1TBvyGfdvWKAHn-bmIoR_vHOZuzIlhJfg5gYWxZdGbZrduklA6v3IuHh5wSTTEApdcDgIr1RF8H7oTXZoj2uJ1TCpRTJOaFA0kq3RHq1WQpAdomkc0gAQe-3cYeH74tpxrBi0Y5k4ARWXmK9dehQT7t_xtMkNScEhMms3AmtikPhxYRE9uuz0v-ZX9YYZ_Qe3c"/>
-              <div class="flex-1">
-                <div class="flex justify-between text-xs font-label-md"><span data-home-member-name="sarah">Sarah</span><span data-member-chapter="sarah">Chapter 11</span></div>
-                <div class="h-1 w-full bg-surface-container-highest rounded-full mt-1"><div class="h-full bg-primary rounded-full" data-member-progress="sarah" style="width:65%"></div></div>
-              </div>
-            </div>
+          <div id="home-member-rows" class="space-y-4">
+            <!-- Populated dynamically: shows logged-in user + top members by progress -->
           </div>
         </div>
         <button onclick="navigate('book')" class="mt-8 bg-primary text-on-primary py-3 px-8 rounded-full font-label-md transition-all hover:shadow-lg active:scale-95 self-start">Open Reader</button>
@@ -1645,6 +1632,41 @@ img,video{max-width:100%;height:auto}
         el.textContent = m.name || memberId;
       });
     });
+    renderHomeMemberRows(members);
+  }
+
+  function renderHomeMemberRows(members) {
+    const container = document.getElementById('home-member-rows');
+    if (!container) return;
+    const myMemberId = state.userProfile?.memberId;
+    const sorted = Object.entries(members).sort((a,b) => (b[1].progress||0)-(a[1].progress||0));
+    // Show logged-in user first, then up to 2 others
+    const myEntry = myMemberId ? sorted.find(([id]) => id === myMemberId) : null;
+    const others = sorted.filter(([id]) => id !== myMemberId).slice(0, myEntry ? 1 : 2);
+    const toShow = myEntry ? [myEntry, ...others] : others.slice(0,2);
+    if (toShow.length === 0) {
+      container.innerHTML = '<p class="text-xs text-on-surface-variant font-body-md opacity-60">No members yet.</p>';
+      return;
+    }
+    container.innerHTML = toShow.map(([id, m]) => {
+      const initials = (m.name||'?').slice(0,2).toUpperCase();
+      const avatarHtml = m.avatarUrl
+        ? `<img alt="${escHtml(m.name||'')}" class="w-8 h-8 rounded-full border border-surface-container-highest object-cover" src="${m.avatarUrl}"/>`
+        : `<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center border border-surface-container-highest shrink-0"><span class="text-on-primary font-bold" style="font-size:9px">${initials}</span></div>`;
+      const isMe = id === myMemberId;
+      return `<div class="flex items-center gap-3">
+        ${avatarHtml}
+        <div class="flex-1">
+          <div class="flex justify-between text-xs font-label-md">
+            <span>${escHtml(m.name||id)}${isMe ? ' <span class="text-primary">(you)</span>' : ''}</span>
+            <span>${escHtml(m.chapter||'')}</span>
+          </div>
+          <div class="h-1 w-full bg-surface-container-highest rounded-full mt-1">
+            <div class="h-full bg-primary rounded-full transition-all duration-700" style="width:${m.progress||0}%"></div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
   }
 
   // ── Firestore real-time listeners ──────────────────────────────────────
@@ -1820,19 +1842,7 @@ img,video{max-width:100%;height:auto}
         alohaText: 'Aloha, Miller Family!'
       });
     }
-    // Seed members
-    const defaultMembers = {
-      arthur: { name:'Grandpa Arthur', role:'Founding Member', bio:"Arthur believes every book is a conversation with the past. He prefers historical non-fiction and the classics that remind him of his youth in the Pacific.", books:'12', pages:'4,250', streak:'15d', favorite:'The Great Gatsby', progress:85, chapter:'Chapter 14', avatarUrl:'', size:'large', order:0 },
-      sarah:  { name:'Sarah', role:'The Librarian', bio:"Sarah keeps us organized. With a penchant for magical realism and contemporary poetry, she often introduces the family to indie authors and hidden gems.", books:'8', pages:'2,800', streak:'5d', favorite:'Circe by Madeline Miller', progress:65, chapter:'Chapter 11', avatarUrl:'', size:'medium', order:1 },
-      dad:    { name:'Dad', role:'The Skeptic', bio:"Dad challenges every plot twist and loves a good debate. His contrarian takes always keep discussions lively.", books:'7', pages:'2,400', streak:'3d', favorite:'The Road by Cormac McCarthy', progress:42, chapter:'Chapter 5', avatarUrl:'', size:'medium', order:2 },
-      leo:    { name:'Leo', role:'The Explorer', bio:"The youngest member, Leo loves Sci-Fi and speculative fiction. Always the first to finish a chapter.", books:'15', pages:'5,100', streak:'22d', favorite:'Dune by Frank Herbert', progress:12, chapter:'Chapter 1', avatarUrl:'', size:'medium', order:3 },
-      mom:    { name:'Mom', role:'The Heart', bio:"Mom brings warmth and emotional depth to every discussion. Her insights on characters always spark the best conversations.", books:'9', pages:'3,100', streak:'8d', favorite:'Little Fires Everywhere', progress:85, chapter:'Chapter 10', avatarUrl:'', size:'medium', order:4 },
-      elena:  { name:'Dr. Elena', role:'The Critic', bio:"Elena brings an academic eye to every reading. She looks for structural integrity and hidden symbolism in every page.", books:'10', pages:'3,500', streak:'12d', favorite:'Middlemarch by George Eliot', progress:60, chapter:'Chapter 8', avatarUrl:'', size:'medium', order:5 },
-    };
-    for (const [id, data] of Object.entries(defaultMembers)) {
-      const mDoc = await getDoc(doc(db, 'members', id));
-      if (!mDoc.exists()) await setDoc(doc(db, 'members', id), data);
-    }
+    // Members are no longer seeded — each user creates their own card on registration
   }
 
   // ── Auth state ─────────────────────────────────────────────────────────
@@ -1854,6 +1864,7 @@ img,video{max-width:100%;height:auto}
       renderHeaderUser(user);
       injectMyProgressButton();
       updateQuickProgressBar();
+      if (Object.keys(state.members).length) renderHomeMemberRows(state.members);
     } else {
       state.userProfile = null;
       state.isAdmin = false;
@@ -1987,7 +1998,6 @@ img,video{max-width:100%;height:auto}
     const name = document.getElementById('reg-name').value.trim();
     const email = document.getElementById('reg-email').value.trim();
     const pass = document.getElementById('reg-password').value;
-    const memberId = document.getElementById('reg-member-select').value;
     const errEl = document.getElementById('user-modal-error');
     const btn = document.getElementById('reg-submit-btn');
     if (!name || !email || !pass) { errEl.textContent = 'Please fill in all fields.'; return; }
@@ -1996,14 +2006,28 @@ img,video{max-width:100%;height:auto}
     try {
       const cred = await createUserWithEmailAndPassword(auth, email, pass);
       await updateProfile(cred.user, { displayName: name });
-      // Save user profile to Firestore
-      await setDoc(doc(db, 'userProfiles', cred.user.uid), {
-        displayName: name, email, memberId: memberId || null, isAdmin: false, createdAt: new Date().toISOString()
+
+      // Auto-create a Family page member card using their UID as the doc ID
+      const memberId = cred.user.uid;
+      const memberOrder = Object.keys(state.members).length;
+      await setDoc(doc(db, 'members', memberId), {
+        name, role: 'Member', bio: '', books: '0', pages: '0',
+        streak: '0d', favorite: '', avatarUrl: '', size: 'medium',
+        order: memberOrder, progress: 0, chapter: ''
       });
+
+      // Save user profile linked to their member card
+      await setDoc(doc(db, 'userProfiles', cred.user.uid), {
+        displayName: name, email, memberId, isAdmin: false,
+        createdAt: new Date().toISOString()
+      });
+
       closeUserModal();
-      showSaveToast(`Welcome, ${name}!`);
+      showSaveToast(`Welcome, ${name}! Your family card has been created.`);
     } catch(e) {
-      errEl.textContent = e.code === 'auth/email-already-in-use' ? 'That email is already registered.' : 'Registration failed: ' + e.message;
+      errEl.textContent = e.code === 'auth/email-already-in-use'
+        ? 'That email is already registered.'
+        : 'Registration failed: ' + e.message;
     }
     btn.textContent = 'Create Account'; btn.disabled = false;
   }
@@ -2051,12 +2075,10 @@ img,video{max-width:100%;height:auto}
 
   // Populate member selects in register + profile tabs
   function populateMemberSelects() {
-    const opts = `<option value="">— I'm not listed yet —</option>` +
-      Object.entries(state.members).map(([id,m]) => `<option value="${id}">${m.name||id}</option>`).join('');
-    ['reg-member-select','profile-member-select'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = opts;
-    });
+    const opts = `<option value="">— Not linked —</option>` +
+      Object.entries(state.members).map(([id,m]) => `<option value="${id}">${escHtml(m.name||id)}</option>`).join('');
+    const el = document.getElementById('profile-member-select');
+    if (el) el.innerHTML = opts;
   }
 
   // ── "Update My Progress" button on Progress page ───────────────────────
@@ -2191,13 +2213,31 @@ img,video{max-width:100%;height:auto}
     document.getElementById('admin-book-synopsis').value = state.book.synopsis || '';
     document.getElementById('admin-book-cover-preview').src = state.book.coverUrl || '';
     document.getElementById('admin-book-cover-preview').classList.toggle('hidden', !state.book.coverUrl);
-    // Fill member fields
-    Object.entries(state.members).forEach(([id, m]) => {
-      const prog = document.getElementById(`admin-progress-${id}`);
-      const chap = document.getElementById(`admin-chapter-${id}`);
-      if (prog) prog.value = m.progress || 0;
-      if (chap) chap.value = m.chapter || '';
-    });
+
+    // Build members list dynamically from state
+    const list = document.getElementById('admin-members-list');
+    if (list) {
+      const sorted = Object.entries(state.members).sort((a,b) => (a[1].order||0)-(b[1].order||0));
+      if (sorted.length === 0) {
+        list.innerHTML = '<p class="text-sm text-on-surface-variant font-body-md text-center py-4">No members yet. Members are created when users register.</p>';
+      } else {
+        list.innerHTML = sorted.map(([id, m]) => `
+          <div class="bg-surface-container-low rounded-xl p-4 border border-surface-container-highest">
+            <p class="font-label-md text-primary mb-3">${escHtml(m.name || id)}</p>
+            <div class="grid grid-cols-1 gap-3">
+              <div>
+                <label class="text-xs text-on-surface-variant font-label-md uppercase tracking-widest mb-1 block">Progress %</label>
+                <input id="admin-progress-${id}" type="number" min="0" max="100" class="w-full rounded-lg border border-outline-variant px-3 py-2 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" value="${m.progress||0}"/>
+              </div>
+              <div>
+                <label class="text-xs text-on-surface-variant font-label-md uppercase tracking-widest mb-1 block">Current Chapter</label>
+                <input id="admin-chapter-${id}" type="text" class="w-full rounded-lg border border-outline-variant px-3 py-2 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" value="${escHtml(m.chapter||'')}"/>
+              </div>
+            </div>
+          </div>`).join('');
+      }
+    }
+
     document.getElementById('admin-panel-tab-book').click();
   }
   window.openAdminPanel = openAdminPanel;
@@ -2260,9 +2300,8 @@ img,video{max-width:100%;height:auto}
     if (!state.isAdmin) return;
     const btn = document.getElementById('admin-save-members-btn');
     btn.textContent = 'Saving…'; btn.disabled = true;
-
-    const memberIds = ['arthur','sarah','dad','leo','mom','elena'];
-    for (const id of memberIds) {
+    // Save progress for all members using dynamic state
+    for (const id of Object.keys(state.members)) {
       const prog = document.getElementById(`admin-progress-${id}`);
       const chap = document.getElementById(`admin-chapter-${id}`);
       if (prog) {
@@ -2934,12 +2973,6 @@ img,video{max-width:100%;height:auto}
         <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Password</label>
         <input id="reg-password" type="password" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="At least 6 characters"/>
       </div>
-      <div>
-        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Which member are you?</label>
-        <select id="reg-member-select" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary bg-white">
-          <option value="">— Loading members… —</option>
-        </select>
-      </div>
       <button id="reg-submit-btn" onclick="submitUserRegister()" class="w-full py-3 rounded-xl bg-primary text-on-primary font-label-md hover:opacity-90 transition-opacity">Create Account</button>
       <p class="text-center text-sm text-on-surface-variant font-body-md">Already registered? <button onclick="switchUserTab('login')" class="text-primary font-label-md underline">Sign in</button></p>
     </div>
@@ -3107,90 +3140,7 @@ img,video{max-width:100%;height:auto}
       <div id="admin-tab-members" class="hidden space-y-4">
         <p class="text-sm text-on-surface-variant font-body-md">Update reading progress for each member.</p>
         <div id="admin-members-list" class="space-y-4">
-          <!-- arthur -->
-          <div class="bg-surface-container-low rounded-xl p-4 border border-surface-container-highest">
-            <p class="font-label-md text-primary mb-3">Grandpa Arthur</p>
-            <div class="grid grid-cols-1 gap-3">
-              <div>
-                <label class="text-xs text-on-surface-variant font-label-md uppercase tracking-widest mb-1 block">Progress %</label>
-                <input id="admin-progress-arthur" type="number" min="0" max="100" class="w-full rounded-lg border border-outline-variant px-3 py-2 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" value="85"/>
-              </div>
-              <div>
-                <label class="text-xs text-on-surface-variant font-label-md uppercase tracking-widest mb-1 block">Current Chapter</label>
-                <input id="admin-chapter-arthur" type="text" class="w-full rounded-lg border border-outline-variant px-3 py-2 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" value="Chapter 14"/>
-              </div>
-            </div>
-          </div>
-          <!-- sarah -->
-          <div class="bg-surface-container-low rounded-xl p-4 border border-surface-container-highest">
-            <p class="font-label-md text-primary mb-3">Sarah</p>
-            <div class="grid grid-cols-1 gap-3">
-              <div>
-                <label class="text-xs text-on-surface-variant font-label-md uppercase tracking-widest mb-1 block">Progress %</label>
-                <input id="admin-progress-sarah" type="number" min="0" max="100" class="w-full rounded-lg border border-outline-variant px-3 py-2 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" value="65"/>
-              </div>
-              <div>
-                <label class="text-xs text-on-surface-variant font-label-md uppercase tracking-widest mb-1 block">Current Chapter</label>
-                <input id="admin-chapter-sarah" type="text" class="w-full rounded-lg border border-outline-variant px-3 py-2 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" value="Chapter 11"/>
-              </div>
-            </div>
-          </div>
-          <!-- dad -->
-          <div class="bg-surface-container-low rounded-xl p-4 border border-surface-container-highest">
-            <p class="font-label-md text-primary mb-3">Dad</p>
-            <div class="grid grid-cols-1 gap-3">
-              <div>
-                <label class="text-xs text-on-surface-variant font-label-md uppercase tracking-widest mb-1 block">Progress %</label>
-                <input id="admin-progress-dad" type="number" min="0" max="100" class="w-full rounded-lg border border-outline-variant px-3 py-2 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" value="42"/>
-              </div>
-              <div>
-                <label class="text-xs text-on-surface-variant font-label-md uppercase tracking-widest mb-1 block">Current Chapter</label>
-                <input id="admin-chapter-dad" type="text" class="w-full rounded-lg border border-outline-variant px-3 py-2 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" value="Chapter 5"/>
-              </div>
-            </div>
-          </div>
-          <!-- leo -->
-          <div class="bg-surface-container-low rounded-xl p-4 border border-surface-container-highest">
-            <p class="font-label-md text-primary mb-3">Leo</p>
-            <div class="grid grid-cols-1 gap-3">
-              <div>
-                <label class="text-xs text-on-surface-variant font-label-md uppercase tracking-widest mb-1 block">Progress %</label>
-                <input id="admin-progress-leo" type="number" min="0" max="100" class="w-full rounded-lg border border-outline-variant px-3 py-2 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" value="12"/>
-              </div>
-              <div>
-                <label class="text-xs text-on-surface-variant font-label-md uppercase tracking-widest mb-1 block">Current Chapter</label>
-                <input id="admin-chapter-leo" type="text" class="w-full rounded-lg border border-outline-variant px-3 py-2 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" value="Chapter 1"/>
-              </div>
-            </div>
-          </div>
-          <!-- mom -->
-          <div class="bg-surface-container-low rounded-xl p-4 border border-surface-container-highest">
-            <p class="font-label-md text-primary mb-3">Mom</p>
-            <div class="grid grid-cols-1 gap-3">
-              <div>
-                <label class="text-xs text-on-surface-variant font-label-md uppercase tracking-widest mb-1 block">Progress %</label>
-                <input id="admin-progress-mom" type="number" min="0" max="100" class="w-full rounded-lg border border-outline-variant px-3 py-2 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" value="85"/>
-              </div>
-              <div>
-                <label class="text-xs text-on-surface-variant font-label-md uppercase tracking-widest mb-1 block">Current Chapter</label>
-                <input id="admin-chapter-mom" type="text" class="w-full rounded-lg border border-outline-variant px-3 py-2 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" value="Chapter 10"/>
-              </div>
-            </div>
-          </div>
-          <!-- elena -->
-          <div class="bg-surface-container-low rounded-xl p-4 border border-surface-container-highest">
-            <p class="font-label-md text-primary mb-3">Dr. Elena</p>
-            <div class="grid grid-cols-1 gap-3">
-              <div>
-                <label class="text-xs text-on-surface-variant font-label-md uppercase tracking-widest mb-1 block">Progress %</label>
-                <input id="admin-progress-elena" type="number" min="0" max="100" class="w-full rounded-lg border border-outline-variant px-3 py-2 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" value="60"/>
-              </div>
-              <div>
-                <label class="text-xs text-on-surface-variant font-label-md uppercase tracking-widest mb-1 block">Current Chapter</label>
-                <input id="admin-chapter-elena" type="text" class="w-full rounded-lg border border-outline-variant px-3 py-2 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" value="Chapter 8"/>
-              </div>
-            </div>
-          </div>
+          <!-- Populated dynamically from state.members -->
         </div>
         <button id="admin-save-members-btn" onclick="saveMembers()" class="w-full py-3 rounded-xl bg-secondary text-on-primary font-label-md hover:opacity-90 transition-opacity">Save Progress — Updates Everyone Instantly</button>
       </div>
