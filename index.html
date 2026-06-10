@@ -10,7 +10,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250629';
+  const APP_VERSION = '20250630';
   const cached = localStorage.getItem('app_version');
   if (cached && cached !== APP_VERSION) {
     localStorage.setItem('app_version', APP_VERSION);
@@ -2754,6 +2754,8 @@ img,video{max-width:100%;height:auto}
     list.appendChild(row);
   }
   window.addChapterBullet = addChapterBullet;
+
+  function addBulletField(value='') {
     const list = document.getElementById('stop-bullets-list');
     const row = document.createElement('div'); row.className = 'flex items-center gap-2';
     row.innerHTML = `<span class="material-symbols-outlined text-secondary text-sm shrink-0">radio_button_checked</span><input type="text" value="${escHtml(value)}" class="flex-1 rounded-lg border border-outline-variant px-3 py-2 font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Bullet point requirement"/><button onclick='this.parentElement.remove()' class="w-7 h-7 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-error hover:text-white transition-colors shrink-0"><span class="material-symbols-outlined text-sm">remove_circle</span></button>`;
