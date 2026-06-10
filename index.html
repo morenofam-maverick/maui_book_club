@@ -10,7 +10,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250716';
+  const APP_VERSION = '20250720';
   const cached = localStorage.getItem('app_version');
   if (cached && cached !== APP_VERSION) {
     localStorage.setItem('app_version', APP_VERSION);
@@ -2772,15 +2772,15 @@ img,video{max-width:100%;height:auto}
   }
   // ── Show/hide Progress page nav based on member count ─────────────────
   function updateProgressNavVisibility() {
-    const membersWithProgress = Object.values(state.members).filter(m => (m.progress || 0) > 0 || m.chapter).length;
-    const totalMembers = Object.keys(state.members).length;
-    // Show if 3+ members exist (regardless of progress) or if any member has logged progress
-    const shouldShow = totalMembers >= 3 || membersWithProgress >= 1;
+    const memberList = Object.values(state.members);
+    const totalMembers = memberList.length;
+    // Only count members who have logged at least some progress or a chapter
+    const activeMembers = memberList.filter(m => (m.progress || 0) > 0 || (m.chapter || '').trim() !== '').length;
+    // Show only when 3+ members total AND at least 1 has logged activity
+    const shouldShow = totalMembers >= 3 && activeMembers >= 1;
     const desktopNav = document.getElementById('nav-progress');
     const mobileNav = document.getElementById('mob-progress');
-    if (desktopNav) {
-      desktopNav.classList.toggle('hidden', !shouldShow);
-    }
+    if (desktopNav) desktopNav.classList.toggle('hidden', !shouldShow);
     if (mobileNav) {
       mobileNav.classList.toggle('hidden', !shouldShow);
       mobileNav.classList.toggle('flex', shouldShow);
@@ -3200,7 +3200,79 @@ img,video{max-width:100%;height:auto}
     btn.textContent = '🚀 Archive & Start New Book'; btn.disabled = false;
   }
 
-  // ── Checkpoint editing (admin only) ───────────────────────────────────
+  // ── Celebration modal ──────────────────────────────────────────────────
+  function showCelebration() {
+    const modal = document.getElementById('celebration-modal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.top = `-${window.scrollY}px`;
+    document.body.classList.add('modal-open');
+    // Launch confetti
+    launchConfetti();
+  }
+  window.showCelebration = showCelebration;
+
+  function closeCelebration() {
+    const modal = document.getElementById('celebration-modal');
+    if (!modal) return;
+    const scrollY = document.body.style.top;
+    document.body.classList.remove('modal-open');
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY || '0') * -1);
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    // Stop confetti
+    const canvas = document.getElementById('confetti-canvas');
+    if (canvas) canvas.remove();
+  }
+  window.closeCelebration = closeCelebration;
+
+  function launchConfetti() {
+    // Create canvas
+    const canvas = document.createElement('canvas');
+    canvas.id = 'confetti-canvas';
+    canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999';
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const colors = ['#c2410c','#0f766e','#9d174d','#0c4a6e','#14532d','#92400e','#f59e0b','#ec4899'];
+    const pieces = Array.from({length: 120}, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * -canvas.height,
+      w: Math.random() * 12 + 6,
+      h: Math.random() * 6 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * 360,
+      vx: (Math.random() - 0.5) * 3,
+      vy: Math.random() * 4 + 2,
+      vr: (Math.random() - 0.5) * 8,
+      opacity: 1
+    }));
+
+    let frame = 0;
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      let alive = false;
+      pieces.forEach(p => {
+        p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+        if (p.y > canvas.height * 0.7) p.opacity -= 0.02;
+        if (p.y < canvas.height && p.opacity > 0) alive = true;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.opacity);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot * Math.PI / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.restore();
+      });
+      if (alive && frame < 300) { frame++; requestAnimationFrame(animate); }
+      else { setTimeout(() => canvas.remove(), 500); }
+    };
+    requestAnimationFrame(animate);
+  }
   function editCheckpoint(event, fieldId) {
     event.stopPropagation(); // prevent card navigating to predictions
     if (!state.isAdmin) return;
@@ -3286,8 +3358,51 @@ img,video{max-width:100%;height:auto}
       const allPreds = Object.values(stopPreds).flat();
       renderHomeMarginalia(allPreds);
       renderProgressMarginalia(allPreds);
+      checkFinalStopComplete();
     });
   }
+
+  // ── Final stop completion notification ────────────────────────────────
+  let finalStopNotified = false; // prevent repeated pop-ups in same session
+
+  function checkFinalStopComplete() {
+    // Only show on home page, only when not already revealed, not for admins
+    if (state.isAdmin) return;
+    const sortedStops = Object.values(stopsData).sort((a,b) => (b.order??0)-(a.order??0));
+    if (!sortedStops.length) return;
+    const finalStop = sortedStops[0];
+    const finalPreds = stopPreds[finalStop.id] || [];
+    const totalMembers = Object.keys(state.members).length;
+    if (totalMembers === 0) return;
+    const submittedCount = new Set(finalPreds.map(p => p.memberId).filter(Boolean)).size;
+    const allRevealed = finalPreds.length > 0 && finalPreds.every(p => p.revealed);
+    const allSubmitted = submittedCount >= totalMembers;
+    // Show popup if: all submitted, not yet revealed, not already shown this session
+    if (allSubmitted && !allRevealed && !finalStopNotified) {
+      finalStopNotified = true;
+      showFinalTheoriesPopup();
+    }
+    // Reset if revealed (so it won't re-trigger on next book)
+    if (allRevealed) finalStopNotified = false;
+  }
+
+  function showFinalTheoriesPopup() {
+    const popup = document.getElementById('final-theories-popup');
+    if (!popup) return;
+    popup.style.transform = 'translateX(-50%) translateY(0)';
+    popup.style.opacity = '1';
+    popup.classList.remove('pointer-events-none');
+    setTimeout(() => dismissFinalTheoriesPopup(), 8000);
+  }
+
+  function dismissFinalTheoriesPopup() {
+    const popup = document.getElementById('final-theories-popup');
+    if (!popup) return;
+    popup.style.transform = 'translateX(-50%) translateY(4rem)';
+    popup.style.opacity = '0';
+    popup.classList.add('pointer-events-none');
+  }
+  window.dismissFinalTheoriesPopup = dismissFinalTheoriesPopup;
 
   function renderHomeMarginalia(preds) {
     const grid = document.getElementById('home-marginalia-grid');
@@ -3318,7 +3433,6 @@ img,video{max-width:100%;height:auto}
       const initials = (p.authorName || '?').slice(0, 2).toUpperCase();
       const rot = rotations[i] || '';
       const hiddenClass = i === 2 ? 'hidden md:block' : '';
-      const isOwn = state.currentUser?.uid === p.authorId;
       const canSeeText = allRevealed || state.isAdmin;
       return `<div class="${hiddenClass} p-5 rounded-lg border border-surface-container-highest shadow-[2px_2px_0px_rgba(44,30,15,0.05)] transform ${rot} hover:rotate-0 transition-transform bg-[#fefcf0] cursor-pointer" onclick="navigate('predictions')">
         <div class="flex items-center gap-2 mb-3">
@@ -3332,7 +3446,7 @@ img,video{max-width:100%;height:auto}
           ? `<p class="font-body-md text-sm text-on-surface leading-relaxed italic">"${escHtml((p.text||'').slice(0,100))}${(p.text||'').length>100?'…':''}"</p>`
           : `<div class="flex items-center gap-2 py-1">
                <span class="material-symbols-outlined text-outline text-sm">lock</span>
-               <span class="text-xs text-on-surface-variant font-body-md">${isOwn ? 'Your prediction is sealed' : 'Sealed until everyone submits'}</span>
+               <span class="text-xs text-on-surface-variant font-body-md">Sealed until the admin reveals all predictions</span>
              </div>`
         }
       </div>`;
@@ -3406,7 +3520,7 @@ img,video{max-width:100%;height:auto}
         ${!state.currentUser
           ?`<button onclick='openUserModal("login")' class="w-full flex items-center justify-center gap-2 border-2 border-dashed border-primary/30 rounded-xl py-4 font-label-md text-primary hover:border-primary hover:bg-surface-container-low transition-all"><span class="material-symbols-outlined">login</span>Sign in to submit your prediction</button>`
           :myPred
-            ?`<div class="flex items-center gap-3 p-4 bg-secondary-container/40 rounded-xl border border-secondary-fixed-dim"><span class="material-symbols-outlined text-secondary text-xl">check_circle</span><div><p class="font-label-md text-secondary text-sm">Your prediction is submitted</p><p class="text-xs text-on-surface-variant font-body-md">${allRevealed?'Revealed to everyone.':'Sealed until all members submit.'}</p></div></div>`
+            ?`<div class="flex items-center gap-3 p-4 bg-secondary-container/40 rounded-xl border border-secondary-fixed-dim"><span class="material-symbols-outlined text-secondary text-xl">check_circle</span><div><p class="font-label-md text-secondary text-sm">Your prediction is submitted</p><p class="text-xs text-on-surface-variant font-body-md">${allRevealed?'Revealed to everyone.':'Sealed until the admin reveals all predictions.'}</p></div></div>`
             :`<button onclick='openPredictionModal("${stop.id}")' class="w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-3.5 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95 shadow-sm"><span class="material-symbols-outlined">psychology_alt</span>Cast My Prediction for This Stop</button>`
         }
       </div>
@@ -3426,7 +3540,6 @@ img,video{max-width:100%;height:auto}
   function buildStopPredsList(stopId, preds, allRevealed) {
     if (!preds.length) return `<p class="text-center text-sm text-on-surface-variant font-body-md py-4 opacity-60">No predictions yet for this stop.</p>`;
     return preds.map(p => {
-      const isOwn = state.currentUser?.uid===p.authorId;
       const canSee = allRevealed||state.isAdmin;
       const initials = (p.authorName||'?').slice(0,2).toUpperCase();
       return `<div class="bg-white border border-surface-container-highest rounded-xl p-4 marginalia-shadow">
@@ -3442,7 +3555,7 @@ img,video{max-width:100%;height:auto}
         </div>
         ${canSee
           ?`<div class="bg-[#fef9e7] p-3 rounded-lg border-l-4 border-tertiary-fixed-dim italic font-body-md text-sm text-on-tertiary-fixed-variant leading-relaxed">"${escHtml(p.text||'')}"</div>`
-          :`<div class="flex items-center gap-2 py-1 text-on-surface-variant"><span class="material-symbols-outlined text-outline text-sm">lock</span><span class="text-xs font-body-md">${isOwn?'Your prediction is sealed — waiting for all members.':'Sealed until everyone submits.'}</span></div>`
+          :`<div class="flex items-center gap-2 py-1 text-on-surface-variant"><span class="material-symbols-outlined text-outline text-sm">lock</span><span class="text-xs font-body-md">Sealed until the admin reveals all predictions.</span></div>`
         }
       </div>`;
     }).join('');
@@ -3456,7 +3569,15 @@ img,video{max-width:100%;height:auto}
       const batch = writeBatch(db);
       snap.forEach(d => { if (d.data().stopId===stopId) batch.update(doc(db,'predictions',d.id),{revealed:true}); });
       await batch.commit();
-      showSaveToast('Predictions revealed!');
+
+      // Check if this is the final stop (highest order value)
+      const sortedStops = Object.values(stopsData).sort((a,b) => (b.order??0)-(a.order??0));
+      const isFinalStop = sortedStops.length > 0 && sortedStops[0].id === stopId;
+      if (isFinalStop) {
+        setTimeout(() => showCelebration(), 600);
+      } else {
+        showSaveToast('Predictions revealed!');
+      }
     } catch(e) { console.error(e); }
   }
   window.revealStopPredictions = revealStopPredictions;
@@ -4311,6 +4432,48 @@ img,video{max-width:100%;height:auto}
     <div class="px-6 pb-6 pt-2 shrink-0 flex gap-3">
       <button onclick="closeStopModal()" class="flex-1 py-3 rounded-xl border border-outline-variant font-label-md text-on-surface-variant hover:bg-surface-container transition-colors">Cancel</button>
       <button id="stop-modal-save-btn" onclick="saveStop()" class="flex-1 py-3 rounded-xl bg-primary text-on-primary font-label-md hover:opacity-90 transition-opacity">Save Stop</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FINAL THEORIES POPUP ===== -->
+<div id="final-theories-popup" class="fixed bottom-24 md:bottom-10 z-[180] w-[calc(100%-2rem)] max-w-sm transition-all duration-500 opacity-0 pointer-events-none"
+     style="left:50%;transform:translateX(-50%) translateY(4rem)">
+  <div class="bg-primary text-on-primary rounded-2xl shadow-2xl p-5 pointer-events-auto">
+    <div class="flex items-start justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl">🔐</span>
+        <div>
+          <p class="font-headline-md text-base font-bold leading-tight">Final Theories Submitted!</p>
+          <p class="font-body-md text-sm opacity-90 mt-0.5">Time for the reveal 👀</p>
+        </div>
+      </div>
+      <button onclick="dismissFinalTheoriesPopup()" class="shrink-0 w-7 h-7 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors mt-0.5">
+        <span class="material-symbols-outlined text-sm">close</span>
+      </button>
+    </div>
+    <button onclick="navigate('predictions');dismissFinalTheoriesPopup()" class="mt-4 w-full bg-white/20 hover:bg-white/30 transition-colors rounded-xl py-2.5 font-label-md text-sm flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-sm">psychology_alt</span>Go to Predictions
+    </button>
+  </div>
+</div>
+
+<!-- ===== CELEBRATION MODAL ===== -->
+<div id="celebration-modal" class="hidden fixed inset-0 z-[200] items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden text-center relative">
+    <div class="bg-gradient-to-b from-secondary-container to-surface px-8 pt-10 pb-6">
+      <div class="text-6xl mb-4">🎉</div>
+      <h2 class="font-headline-lg text-headline-lg text-primary mb-2">Final Theories Revealed!</h2>
+      <p class="font-body-md text-on-surface-variant mb-1">All predictions for the final stop are now out in the open.</p>
+      <p class="font-body-md text-on-surface-variant text-sm italic">Now let's find out who had it right... 📚</p>
+    </div>
+    <div class="px-8 py-6 space-y-3">
+      <button onclick="navigate('predictions');closeCelebration()" class="w-full bg-primary text-on-primary py-3.5 rounded-xl font-label-md hover:opacity-90 transition-opacity active:scale-95">
+        <span class="material-symbols-outlined text-lg align-middle mr-1">psychology_alt</span>See All Predictions
+      </button>
+      <button onclick="closeCelebration()" class="w-full border border-outline-variant text-on-surface-variant py-3 rounded-xl font-label-md hover:bg-surface-container transition-colors">
+        Maybe Later
+      </button>
     </div>
   </div>
 </div>
