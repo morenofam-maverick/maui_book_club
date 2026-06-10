@@ -10,7 +10,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250612';
+  const APP_VERSION = '20250615';
   const cached = localStorage.getItem('app_version');
   if (cached && cached !== APP_VERSION) {
     localStorage.setItem('app_version', APP_VERSION);
@@ -956,7 +956,8 @@ img,video{max-width:100%;height:auto}
   body.admin-active [data-editable="book-title"],
   body.admin-active [data-editable="book-author"],
   body.admin-active [data-editable="welcome"],
-  body.admin-active [data-editable="welcome-invite"] {
+  body.admin-active [data-editable="welcome-invite"],
+  body.admin-active [id^="cp"] {
     cursor: pointer !important;
     outline: 2px dashed #45664b;
     outline-offset: 3px;
@@ -1026,15 +1027,15 @@ img,video{max-width:100%;height:auto}
             <div class="flex items-center gap-3">
               <img alt="Grandpa" data-editable="img" data-edit-id="member-arthur" class="w-8 h-8 rounded-full border border-surface-container-highest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbcjh4An31TPfvoLEoeBh44yka1D8vXGLgVvHoOEKb-k57Y1QyPX0wqv5codIX1Ml4BlHeRbpZHd6DjSFjxPICV4ltg_NHU2z-5KtHp0QlnZepN9sPCPEN5DyGUqv3e6qhttLI6DGL_dtMM6voV7lPSBwE5OHCXj9uyvyjyNrwGEpqN20_GuYbCA0kiOiCkBTKUN2aftejz63ofj1lPyCpPu-JhslaZMnQ-BwFIiv4wprf8s6PVb5m3ZAUVMZJKSMC84SNxOpSo_s"/>
               <div class="flex-1">
-                <div class="flex justify-between text-xs font-label-md"><span>Grandpa Arthur</span><span>Chapter 14</span></div>
-                <div class="h-1 w-full bg-surface-container-highest rounded-full mt-1"><div class="h-full bg-primary w-[85%] rounded-full" data-member-progress="arthur" style="width:85%"></div></div>
+                <div class="flex justify-between text-xs font-label-md"><span data-home-member-name="arthur">Grandpa Arthur</span><span data-member-chapter="arthur">Chapter 14</span></div>
+                <div class="h-1 w-full bg-surface-container-highest rounded-full mt-1"><div class="h-full bg-primary rounded-full" data-member-progress="arthur" style="width:85%"></div></div>
               </div>
             </div>
             <div class="flex items-center gap-3">
               <img alt="Sarah" data-editable="img" data-edit-id="member-sarah" class="w-8 h-8 rounded-full border border-surface-container-highest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqHEYI2Z-XIxDLT-X4kDTAt-qckTiVabed6S5SHNMKLTLu-m5elhyhWqNtd14I5t_1CgcVRLGWi1TBvyGfdvWKAHn-bmIoR_vHOZuzIlhJfg5gYWxZdGbZrduklA6v3IuHh5wSTTEApdcDgIr1RF8H7oTXZoj2uJ1TCpRTJOaFA0kq3RHq1WQpAdomkc0gAQe-3cYeH74tpxrBi0Y5k4ARWXmK9dehQT7t_xtMkNScEhMms3AmtikPhxYRE9uuz0v-ZX9YYZ_Qe3c"/>
               <div class="flex-1">
-                <div class="flex justify-between text-xs font-label-md"><span>Sarah</span><span>Chapter 11</span></div>
-                <div class="h-1 w-full bg-surface-container-highest rounded-full mt-1"><div class="h-full bg-primary w-[65%] rounded-full" data-member-progress="sarah" style="width:65%"></div></div>
+                <div class="flex justify-between text-xs font-label-md"><span data-home-member-name="sarah">Sarah</span><span data-member-chapter="sarah">Chapter 11</span></div>
+                <div class="h-1 w-full bg-surface-container-highest rounded-full mt-1"><div class="h-full bg-primary rounded-full" data-member-progress="sarah" style="width:65%"></div></div>
               </div>
             </div>
           </div>
@@ -1134,8 +1135,8 @@ img,video{max-width:100%;height:auto}
           <div class="p-4 rounded-lg bg-surface-bright border border-secondary-fixed-dim flex items-center gap-4 transition-all hover:scale-[1.02] cursor-pointer" onclick="navigate('predictions')">
             <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-secondary"><span class="material-symbols-outlined">task_alt</span></div>
             <div class="flex-1">
-              <p class="text-[10px] uppercase tracking-widest text-secondary font-bold">Chapter 5</p>
-              <h4 class="font-label-md text-on-surface">The Awakening</h4>
+              <p id="cp1-label" class="text-[10px] uppercase tracking-widest text-secondary font-bold" onclick="editCheckpoint(event,'cp1-label')" title="Click to edit">Chapter 5</p>
+              <h4 id="cp1-title" class="font-label-md text-on-surface" onclick="editCheckpoint(event,'cp1-title')" title="Click to edit">The Awakening</h4>
               <p class="text-xs text-secondary">Completed</p>
             </div>
             <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
@@ -1144,8 +1145,8 @@ img,video{max-width:100%;height:auto}
             <div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
             <div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container"><span class="material-symbols-outlined">psychology_alt</span></div>
             <div class="flex-1">
-              <p class="text-[10px] uppercase tracking-widest text-primary font-bold">Chapter 10</p>
-              <h4 class="font-label-md text-primary">Hidden Glyphs</h4>
+              <p id="cp2-label" class="text-[10px] uppercase tracking-widest text-primary font-bold" onclick="editCheckpoint(event,'cp2-label')" title="Click to edit">Chapter 10</p>
+              <h4 id="cp2-title" class="font-label-md text-primary" onclick="editCheckpoint(event,'cp2-title')" title="Click to edit">Hidden Glyphs</h4>
               <p class="text-xs text-primary font-semibold">In Progress</p>
             </div>
             <span class="material-symbols-outlined text-primary">pending</span>
@@ -1153,8 +1154,8 @@ img,video{max-width:100%;height:auto}
           <div class="p-4 rounded-lg bg-surface-container-low border border-outline-variant flex items-center gap-4 opacity-75">
             <div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-outline"><span class="material-symbols-outlined">lock</span></div>
             <div class="flex-1">
-              <p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Chapter 15</p>
-              <h4 class="font-label-md text-on-surface-variant">Celestial Choice</h4>
+              <p id="cp3-label" class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold" onclick="editCheckpoint(event,'cp3-label')" title="Click to edit">Chapter 15</p>
+              <h4 id="cp3-title" class="font-label-md text-on-surface-variant" onclick="editCheckpoint(event,'cp3-title')" title="Click to edit">Celestial Choice</h4>
               <p class="text-xs text-on-surface-variant">Locked</p>
             </div>
           </div>
@@ -1353,6 +1354,20 @@ img,video{max-width:100%;height:auto}
       </div>
     </div>
   </section>
+
+  <!-- Quick progress update — shown to logged-in members -->
+  <div id="quick-progress-update" class="hidden mt-6 bg-surface-container-low border border-outline-variant rounded-xl p-5 flex flex-col md:flex-row items-center gap-4">
+    <div class="flex items-center gap-3 shrink-0">
+      <span class="material-symbols-outlined text-primary text-xl">menu_book</span>
+      <p class="font-label-md text-on-surface text-sm">Where are you right now?</p>
+    </div>
+    <input id="quick-chapter-input" type="text" placeholder="e.g. Chapter 7 or Page 142"
+      class="flex-1 rounded-lg border border-outline-variant px-4 py-2.5 font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-white w-full md:w-auto"/>
+    <button onclick="saveQuickProgress()" class="shrink-0 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-label-md text-sm hover:opacity-90 transition-opacity active:scale-95">
+      Update
+    </button>
+  </div>
+
   <section class="mt-16 max-w-2xl mx-auto">
     <div class="relative bg-tertiary-fixed/30 p-8 rounded-lg border-l-4 border-tertiary shadow-sm paper-texture">
       <div class="flex items-center gap-3 mb-4">
@@ -1602,24 +1617,32 @@ img,video{max-width:100%;height:auto}
       const el = document.getElementById('book-note-body');
       if (el && !el.querySelector('input,textarea')) el.textContent = book.note_body;
     }
+    // Checkpoints
+    ['cp1-label','cp1-title','cp2-label','cp2-title','cp3-label','cp3-title'].forEach(id => {
+      if (book[id]) {
+        const el = document.getElementById(id);
+        if (el && !el.querySelector('input')) el.textContent = book[id];
+      }
+    });
   }
 
   // ── Apply member data to DOM ───────────────────────────────────────────
   function applyMembersToDOM(members) {
     Object.entries(members).forEach(([memberId, m]) => {
-      // Update all avatar images for this member
       document.querySelectorAll(`[data-edit-id="member-${memberId}"]`).forEach(img => {
         if (m.avatarUrl) img.src = m.avatarUrl;
       });
-      // Update progress bars
-      const bars = document.querySelectorAll(`[data-member-progress="${memberId}"]`);
-      bars.forEach(bar => { bar.style.width = (m.progress || 0) + '%'; });
-      // Update progress labels
+      document.querySelectorAll(`[data-member-progress="${memberId}"]`).forEach(bar => {
+        bar.style.width = (m.progress || 0) + '%';
+      });
       document.querySelectorAll(`[data-member-chapter="${memberId}"]`).forEach(el => {
         el.textContent = m.chapter || '';
       });
       document.querySelectorAll(`[data-member-percent="${memberId}"]`).forEach(el => {
         el.textContent = (m.progress || 0) + '%';
+      });
+      document.querySelectorAll(`[data-home-member-name="${memberId}"]`).forEach(el => {
+        el.textContent = m.name || memberId;
       });
     });
   }
@@ -1779,6 +1802,7 @@ img,video{max-width:100%;height:auto}
       renderMembersPage(state.members);
       populateMemberSelects();
       if (state.currentUser) injectMyProgressButton();
+      updateQuickProgressBar();
     });
   }
 
@@ -1829,6 +1853,7 @@ img,video{max-width:100%;height:auto}
       if (authBtnIcon) authBtnIcon.textContent = 'logout';
       renderHeaderUser(user);
       injectMyProgressButton();
+      updateQuickProgressBar();
     } else {
       state.userProfile = null;
       state.isAdmin = false;
@@ -2137,11 +2162,9 @@ img,video{max-width:100%;height:auto}
 
   // ── Old admin-only auth modal — opens admin login, not user profile ───
   function openAuthModal() {
-    // If already signed in as admin, open admin panel directly
-    if (state.isAdmin) { openAdminPanel(); return; }
-    // If signed in but not admin, this button signs them out
+    // If signed in (admin or regular user), this button signs them out
     if (state.currentUser) { doSignOut(); return; }
-    // Not signed in — open the dedicated admin login modal
+    // Not signed in — open the admin login modal
     document.getElementById('auth-modal').classList.remove('hidden');
     document.getElementById('auth-modal').classList.add('flex');
     document.getElementById('auth-error').textContent = '';
@@ -2283,7 +2306,68 @@ img,video{max-width:100%;height:auto}
   window.doSignOut = () => signOut(auth);
   window.showSaveToast = showSaveToast;
 
-  // ── Book note (any logged-in user can edit) ────────────────────────────
+  // ── Quick progress update on Progress page ────────────────────────────
+  async function saveQuickProgress() {
+    const profile = state.userProfile;
+    if (!profile?.memberId) return;
+    const input = document.getElementById('quick-chapter-input');
+    const val = input?.value.trim();
+    if (!val) return;
+    const btn = input.nextElementSibling;
+    if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
+    try {
+      await updateDoc(doc(db, 'members', profile.memberId), { chapter: val });
+      input.value = '';
+      input.placeholder = `Saved: ${val}`;
+      showSaveToast('Progress updated!');
+    } catch(e) { console.error(e); }
+    if (btn) { btn.textContent = 'Update'; btn.disabled = false; }
+  }
+  window.saveQuickProgress = saveQuickProgress;
+
+  function updateQuickProgressBar() {
+    const bar = document.getElementById('quick-progress-update');
+    if (!bar) return;
+    const profile = state.userProfile;
+    if (profile?.memberId) {
+      bar.classList.remove('hidden');
+      // Pre-fill with current chapter
+      const m = state.members[profile.memberId];
+      const input = document.getElementById('quick-chapter-input');
+      if (input && m?.chapter) input.placeholder = `Currently: ${m.chapter}`;
+    } else {
+      bar.classList.add('hidden');
+    }
+  }
+  function editCheckpoint(event, fieldId) {
+    event.stopPropagation(); // prevent card navigating to predictions
+    if (!state.isAdmin) return;
+    const el = document.getElementById(fieldId);
+    if (!el || el.querySelector('input')) return;
+    const current = el.textContent.trim();
+    const inp = document.createElement('input');
+    inp.value = current;
+    inp.className = 'w-full bg-white border-2 border-primary rounded px-2 py-0.5 text-xs font-label-md focus:outline-none';
+    el.textContent = '';
+    el.appendChild(inp);
+    inp.focus(); inp.select();
+    const save = async () => {
+      const val = inp.value.trim() || current;
+      el.textContent = val;
+      if (val !== current) {
+        try {
+          await updateDoc(doc(db, 'config', 'currentBook'), { [fieldId]: val });
+          showSaveToast('Checkpoint updated!');
+        } catch(e) { console.error(e); }
+      }
+    };
+    inp.addEventListener('blur', save);
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); save(); }
+      if (e.key === 'Escape') { el.textContent = current; }
+    });
+  }
+  window.editCheckpoint = editCheckpoint;
   function editBookNote(field) {
     if (!state.currentUser) { openUserModal('login'); return; }
     const elId = field === 'label' ? 'book-note-label' : 'book-note-body';
@@ -2758,6 +2842,10 @@ img,video{max-width:100%;height:auto}
       };
       reader.readAsDataURL(file);
     });
+
+    // Enter on quick chapter input
+    const quickInput = document.getElementById('quick-chapter-input');
+    if (quickInput) quickInput.addEventListener('keydown', e => { if (e.key === 'Enter') saveQuickProgress(); });
 
     // Seed + start listeners
     await seedIfEmpty();
