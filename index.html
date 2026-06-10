@@ -917,6 +917,7 @@ img,video{max-width:100%;height:auto}
 </style>
 <style>
   .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .icon-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
   .page-texture {
     background-color: #fbf9f5;
     background-image: radial-gradient(#efeeea 0.5px, transparent 0.5px);
@@ -1655,20 +1656,20 @@ img,video{max-width:100%;height:auto}
     wrap.innerHTML = `
       ${isAdmin ? `<div class="member-admin-controls absolute top-2 right-2 z-20 flex gap-1">
         <div class="relative">
-          <button class="size-btn w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:opacity-80 shadow-md" onclick="toggleSizeMenu('${id}')" title="Resize card">
+          <button class="size-btn w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:opacity-80 shadow-md" onclick='toggleSizeMenu("${id}")' title="Resize card">
             <span class="material-symbols-outlined text-sm">open_with</span>
           </button>
           <div id="size-menu-${id}" class="hidden absolute right-0 top-10 bg-white rounded-xl shadow-2xl border border-surface-container-highest z-30 w-36 overflow-hidden">
-            ${Object.entries(SIZE_LABELS).map(([s,l])=>`<button onclick="resizeCard('${id}','${s}')" class="w-full text-left px-4 py-2.5 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center justify-between ${m.size===s?'bg-secondary-container text-secondary font-bold':''}">${l}${m.size===s?'<span class="material-symbols-outlined text-sm">check</span>':''}</button>`).join('')}
+            ${Object.entries(SIZE_LABELS).map(([s,l])=>`<button onclick='resizeCard("${id}","${s}")' class="w-full text-left px-4 py-2.5 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center justify-between ${m.size===s?'bg-secondary-container text-secondary font-bold':''}">${l}${m.size===s?'<span class="material-symbols-outlined text-sm">check</span>':''}</button>`).join('')}
           </div>
         </div>
-        <button class="w-8 h-8 rounded-full bg-error text-white flex items-center justify-center hover:opacity-80 shadow-md" onclick="confirmRemoveMember('${id}')" title="Remove member">
+        <button class="w-8 h-8 rounded-full bg-error text-white flex items-center justify-center hover:opacity-80 shadow-md" onclick='confirmRemoveMember("${id}")' title="Remove member">
           <span class="material-symbols-outlined text-sm">delete</span>
         </button>
       </div>` : ''}
       <div class="p-6 flex flex-col gap-4">
         <div class="flex items-center gap-4">
-          <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-surface-container-high shrink-0 ${isAdmin?'cursor-pointer':''}" ${isAdmin?`onclick="openPhotoModal('member-${id}')"`:''}>
+          <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-surface-container-high shrink-0 ${isAdmin?'cursor-pointer':''}" ${isAdmin?`onclick='openPhotoModal("member-${id}")'`:''}>
             <img data-editable="img" data-edit-id="member-${id}" src="${m.avatarUrl||''}" alt="${m.name||''}" class="w-full h-full object-cover"/>
           </div>
           <div class="flex-1 min-w-0">
@@ -1846,7 +1847,7 @@ img,video{max-width:100%;height:auto}
     const area = document.getElementById('header-user-area');
     if (!area) return;
     if (!user) {
-      area.innerHTML = `<button onclick="openUserModal('login')" class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-full font-label-md hover:opacity-90 transition-all active:scale-95 shadow-sm">
+      area.innerHTML = `<button onclick='openUserModal("login")' class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-full font-label-md hover:opacity-90 transition-all active:scale-95 shadow-sm">
         <span class="material-symbols-outlined text-lg">login</span>
         <span class="hidden md:inline">Sign In</span>
       </button>`;
@@ -1858,7 +1859,7 @@ img,video{max-width:100%;height:auto}
       const initials = displayName.slice(0,2).toUpperCase();
       area.innerHTML = `
         <div class="relative" id="user-menu-wrap">
-          <button onclick="toggleUserMenu()" class="flex items-center gap-2 bg-surface-container-low border border-outline-variant rounded-full pl-1 pr-3 py-1 hover:bg-surface-container-high transition-all active:scale-95">
+          <button onclick='toggleUserMenu()' class="flex items-center gap-2 bg-surface-container-low border border-outline-variant rounded-full pl-1 pr-3 py-1 hover:bg-surface-container-high transition-all active:scale-95">
             <div class="w-8 h-8 rounded-full overflow-hidden bg-primary flex items-center justify-center shrink-0">
               ${avatar ? `<img src="${avatar}" class="w-full h-full object-cover" alt="${displayName}"/>` : `<span class="text-on-primary font-bold text-xs">${initials}</span>`}
             </div>
@@ -1871,17 +1872,17 @@ img,video{max-width:100%;height:auto}
               <p class="text-xs text-on-surface-variant truncate">${user.email}</p>
               ${state.isAdmin ? '<span class="inline-block mt-1 px-2 py-0.5 bg-primary text-on-primary text-[10px] font-bold rounded-full uppercase tracking-wider">Admin</span>' : ''}
             </div>
-            <button onclick="openUserModal('profile')" class="w-full text-left px-4 py-3 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center gap-3">
+            <button onclick='openUserModal("profile")' class="w-full text-left px-4 py-3 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center gap-3">
               <span class="material-symbols-outlined text-on-surface-variant text-lg">manage_accounts</span>My Profile
             </button>
-            <button onclick="navigate('progress');toggleUserMenu()" class="w-full text-left px-4 py-3 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center gap-3">
+            <button onclick='navigate("progress");toggleUserMenu()' class="w-full text-left px-4 py-3 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center gap-3">
               <span class="material-symbols-outlined text-on-surface-variant text-lg">bar_chart</span>My Progress
             </button>
-            <button onclick="navigate('predictions');toggleUserMenu()" class="w-full text-left px-4 py-3 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center gap-3">
+            <button onclick='navigate("predictions");toggleUserMenu()' class="w-full text-left px-4 py-3 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center gap-3">
               <span class="material-symbols-outlined text-on-surface-variant text-lg">psychology_alt</span>My Predictions
             </button>
             <div class="border-t border-surface-container-highest">
-              <button onclick="signOut(auth)" class="w-full text-left px-4 py-3 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center gap-3 text-error">
+              <button onclick='signOut(auth)' class="w-full text-left px-4 py-3 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center gap-3 text-error">
                 <span class="material-symbols-outlined text-lg">logout</span>Sign Out
               </button>
             </div>
@@ -2043,7 +2044,7 @@ img,video{max-width:100%;height:auto}
     card.querySelector('.my-progress-btn')?.remove();
     const btnWrap = document.createElement('div');
     btnWrap.className = 'my-progress-btn mt-3 pt-3 border-t border-outline-variant';
-    btnWrap.innerHTML = `<button onclick="openMyProgressModal()" class="w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-2 rounded-lg font-label-md text-sm hover:opacity-90 transition-opacity active:scale-95">
+    btnWrap.innerHTML = `<button onclick='openMyProgressModal()' class="w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-2 rounded-lg font-label-md text-sm hover:opacity-90 transition-opacity active:scale-95">
       <span class="material-symbols-outlined text-sm">edit</span>Update My Progress
     </button>`;
     card.querySelector('.space-y-4')?.appendChild(btnWrap);
@@ -2390,8 +2391,8 @@ img,video{max-width:100%;height:auto}
             ${stop.subtitle?`<p class="font-body-md text-on-surface-variant text-sm italic mt-1">${escHtml(stop.subtitle)}</p>`:''}
           </div>
           ${state.isAdmin?`<div class="flex gap-2 shrink-0">
-            <button onclick="openEditStopModal('${stop.id}')" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center hover:bg-primary hover:text-white transition-colors" title="Edit"><span class="material-symbols-outlined text-sm">edit</span></button>
-            <button onclick="confirmRemoveStop('${stop.id}')" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center hover:bg-error hover:text-white transition-colors" title="Delete"><span class="material-symbols-outlined text-sm">delete</span></button>
+            <button onclick='openEditStopModal("${stop.id}")' class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center hover:bg-primary hover:text-white transition-colors" title="Edit"><span class="material-symbols-outlined text-sm">edit</span></button>
+            <button onclick='confirmRemoveStop("${stop.id}")' class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center hover:bg-error hover:text-white transition-colors" title="Delete"><span class="material-symbols-outlined text-sm">delete</span></button>
           </div>`:''}
         </div>
         ${stop.bullets?.length?`<div class="mt-4 bg-surface-container-low rounded-xl p-4 border border-outline-variant">
@@ -2402,18 +2403,18 @@ img,video{max-width:100%;height:auto}
       </div>
       <div class="p-6 border-b border-surface-container-highest bg-surface-container-lowest">
         ${!state.currentUser
-          ?`<button onclick="openUserModal('login')" class="w-full flex items-center justify-center gap-2 border-2 border-dashed border-primary/30 rounded-xl py-4 font-label-md text-primary hover:border-primary hover:bg-surface-container-low transition-all"><span class="material-symbols-outlined">login</span>Sign in to submit your prediction</button>`
+          ?`<button onclick='openUserModal("login")' class="w-full flex items-center justify-center gap-2 border-2 border-dashed border-primary/30 rounded-xl py-4 font-label-md text-primary hover:border-primary hover:bg-surface-container-low transition-all"><span class="material-symbols-outlined">login</span>Sign in to submit your prediction</button>`
           :myPred
             ?`<div class="flex items-center gap-3 p-4 bg-secondary-container/40 rounded-xl border border-secondary-fixed-dim"><span class="material-symbols-outlined text-secondary text-xl">check_circle</span><div><p class="font-label-md text-secondary text-sm">Your prediction is submitted</p><p class="text-xs text-on-surface-variant font-body-md">${allRevealed?'Revealed to everyone.':'Sealed until all members submit.'}</p></div></div>`
-            :`<button onclick="openPredictionModal('${stop.id}')" class="w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-3.5 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95 shadow-sm"><span class="material-symbols-outlined">psychology_alt</span>Cast My Prediction for This Stop</button>`
+            :`<button onclick='openPredictionModal("${stop.id}")' class="w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-3.5 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95 shadow-sm"><span class="material-symbols-outlined">psychology_alt</span>Cast My Prediction for This Stop</button>`
         }
       </div>
       ${state.isAdmin?`<div class="px-6 py-3 bg-primary/5 border-b border-primary/10 flex items-center justify-between gap-3 flex-wrap">
         <p class="text-xs font-label-md text-primary">${allRevealed?'All predictions revealed.':allSubmitted?'✓ Ready to reveal!':`Waiting for ${totalMembers-submittedCount} more…`}</p>
         <div class="flex gap-2">
           ${!allRevealed
-            ?`<button onclick="revealStopPredictions('${stop.id}')" ${allSubmitted?'':'disabled'} class="flex items-center gap-1.5 px-4 py-1.5 rounded-full font-label-md text-xs transition-all ${allSubmitted?'bg-secondary text-on-primary hover:opacity-90 active:scale-95':'bg-surface-container text-on-surface-variant opacity-50 cursor-not-allowed'}"><span class="material-symbols-outlined text-sm">visibility</span>Reveal All</button>`
-            :`<button onclick="hideStopPredictions('${stop.id}')" class="flex items-center gap-1.5 px-4 py-1.5 rounded-full font-label-md text-xs bg-surface-container text-on-surface-variant border border-outline-variant hover:bg-error hover:text-white transition-all"><span class="material-symbols-outlined text-sm">visibility_off</span>Re-seal</button>`
+            ?`<button onclick='revealStopPredictions("${stop.id}")' ${allSubmitted?'':'disabled'} class="flex items-center gap-1.5 px-4 py-1.5 rounded-full font-label-md text-xs transition-all ${allSubmitted?'bg-secondary text-on-primary hover:opacity-90 active:scale-95':'bg-surface-container text-on-surface-variant opacity-50 cursor-not-allowed'}"><span class="material-symbols-outlined text-sm">visibility</span>Reveal All</button>`
+            :`<button onclick='hideStopPredictions("${stop.id}")' class="flex items-center gap-1.5 px-4 py-1.5 rounded-full font-label-md text-xs bg-surface-container text-on-surface-variant border border-outline-variant hover:bg-error hover:text-white transition-all"><span class="material-symbols-outlined text-sm">visibility_off</span>Re-seal</button>`
           }
         </div>
       </div>`:''}
@@ -2434,8 +2435,8 @@ img,video{max-width:100%;height:auto}
             <div><p class="font-label-md text-on-surface text-sm">${escHtml(p.authorName||'Member')}</p><p class="text-xs text-on-surface-variant font-body-md">${formatTimeAgo(p.createdAt)} · ${allRevealed?'Revealed':'Sealed'}</p></div>
           </div>
           <div class="flex items-center gap-1.5">
-            ${allRevealed?'<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings:'FILL' 1">verified</span>':'<span class="material-symbols-outlined text-outline-variant text-base">lock</span>'}
-            ${state.isAdmin?`<button onclick="deletePrediction('${p.id}')" class="w-7 h-7 rounded-full flex items-center justify-center bg-surface-container text-on-surface-variant hover:bg-error hover:text-white transition-colors"><span class="material-symbols-outlined text-sm">delete</span></button>`:''}
+            ${allRevealed?'<span class="material-symbols-outlined text-secondary text-base icon-filled">verified</span>':'<span class="material-symbols-outlined text-outline-variant text-base">lock</span>'}
+            ${state.isAdmin?`<button onclick='deletePrediction("${p.id}")' class="w-7 h-7 rounded-full flex items-center justify-center bg-surface-container text-on-surface-variant hover:bg-error hover:text-white transition-colors"><span class="material-symbols-outlined text-sm">delete</span></button>`:''}
           </div>
         </div>
         ${canSee
@@ -2505,7 +2506,7 @@ img,video{max-width:100%;height:auto}
   function addBulletField(value='') {
     const list = document.getElementById('stop-bullets-list');
     const row = document.createElement('div'); row.className = 'flex items-center gap-2';
-    row.innerHTML = `<span class="material-symbols-outlined text-secondary text-sm shrink-0">radio_button_checked</span><input type="text" value="${escHtml(value)}" class="flex-1 rounded-lg border border-outline-variant px-3 py-2 font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Bullet point requirement"/><button onclick="this.parentElement.remove()" class="w-7 h-7 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-error hover:text-white transition-colors shrink-0"><span class="material-symbols-outlined text-sm">remove_circle</span></button>`;
+    row.innerHTML = `<span class="material-symbols-outlined text-secondary text-sm shrink-0">radio_button_checked</span><input type="text" value="${escHtml(value)}" class="flex-1 rounded-lg border border-outline-variant px-3 py-2 font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Bullet point requirement"/><button onclick='this.parentElement.remove()' class="w-7 h-7 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-error hover:text-white transition-colors shrink-0"><span class="material-symbols-outlined text-sm">remove_circle</span></button>`;
     list.appendChild(row);
   }
   window.addBulletField = addBulletField;
