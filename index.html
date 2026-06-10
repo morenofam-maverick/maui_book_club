@@ -10,7 +10,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250616';
+  const APP_VERSION = '20250617';
   const cached = localStorage.getItem('app_version');
   if (cached && cached !== APP_VERSION) {
     localStorage.setItem('app_version', APP_VERSION);
@@ -2197,7 +2197,24 @@ img,video{max-width:100%;height:auto}
     document.getElementById('auth-modal').classList.remove('flex');
   }
   window.closeAuthModal = closeAuthModal;
-  async function submitLogin() { await submitUserLogin(); }
+  async function submitLogin() {
+    const email = document.getElementById('auth-email').value.trim();
+    const pass = document.getElementById('auth-password').value;
+    const errEl = document.getElementById('auth-error');
+    const btn = document.getElementById('auth-submit-btn');
+    if (!email || !pass) { errEl.textContent = 'Please enter your email and password.'; return; }
+    btn.textContent = 'Signing in…'; btn.disabled = true;
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      closeAuthModal();
+      showSaveToast('Welcome back, admin!');
+    } catch(e) {
+      errEl.textContent = e.code === 'auth/invalid-credential'
+        ? 'Incorrect email or password.'
+        : 'Sign in failed. Please try again.';
+    }
+    btn.textContent = 'Sign In'; btn.disabled = false;
+  }
   window.submitLogin = submitLogin;
 
   // ── Admin panel ────────────────────────────────────────────────────────
