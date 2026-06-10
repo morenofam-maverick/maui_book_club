@@ -938,7 +938,8 @@ img,video{max-width:100%;height:auto}
   }
   body.admin-active [data-editable="book-title"],
   body.admin-active [data-editable="book-author"],
-  body.admin-active [data-editable="welcome"] {
+  body.admin-active [data-editable="welcome"],
+  body.admin-active [data-editable="welcome-invite"] {
     cursor: pointer !important;
     outline: 2px dashed #45664b;
     outline-offset: 3px;
@@ -1523,7 +1524,7 @@ img,video{max-width:100%;height:auto}
 <main class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-8 md:py-12 pb-32">
   <!-- Hero -->
   <section class="mb-10 text-center md:text-left">
-    <div class="inline-block px-4 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-md mb-4">
+    <div id="invite-aloha" data-editable="welcome-invite" class="inline-block px-4 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-md mb-4">
       Aloha, Miller Family!
     </div>
     <h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-4">The next chapter starts with you.</h2>
@@ -1716,6 +1717,10 @@ img,video{max-width:100%;height:auto}
       const el = document.getElementById('welcome-heading');
       if (el) el.textContent = book.welcomeText;
     }
+    if (book.alohaText) {
+      const el = document.getElementById('invite-aloha');
+      if (el) el.textContent = book.alohaText;
+    }
   }
 
   // ── Apply member data to DOM ───────────────────────────────────────────
@@ -1906,7 +1911,8 @@ img,video{max-width:100%;height:auto}
         coverUrl: '',
         synopsis: 'In a world where stories take on a life of their own, young Daniel Sempere discovers a mysterious book that leads him into a labyrinthine conspiracy.',
         altText: 'The Shadow of the Wind',
-        welcomeText: 'Welcome back, Miller Family'
+        welcomeText: 'Welcome back, Miller Family',
+        alohaText: 'Aloha, Miller Family!'
       });
     }
     // Seed members
@@ -1927,24 +1933,30 @@ img,video{max-width:100%;height:auto}
   // ── Auth state ─────────────────────────────────────────────────────────
   onAuthStateChanged(auth, async user => {
     state.currentUser = user;
+    const adminBtn = document.getElementById('admin-panel-btn');
+    const authBtnLabel = document.getElementById('auth-btn-label');
+    const authBtnIcon = document.querySelector('#auth-btn .material-symbols-outlined');
     if (user) {
       // Load user profile from Firestore
       const profileDoc = await getDoc(doc(db, 'userProfiles', user.uid));
       state.userProfile = profileDoc.exists() ? profileDoc.data() : null;
       state.isAdmin = !!(state.userProfile?.isAdmin);
       document.body.classList.toggle('admin-active', state.isAdmin);
-      renderHeaderUser(user);
-      const adminBtn = document.getElementById('admin-panel-btn');
       if (adminBtn) adminBtn.classList.toggle('hidden', !state.isAdmin);
-      // Inject "Update My Progress" on progress page
+      // Auth btn = Sign Out for any logged-in user
+      if (authBtnLabel) authBtnLabel.textContent = 'Sign Out';
+      if (authBtnIcon) authBtnIcon.textContent = 'logout';
+      renderHeaderUser(user);
       injectMyProgressButton();
     } else {
       state.userProfile = null;
       state.isAdmin = false;
       document.body.classList.remove('admin-active');
-      renderHeaderUser(null);
-      const adminBtn = document.getElementById('admin-panel-btn');
       if (adminBtn) adminBtn.classList.add('hidden');
+      // Auth btn = Admin Login when signed out
+      if (authBtnLabel) authBtnLabel.textContent = 'Admin Login';
+      if (authBtnIcon) authBtnIcon.textContent = 'lock';
+      renderHeaderUser(null);
     }
     if (Object.keys(state.members).length) renderMembersPage(state.members);
   });
@@ -2234,10 +2246,22 @@ img,video{max-width:100%;height:auto}
   }
   window.submitPrediction = submitPrediction;
 
-  // ── Old admin-only auth modal (kept for backward compat, now opens user modal) ──
-  function openAuthModal() { openUserModal(state.currentUser ? 'profile' : 'login'); }
+  // ── Old admin-only auth modal — opens admin login, not user profile ───
+  function openAuthModal() {
+    // If already signed in as admin, open admin panel directly
+    if (state.isAdmin) { openAdminPanel(); return; }
+    // If signed in but not admin, this button signs them out
+    if (state.currentUser) { signOut(auth); return; }
+    // Not signed in — open the dedicated admin login modal
+    document.getElementById('auth-modal').classList.remove('hidden');
+    document.getElementById('auth-modal').classList.add('flex');
+    document.getElementById('auth-error').textContent = '';
+  }
   window.openAuthModal = openAuthModal;
-  function closeAuthModal() { closeUserModal(); }
+  function closeAuthModal() {
+    document.getElementById('auth-modal').classList.add('hidden');
+    document.getElementById('auth-modal').classList.remove('flex');
+  }
   window.closeAuthModal = closeAuthModal;
   async function submitLogin() { await submitUserLogin(); }
   window.submitLogin = submitLogin;
@@ -2249,6 +2273,7 @@ img,video{max-width:100%;height:auto}
     document.getElementById('admin-panel').classList.add('flex');
     // Pre-fill fields
     document.getElementById('admin-welcome-text').value = state.book.welcomeText || 'Welcome back, Miller Family';
+    document.getElementById('admin-aloha-text').value = state.book.alohaText || 'Aloha, Miller Family!';
     document.getElementById('admin-book-title').value = state.book.title || '';
     document.getElementById('admin-book-author').value = state.book.author || '';
     document.getElementById('admin-book-synopsis').value = state.book.synopsis || '';
@@ -2293,6 +2318,7 @@ img,video{max-width:100%;height:auto}
       author: document.getElementById('admin-book-author').value.trim(),
       synopsis: document.getElementById('admin-book-synopsis').value.trim(),
       welcomeText: document.getElementById('admin-welcome-text').value.trim(),
+      alohaText: document.getElementById('admin-aloha-text').value.trim(),
       coverUrl: state.book.coverUrl || ''
     };
 
@@ -2710,8 +2736,12 @@ img,video{max-width:100%;height:auto}
       <div id="admin-tab-book" class="space-y-4">
         <p class="text-sm text-on-surface-variant font-body-md">Changes save instantly for all club members.</p>
         <div>
-          <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Welcome Message</label>
+          <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Welcome Message (Home page)</label>
           <input id="admin-welcome-text" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Welcome back, Miller Family"/>
+        </div>
+        <div>
+          <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Aloha Greeting (Invite page)</label>
+          <input id="admin-aloha-text" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Aloha, Miller Family!"/>
         </div>
         <div>
           <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Book Title</label>
@@ -2843,7 +2873,7 @@ img,video{max-width:100%;height:auto}
   </button>
   <button id="auth-btn" onclick="openAuthModal()" class="bg-surface-container text-on-surface-variant flex items-center gap-2 px-4 py-2.5 rounded-full font-label-md shadow-sm hover:bg-surface-container-high transition-all active:scale-95 border border-outline-variant">
     <span class="material-symbols-outlined text-xl">lock</span>
-    <span class="hidden md:inline">Admin Login</span>
+    <span class="hidden md:inline" id="auth-btn-label">Admin Login</span>
   </button>
 </div>
 
