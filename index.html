@@ -10,7 +10,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250630';
+  const APP_VERSION = '20250701';
   const cached = localStorage.getItem('app_version');
   if (cached && cached !== APP_VERSION) {
     localStorage.setItem('app_version', APP_VERSION);
@@ -957,7 +957,12 @@ img,video{max-width:100%;height:auto}
   body.admin-active [data-editable="book-author"],
   body.admin-active [data-editable="welcome"],
   body.admin-active [data-editable="welcome-invite"],
-  body.admin-active [id^="cp"] {
+  body.admin-active [id^="cp"],
+  body.admin-active #chapter-overview-intro,
+  body.admin-active #book-note-label,
+  body.admin-active #book-note-body,
+  body.admin-active #ohana-title,
+  body.admin-active #ohana-body {
     cursor: pointer !important;
     outline: 2px dashed #45664b;
     outline-offset: 3px;
@@ -1120,16 +1125,27 @@ img,video{max-width:100%;height:auto}
           <span id="buy-link-book-label">Purchase Book</span>
         </a>
       </div>
-      <!-- Chapter Overview -->
-      <div id="chapter-overview-section" class="hidden max-w-2xl mt-6 bg-surface-container-low rounded-xl p-6 border border-outline-variant">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="font-label-md text-primary uppercase tracking-widest">Chapter Overview</h3>
-          <span id="chapter-overview-edit-hint" class="hidden text-[10px] text-secondary font-label-md flex items-center gap-1 cursor-pointer opacity-60 hover:opacity-100" onclick="openAdminPanel()">
-            <span class="material-symbols-outlined text-sm">edit</span>Edit in Admin Panel
-          </span>
-        </div>
-        <p id="chapter-overview-intro" class="font-body-md text-on-surface-variant text-sm leading-relaxed mb-4"></p>
-        <ul id="chapter-overview-bullets" class="space-y-2"></ul>
+      <!-- Chapter Overview — always visible, admin-editable inline -->
+      <div class="max-w-2xl mt-6 bg-surface-container-low rounded-xl p-6 border border-outline-variant">
+        <h3 class="font-label-md text-primary uppercase tracking-widest mb-4">Chapter Overview</h3>
+        <p id="chapter-overview-intro"
+           class="font-body-md text-on-surface-variant text-sm leading-relaxed mb-4 cursor-pointer hover:opacity-70 transition-opacity"
+           onclick="editBookNote('chapter-overview-intro')"
+           title="Click to edit">The book features a split-timeline that alternates between the past and the present, told by seven different characters.</p>
+        <ul id="chapter-overview-bullets" class="space-y-2">
+          <li class="flex items-start gap-2 font-body-md text-sm text-on-surface">
+            <span class="material-symbols-outlined text-secondary text-sm mt-0.5 shrink-0">radio_button_checked</span>
+            <span>Chapters 1–21: Sets the scene and explores the arrival of the wedding party and their individual dark secrets.</span>
+          </li>
+          <li class="flex items-start gap-2 font-body-md text-sm text-on-surface">
+            <span class="material-symbols-outlined text-secondary text-sm mt-0.5 shrink-0">radio_button_checked</span>
+            <span>Chapters 22–42: Focuses on the escalating drama and tension leading up to the night of the wedding.</span>
+          </li>
+          <li class="flex items-start gap-2 font-body-md text-sm text-on-surface">
+            <span class="material-symbols-outlined text-secondary text-sm mt-0.5 shrink-0">radio_button_checked</span>
+            <span>Chapters 43–73: The climax and unraveling of exactly who ended up dead and why.</span>
+          </li>
+        </ul>
       </div>
     </div>
   </section>
@@ -1479,24 +1495,21 @@ img,video{max-width:100%;height:auto}
       const el = document.getElementById('ohana-body');
       if (el && !el.querySelector('input,textarea')) el.textContent = book['ohana-body'];
     }
-    // Chapter Overview
-    const section = document.getElementById('chapter-overview-section');
-    const introEl = document.getElementById('chapter-overview-intro');
-    const bulletsEl = document.getElementById('chapter-overview-bullets');
-    const editHint = document.getElementById('chapter-overview-edit-hint');
-    if (section) {
-      const hasContent = book.chapterIntro || (book.chapterBullets && book.chapterBullets.length > 0);
-      section.classList.toggle('hidden', !hasContent);
-      if (introEl) introEl.textContent = book.chapterIntro || '';
+    // Chapter Overview — always visible, update from Firebase if content exists
+    if (book.chapterIntro) {
+      const el = document.getElementById('chapter-overview-intro');
+      if (el && !el.querySelector('input,textarea')) el.textContent = book.chapterIntro;
+    }
+    if (book.chapterBullets && book.chapterBullets.length > 0) {
+      const bulletsEl = document.getElementById('chapter-overview-bullets');
       if (bulletsEl) {
-        bulletsEl.innerHTML = (book.chapterBullets || []).map(b =>
+        bulletsEl.innerHTML = book.chapterBullets.map(b =>
           `<li class="flex items-start gap-2 font-body-md text-sm text-on-surface">
             <span class="material-symbols-outlined text-secondary text-sm mt-0.5 shrink-0">radio_button_checked</span>
             <span>${escHtml(b)}</span>
           </li>`
         ).join('');
       }
-      if (editHint) editHint.classList.toggle('hidden', !state.isAdmin);
     }
     const coverSize = book.coverSize || 'medium';
     const sizeMap = { small: '120px', medium: '180px', large: '260px' };
