@@ -964,8 +964,11 @@ img,video{max-width:100%;height:auto}
         <span id="nav-members" class="font-label-md text-on-surface-variant cursor-pointer transition-colors hover:text-primary nav-link" onclick="navigate('members')">Family</span>
         <span id="nav-invite" class="font-label-md text-on-surface-variant cursor-pointer transition-colors hover:text-primary nav-link" onclick="navigate('invite')">Invite</span>
       </div>
-      <div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border-2 border-primary-container cursor-pointer transition-transform active:scale-95">
-        <img alt="User Avatar" data-editable="img" data-edit-id="user-avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCo22nK4zKKV9PWCABd-dmxZe56V0F7AADmsVVIchEQSVqfQF6qqetloxfWFqF1dSXTU_WEfJbndMkhOrgrtXUJYNi2jrkN9tWE43fO1NiECvxQ2zyeeb7VSTxwDv1Bannmj16-KitQAVnOgvq8PZTr42jEnZIq63rX9upK-8kikul51RtEPhkwb6ANh7b01PaADLLtwB3Ot_WOmprsTDYwVzyVCS1eluDFDBmyYioFkZisGUQRn-Fb_WpFaYotJobuUbMwWhBGDfM"/>
+      <div class="flex items-center gap-3">
+        <!-- User avatar / sign in button -->
+        <div id="header-user-area">
+          <!-- Injected by JS: sign-in button or user avatar dropdown -->
+        </div>
       </div>
     </div>
   </div>
@@ -1257,7 +1260,7 @@ img,video{max-width:100%;height:auto}
         </div>
         <span class="font-body-md text-body-md text-on-surface-variant">3 family members predicted</span>
       </div>
-      <button class="flex items-center gap-2 bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-md hover:opacity-90 active:scale-95 transition-all shadow-sm">
+      <button onclick="openPredictionModal()" class="flex items-center gap-2 bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-md hover:opacity-90 active:scale-95 transition-all shadow-sm">
         <span class="material-symbols-outlined text-[20px]">add_circle</span>Make Prediction
       </button>
     </div>
@@ -1380,7 +1383,7 @@ img,video{max-width:100%;height:auto}
   </section>
   <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
     <!-- Mom -->
-    <div class="bg-surface-bright paper-texture border border-surface-container-high rounded-xl p-6 flex flex-col justify-between shadow-sm transition-transform hover:-translate-y-1 duration-300">
+    <div data-progress-card="mom" class="bg-surface-bright paper-texture border border-surface-container-high rounded-xl p-6 flex flex-col justify-between shadow-sm transition-transform hover:-translate-y-1 duration-300">
       <div class="flex items-center justify-between mb-6">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full border-2 border-secondary-fixed overflow-hidden">
@@ -1404,7 +1407,7 @@ img,video{max-width:100%;height:auto}
       </div>
     </div>
     <!-- Dad -->
-    <div class="bg-surface-bright paper-texture border border-surface-container-high rounded-xl p-6 flex flex-col justify-between shadow-sm transition-transform hover:-translate-y-1 duration-300">
+    <div data-progress-card="dad" class="bg-surface-bright paper-texture border border-surface-container-high rounded-xl p-6 flex flex-col justify-between shadow-sm transition-transform hover:-translate-y-1 duration-300">
       <div class="flex items-center justify-between mb-6">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full border-2 border-secondary-fixed overflow-hidden">
@@ -1428,7 +1431,7 @@ img,video{max-width:100%;height:auto}
       </div>
     </div>
     <!-- Sarah -->
-    <div class="bg-surface-bright paper-texture border border-surface-container-high rounded-xl p-6 flex flex-col justify-between shadow-sm transition-transform hover:-translate-y-1 duration-300">
+    <div data-progress-card="sarah" class="bg-surface-bright paper-texture border border-surface-container-high rounded-xl p-6 flex flex-col justify-between shadow-sm transition-transform hover:-translate-y-1 duration-300">
       <div class="flex items-center justify-between mb-6">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full border-2 border-secondary-fixed overflow-hidden">
@@ -1452,7 +1455,7 @@ img,video{max-width:100%;height:auto}
       </div>
     </div>
     <!-- Leo -->
-    <div class="bg-surface-bright paper-texture border border-surface-container-high rounded-xl p-6 flex flex-col justify-between shadow-sm transition-transform hover:-translate-y-1 duration-300">
+    <div data-progress-card="leo" class="bg-surface-bright paper-texture border border-surface-container-high rounded-xl p-6 flex flex-col justify-between shadow-sm transition-transform hover:-translate-y-1 duration-300">
       <div class="flex items-center justify-between mb-6">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full border-2 border-secondary-fixed overflow-hidden">
@@ -1637,7 +1640,7 @@ img,video{max-width:100%;height:auto}
 <script type="module">
   // ── Firebase SDK ───────────────────────────────────────────────────────
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail }
     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
   import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, getDocs, updateDoc }
     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
@@ -1888,6 +1891,8 @@ img,video{max-width:100%;height:auto}
       snap.forEach(d => { state.members[d.id] = d.data(); });
       applyMembersToDOM(state.members);
       renderMembersPage(state.members);
+      populateMemberSelects();
+      if (state.currentUser) injectMyProgressButton();
     });
   }
 
@@ -1922,53 +1927,319 @@ img,video{max-width:100%;height:auto}
   // ── Auth state ─────────────────────────────────────────────────────────
   onAuthStateChanged(auth, async user => {
     state.currentUser = user;
-    state.isAdmin = !!user;
-    const adminBtn = document.getElementById('admin-panel-btn');
-    const authBtn = document.getElementById('auth-btn');
     if (user) {
-      document.body.classList.add('admin-active');
-      if (adminBtn) adminBtn.classList.remove('hidden');
-      if (authBtn) { authBtn.textContent = 'Sign Out'; authBtn.onclick = () => signOut(auth); }
+      // Load user profile from Firestore
+      const profileDoc = await getDoc(doc(db, 'userProfiles', user.uid));
+      state.userProfile = profileDoc.exists() ? profileDoc.data() : null;
+      state.isAdmin = !!(state.userProfile?.isAdmin);
+      document.body.classList.toggle('admin-active', state.isAdmin);
+      renderHeaderUser(user);
+      const adminBtn = document.getElementById('admin-panel-btn');
+      if (adminBtn) adminBtn.classList.toggle('hidden', !state.isAdmin);
+      // Inject "Update My Progress" on progress page
+      injectMyProgressButton();
     } else {
+      state.userProfile = null;
+      state.isAdmin = false;
       document.body.classList.remove('admin-active');
+      renderHeaderUser(null);
+      const adminBtn = document.getElementById('admin-panel-btn');
       if (adminBtn) adminBtn.classList.add('hidden');
-      if (authBtn) { authBtn.textContent = 'Admin Login'; authBtn.onclick = () => openAuthModal(); }
     }
-    // Re-render members page with correct admin state
     if (Object.keys(state.members).length) renderMembersPage(state.members);
   });
 
-  // ── Auth modal ─────────────────────────────────────────────────────────
-  function openAuthModal() {
-    document.getElementById('auth-modal').classList.remove('hidden');
-    document.getElementById('auth-modal').classList.add('flex');
-    document.getElementById('auth-error').textContent = '';
+  // ── Header user area ───────────────────────────────────────────────────
+  function renderHeaderUser(user) {
+    const area = document.getElementById('header-user-area');
+    if (!area) return;
+    if (!user) {
+      area.innerHTML = `<button onclick="openUserModal('login')" class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-full font-label-md hover:opacity-90 transition-all active:scale-95 shadow-sm">
+        <span class="material-symbols-outlined text-lg">login</span>
+        <span class="hidden md:inline">Sign In</span>
+      </button>`;
+    } else {
+      const profile = state.userProfile;
+      const memberData = profile?.memberId ? state.members[profile.memberId] : null;
+      const avatar = memberData?.avatarUrl || '';
+      const displayName = profile?.displayName || user.email.split('@')[0];
+      const initials = displayName.slice(0,2).toUpperCase();
+      area.innerHTML = `
+        <div class="relative" id="user-menu-wrap">
+          <button onclick="toggleUserMenu()" class="flex items-center gap-2 bg-surface-container-low border border-outline-variant rounded-full pl-1 pr-3 py-1 hover:bg-surface-container-high transition-all active:scale-95">
+            <div class="w-8 h-8 rounded-full overflow-hidden bg-primary flex items-center justify-center shrink-0">
+              ${avatar ? `<img src="${avatar}" class="w-full h-full object-cover" alt="${displayName}"/>` : `<span class="text-on-primary font-bold text-xs">${initials}</span>`}
+            </div>
+            <span class="font-label-md text-on-surface text-sm hidden md:inline max-w-[120px] truncate">${displayName}</span>
+            <span class="material-symbols-outlined text-on-surface-variant text-sm">expand_more</span>
+          </button>
+          <div id="user-dropdown" class="hidden absolute right-0 top-12 bg-white rounded-2xl shadow-2xl border border-surface-container-highest z-50 w-56 overflow-hidden">
+            <div class="px-4 py-3 border-b border-surface-container-highest">
+              <p class="font-label-md text-on-surface text-sm truncate">${displayName}</p>
+              <p class="text-xs text-on-surface-variant truncate">${user.email}</p>
+              ${state.isAdmin ? '<span class="inline-block mt-1 px-2 py-0.5 bg-primary text-on-primary text-[10px] font-bold rounded-full uppercase tracking-wider">Admin</span>' : ''}
+            </div>
+            <button onclick="openUserModal('profile')" class="w-full text-left px-4 py-3 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center gap-3">
+              <span class="material-symbols-outlined text-on-surface-variant text-lg">manage_accounts</span>My Profile
+            </button>
+            <button onclick="navigate('progress');toggleUserMenu()" class="w-full text-left px-4 py-3 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center gap-3">
+              <span class="material-symbols-outlined text-on-surface-variant text-lg">bar_chart</span>My Progress
+            </button>
+            <button onclick="navigate('predictions');toggleUserMenu()" class="w-full text-left px-4 py-3 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center gap-3">
+              <span class="material-symbols-outlined text-on-surface-variant text-lg">psychology_alt</span>My Predictions
+            </button>
+            <div class="border-t border-surface-container-highest">
+              <button onclick="signOut(auth)" class="w-full text-left px-4 py-3 font-label-md text-sm hover:bg-surface-container-low transition-colors flex items-center gap-3 text-error">
+                <span class="material-symbols-outlined text-lg">logout</span>Sign Out
+              </button>
+            </div>
+          </div>
+        </div>`;
+    }
   }
-  window.openAuthModal = openAuthModal;
 
-  function closeAuthModal() {
-    document.getElementById('auth-modal').classList.add('hidden');
-    document.getElementById('auth-modal').classList.remove('flex');
+  function toggleUserMenu() {
+    const dd = document.getElementById('user-dropdown');
+    if (dd) dd.classList.toggle('hidden');
   }
-  window.closeAuthModal = closeAuthModal;
+  window.toggleUserMenu = toggleUserMenu;
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#user-menu-wrap')) {
+      document.getElementById('user-dropdown')?.classList.add('hidden');
+    }
+  });
 
-  async function submitLogin() {
-    const email = document.getElementById('auth-email').value.trim();
-    const pass = document.getElementById('auth-password').value;
-    const errEl = document.getElementById('auth-error');
-    const btn = document.getElementById('auth-submit-btn');
-    btn.textContent = 'Signing in…';
-    btn.disabled = true;
+  // ── User modal (login / register / profile) ───────────────────────────
+  function openUserModal(tab = 'login') {
+    document.getElementById('user-modal').classList.remove('hidden');
+    document.getElementById('user-modal').classList.add('flex');
+    // Show/hide profile tab based on login state
+    const profileBtn = document.getElementById('user-tab-btn-profile');
+    if (profileBtn) profileBtn.classList.toggle('hidden', !state.currentUser);
+    switchUserTab(tab);
+    document.getElementById('user-modal-error').textContent = '';
+  }
+  window.openUserModal = openUserModal;
+
+  function closeUserModal() {
+    document.getElementById('user-modal').classList.add('hidden');
+    document.getElementById('user-modal').classList.remove('flex');
+  }
+  window.closeUserModal = closeUserModal;
+
+  function switchUserTab(tab) {
+    ['login','register','profile'].forEach(t => {
+      const panel = document.getElementById(`user-tab-${t}`);
+      const btn = document.getElementById(`user-tab-btn-${t}`);
+      if (panel) panel.classList.toggle('hidden', t !== tab);
+      if (btn) {
+        btn.classList.toggle('bg-primary', t === tab);
+        btn.classList.toggle('text-on-primary', t === tab);
+        btn.classList.toggle('text-on-surface-variant', t !== tab);
+      }
+    });
+    // Populate profile tab if needed
+    if (tab === 'profile' && state.currentUser) {
+      populateProfileTab();
+    }
+    document.getElementById('user-modal-error').textContent = '';
+  }
+  window.switchUserTab = switchUserTab;
+
+  // Sign in
+  async function submitUserLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const pass = document.getElementById('login-password').value;
+    const errEl = document.getElementById('user-modal-error');
+    const btn = document.getElementById('login-submit-btn');
+    btn.textContent = 'Signing in…'; btn.disabled = true;
     try {
       await signInWithEmailAndPassword(auth, email, pass);
-      closeAuthModal();
-      showSaveToast('Welcome back, admin!');
+      closeUserModal();
+      showSaveToast('Welcome back!');
     } catch(e) {
-      errEl.textContent = 'Invalid email or password.';
+      errEl.textContent = e.code === 'auth/invalid-credential' ? 'Incorrect email or password.' : 'Sign in failed. Please try again.';
     }
-    btn.textContent = 'Sign In';
-    btn.disabled = false;
+    btn.textContent = 'Sign In'; btn.disabled = false;
   }
+  window.submitUserLogin = submitUserLogin;
+
+  // Register
+  async function submitUserRegister() {
+    const name = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const pass = document.getElementById('reg-password').value;
+    const memberId = document.getElementById('reg-member-select').value;
+    const errEl = document.getElementById('user-modal-error');
+    const btn = document.getElementById('reg-submit-btn');
+    if (!name || !email || !pass) { errEl.textContent = 'Please fill in all fields.'; return; }
+    if (pass.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; return; }
+    btn.textContent = 'Creating…'; btn.disabled = true;
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      await updateProfile(cred.user, { displayName: name });
+      // Save user profile to Firestore
+      await setDoc(doc(db, 'userProfiles', cred.user.uid), {
+        displayName: name, email, memberId: memberId || null, isAdmin: false, createdAt: new Date().toISOString()
+      });
+      closeUserModal();
+      showSaveToast(`Welcome, ${name}!`);
+    } catch(e) {
+      errEl.textContent = e.code === 'auth/email-already-in-use' ? 'That email is already registered.' : 'Registration failed: ' + e.message;
+    }
+    btn.textContent = 'Create Account'; btn.disabled = false;
+  }
+  window.submitUserRegister = submitUserRegister;
+
+  // Forgot password
+  async function submitForgotPassword() {
+    const email = document.getElementById('login-email').value.trim();
+    if (!email) { document.getElementById('user-modal-error').textContent = 'Enter your email above first.'; return; }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      document.getElementById('user-modal-error').textContent = '';
+      showSaveToast('Password reset email sent!');
+    } catch(e) { document.getElementById('user-modal-error').textContent = 'Could not send reset email.'; }
+  }
+  window.submitForgotPassword = submitForgotPassword;
+
+  // Profile tab
+  function populateProfileTab() {
+    const p = state.userProfile;
+    if (!p) return;
+    const nameEl = document.getElementById('profile-name');
+    const memberEl = document.getElementById('profile-member-select');
+    if (nameEl) nameEl.value = p.displayName || '';
+    if (memberEl) memberEl.value = p.memberId || '';
+  }
+
+  async function saveUserProfile() {
+    if (!state.currentUser) return;
+    const name = document.getElementById('profile-name').value.trim();
+    const memberId = document.getElementById('profile-member-select').value;
+    const btn = document.getElementById('profile-save-btn');
+    btn.textContent = 'Saving…'; btn.disabled = true;
+    try {
+      await updateDoc(doc(db, 'userProfiles', state.currentUser.uid), { displayName: name, memberId: memberId || null });
+      await updateProfile(state.currentUser, { displayName: name });
+      state.userProfile = { ...state.userProfile, displayName: name, memberId: memberId || null };
+      renderHeaderUser(state.currentUser);
+      showSaveToast('Profile updated!');
+      closeUserModal();
+    } catch(e) { showSaveToast('Save failed'); }
+    btn.textContent = 'Save'; btn.disabled = false;
+  }
+  window.saveUserProfile = saveUserProfile;
+
+  // Populate member selects in register + profile tabs
+  function populateMemberSelects() {
+    const opts = `<option value="">— I'm not listed yet —</option>` +
+      Object.entries(state.members).map(([id,m]) => `<option value="${id}">${m.name||id}</option>`).join('');
+    ['reg-member-select','profile-member-select'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = opts;
+    });
+  }
+
+  // ── "Update My Progress" button on Progress page ───────────────────────
+  function injectMyProgressButton() {
+    const profile = state.userProfile;
+    if (!profile?.memberId) return;
+    const card = document.querySelector(`[data-progress-card="${profile.memberId}"]`);
+    if (!card) return;
+    // Remove any existing button
+    card.querySelector('.my-progress-btn')?.remove();
+    const btnWrap = document.createElement('div');
+    btnWrap.className = 'my-progress-btn mt-3 pt-3 border-t border-outline-variant';
+    btnWrap.innerHTML = `<button onclick="openMyProgressModal()" class="w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-2 rounded-lg font-label-md text-sm hover:opacity-90 transition-opacity active:scale-95">
+      <span class="material-symbols-outlined text-sm">edit</span>Update My Progress
+    </button>`;
+    card.querySelector('.space-y-4')?.appendChild(btnWrap);
+    // Highlight their card
+    card.classList.add('ring-2','ring-primary','ring-offset-2');
+  }
+
+  function openMyProgressModal() {
+    const profile = state.userProfile;
+    if (!profile?.memberId) return;
+    const m = state.members[profile.memberId] || {};
+    const pctEl = document.getElementById('my-progress-pct');
+    const labelEl = document.getElementById('my-progress-pct-label');
+    if (pctEl) { pctEl.value = m.progress || 0; }
+    if (labelEl) { labelEl.textContent = (m.progress || 0) + '%'; }
+    document.getElementById('my-progress-chapter').value = m.chapter || '';
+    document.getElementById('my-progress-modal').classList.remove('hidden');
+    document.getElementById('my-progress-modal').classList.add('flex');
+  }
+  window.openMyProgressModal = openMyProgressModal;
+
+  function closeMyProgressModal() {
+    document.getElementById('my-progress-modal').classList.add('hidden');
+    document.getElementById('my-progress-modal').classList.remove('flex');
+  }
+  window.closeMyProgressModal = closeMyProgressModal;
+
+  async function saveMyProgress() {
+    const profile = state.userProfile;
+    if (!profile?.memberId) return;
+    const pct = parseInt(document.getElementById('my-progress-pct').value) || 0;
+    const chapter = document.getElementById('my-progress-chapter').value.trim();
+    const btn = document.getElementById('my-progress-save-btn');
+    btn.textContent = 'Saving…'; btn.disabled = true;
+    try {
+      await updateDoc(doc(db, 'members', profile.memberId), { progress: pct, chapter });
+      showSaveToast('Progress updated!');
+      closeMyProgressModal();
+    } catch(e) { showSaveToast('Save failed'); }
+    btn.textContent = 'Save'; btn.disabled = false;
+  }
+  window.saveMyProgress = saveMyProgress;
+
+  // ── Submit prediction ──────────────────────────────────────────────────
+  function openPredictionModal() {
+    if (!state.currentUser) { openUserModal('login'); return; }
+    document.getElementById('prediction-modal').classList.remove('hidden');
+    document.getElementById('prediction-modal').classList.add('flex');
+    document.getElementById('prediction-text').value = '';
+  }
+  window.openPredictionModal = openPredictionModal;
+
+  function closePredictionModal() {
+    document.getElementById('prediction-modal').classList.add('hidden');
+    document.getElementById('prediction-modal').classList.remove('flex');
+  }
+  window.closePredictionModal = closePredictionModal;
+
+  async function submitPrediction() {
+    const text = document.getElementById('prediction-text').value.trim();
+    if (!text) return;
+    const btn = document.getElementById('prediction-submit-btn');
+    btn.textContent = 'Posting…'; btn.disabled = true;
+    const profile = state.userProfile;
+    const memberId = profile?.memberId || null;
+    const memberData = memberId ? state.members[memberId] : null;
+    try {
+      const { addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      await addDoc(collection(db, 'predictions'), {
+        text, authorName: profile?.displayName || state.currentUser.email.split('@')[0],
+        authorId: state.currentUser.uid, memberId,
+        avatarUrl: memberData?.avatarUrl || '',
+        bookTitle: state.book.title || '', createdAt: serverTimestamp(), revealed: true
+      });
+      closePredictionModal();
+      showSaveToast('Prediction posted!');
+      navigate('predictions');
+    } catch(e) { showSaveToast('Failed to post'); }
+    btn.textContent = 'Post Prediction'; btn.disabled = false;
+  }
+  window.submitPrediction = submitPrediction;
+
+  // ── Old admin-only auth modal (kept for backward compat, now opens user modal) ──
+  function openAuthModal() { openUserModal(state.currentUser ? 'profile' : 'login'); }
+  window.openAuthModal = openAuthModal;
+  function closeAuthModal() { closeUserModal(); }
+  window.closeAuthModal = closeAuthModal;
+  async function submitLogin() { await submitUserLogin(); }
   window.submitLogin = submitLogin;
 
   // ── Admin panel ────────────────────────────────────────────────────────
@@ -2257,7 +2528,136 @@ img,video{max-width:100%;height:auto}
   </div>
 </div>
 
-<!-- ===== AUTH MODAL ===== -->
+<!-- ===== USER AUTH MODAL ===== -->
+<div id="user-modal" class="hidden fixed inset-0 z-[100] items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+    <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-surface-container-highest">
+      <div class="flex gap-2">
+        <button id="user-tab-btn-login" onclick="switchUserTab('login')" class="px-4 py-1.5 rounded-full font-label-md text-sm bg-primary text-on-primary transition-all">Sign In</button>
+        <button id="user-tab-btn-register" onclick="switchUserTab('register')" class="px-4 py-1.5 rounded-full font-label-md text-sm text-on-surface-variant transition-all">Register</button>
+        <button id="user-tab-btn-profile" onclick="switchUserTab('profile')" class="hidden px-4 py-1.5 rounded-full font-label-md text-sm text-on-surface-variant transition-all">My Profile</button>
+      </div>
+      <button onclick="closeUserModal()" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant text-xl">close</span>
+      </button>
+    </div>
+    <p id="user-modal-error" class="text-sm text-error font-label-md px-6 pt-3 min-h-[1.5rem]"></p>
+
+    <!-- Login tab -->
+    <div id="user-tab-login" class="p-6 pt-2 space-y-4">
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Email</label>
+        <input id="login-email" type="email" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="you@example.com"/>
+      </div>
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Password</label>
+        <input id="login-password" type="password" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="••••••••"/>
+      </div>
+      <div class="flex gap-3 pt-1">
+        <button onclick="submitForgotPassword()" class="flex-1 py-3 rounded-xl border border-outline-variant font-label-md text-on-surface-variant text-sm hover:bg-surface-container transition-colors">Forgot Password</button>
+        <button id="login-submit-btn" onclick="submitUserLogin()" class="flex-1 py-3 rounded-xl bg-primary text-on-primary font-label-md hover:opacity-90 transition-opacity">Sign In</button>
+      </div>
+      <p class="text-center text-sm text-on-surface-variant font-body-md">New to the club? <button onclick="switchUserTab('register')" class="text-primary font-label-md underline">Create an account</button></p>
+    </div>
+
+    <!-- Register tab -->
+    <div id="user-tab-register" class="hidden p-6 pt-2 space-y-4">
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Your Name</label>
+        <input id="reg-name" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="First name or nickname"/>
+      </div>
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Email</label>
+        <input id="reg-email" type="email" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="you@example.com"/>
+      </div>
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Password</label>
+        <input id="reg-password" type="password" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="At least 6 characters"/>
+      </div>
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Which member are you?</label>
+        <select id="reg-member-select" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary bg-white">
+          <option value="">— Loading members… —</option>
+        </select>
+      </div>
+      <button id="reg-submit-btn" onclick="submitUserRegister()" class="w-full py-3 rounded-xl bg-primary text-on-primary font-label-md hover:opacity-90 transition-opacity">Create Account</button>
+      <p class="text-center text-sm text-on-surface-variant font-body-md">Already registered? <button onclick="switchUserTab('login')" class="text-primary font-label-md underline">Sign in</button></p>
+    </div>
+
+    <!-- Profile tab -->
+    <div id="user-tab-profile" class="hidden p-6 pt-2 space-y-4">
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Display Name</label>
+        <input id="profile-name" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary"/>
+      </div>
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Which member are you?</label>
+        <select id="profile-member-select" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary bg-white">
+          <option value="">— Not linked —</option>
+        </select>
+      </div>
+      <button id="profile-save-btn" onclick="saveUserProfile()" class="w-full py-3 rounded-xl bg-primary text-on-primary font-label-md hover:opacity-90 transition-opacity">Save Profile</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MY PROGRESS MODAL ===== -->
+<div id="my-progress-modal" class="hidden fixed inset-0 z-[100] items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden">
+    <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-surface-container-highest">
+      <h3 class="font-headline-md text-headline-md text-primary">Update My Progress</h3>
+      <button onclick="closeMyProgressModal()" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant text-xl">close</span>
+      </button>
+    </div>
+    <div class="p-6 space-y-5">
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Reading Progress</label>
+        <div class="flex items-center gap-4">
+          <input id="my-progress-pct" type="range" min="0" max="100" value="0" class="flex-1 accent-primary" oninput="document.getElementById('my-progress-pct-label').textContent=this.value+'%'"/>
+          <span id="my-progress-pct-label" class="font-label-md text-primary w-10 text-right">0%</span>
+        </div>
+      </div>
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Current Chapter</label>
+        <input id="my-progress-chapter" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. Chapter 7"/>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="closeMyProgressModal()" class="flex-1 py-3 rounded-xl border border-outline-variant font-label-md text-on-surface-variant hover:bg-surface-container transition-colors">Cancel</button>
+        <button id="my-progress-save-btn" onclick="saveMyProgress()" class="flex-1 py-3 rounded-xl bg-primary text-on-primary font-label-md hover:opacity-90 transition-opacity">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SUBMIT PREDICTION MODAL ===== -->
+<div id="prediction-modal" class="hidden fixed inset-0 z-[100] items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+    <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-surface-container-highest">
+      <div>
+        <h3 class="font-headline-md text-headline-md text-primary">Cast Your Prediction</h3>
+        <p class="text-xs text-on-surface-variant font-body-md mt-1" id="prediction-book-label"></p>
+      </div>
+      <button onclick="closePredictionModal()" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant text-xl">close</span>
+      </button>
+    </div>
+    <div class="p-6 space-y-4">
+      <div class="bg-tertiary-fixed/30 rounded-xl p-4 border border-tertiary-fixed-dim">
+        <p class="text-xs font-label-md text-outline uppercase tracking-widest mb-1">What do you think happens next?</p>
+        <textarea id="prediction-text" rows="4" class="w-full bg-transparent font-body-md text-on-surface focus:outline-none resize-none text-sm leading-relaxed" placeholder="Write your prediction here... What secrets will be revealed? Who is the mystery figure?"></textarea>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="closePredictionModal()" class="flex-1 py-3 rounded-xl border border-outline-variant font-label-md text-on-surface-variant hover:bg-surface-container transition-colors">Cancel</button>
+        <button id="prediction-submit-btn" onclick="submitPrediction()" class="flex-1 py-3 rounded-xl bg-primary text-on-primary font-label-md hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-sm">psychology_alt</span>Post Prediction
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== AUTH MODAL (admin) ===== -->
 <div id="auth-modal" class="hidden fixed inset-0 z-[100] items-center justify-center bg-black/50 backdrop-blur-sm p-4">
   <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
     <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-surface-container-highest">
