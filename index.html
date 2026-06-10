@@ -10,7 +10,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250710';
+  const APP_VERSION = '20250712';
   const cached = localStorage.getItem('app_version');
   if (cached && cached !== APP_VERSION) {
     localStorage.setItem('app_version', APP_VERSION);
@@ -964,6 +964,9 @@ img,video{max-width:100%;height:auto}
   .prediction-blur { filter: blur(8px); user-select: none; pointer-events: none; }
   .page { display: none; }
   .page.active { display: block; }
+  /* Modal scroll fix */
+  body.modal-open { overflow: hidden; position: fixed; width: 100%; }
+  .modal-scroll-inner { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
   body { min-height: 100dvh; }
 
   /* Admin photo edit indicators */
@@ -2016,7 +2019,8 @@ img,video{max-width:100%;height:auto}
     const name = document.querySelector(`[data-member-id="${id}"] .member-name`)?.textContent || 'this member';
     document.getElementById('confirm-remove-name').textContent = name;
     document.getElementById('confirm-remove-id').value = id;
-    document.body.style.overflow = 'hidden';
+    document.body.style.top = `-${window.scrollY}px`;
+    document.body.classList.add('modal-open');
     document.getElementById('confirm-remove-modal').classList.remove('hidden');
     document.getElementById('confirm-remove-modal').classList.add('flex');
   }
@@ -2024,7 +2028,10 @@ img,video{max-width:100%;height:auto}
 
   async function doRemoveMember() {
     const id = document.getElementById('confirm-remove-id').value;
-    document.body.style.overflow = '';
+    const scrollY = document.body.style.top;
+    document.body.classList.remove('modal-open');
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY || '0') * -1);
     document.getElementById('confirm-remove-modal').classList.add('hidden');
     document.getElementById('confirm-remove-modal').classList.remove('flex');
     try {
@@ -2036,7 +2043,10 @@ img,video{max-width:100%;height:auto}
   window.doRemoveMember = doRemoveMember;
 
   function cancelRemoveMember() {
-    document.body.style.overflow = '';
+    const scrollY = document.body.style.top;
+    document.body.classList.remove('modal-open');
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY || '0') * -1);
     document.getElementById('confirm-remove-modal').classList.add('hidden');
     document.getElementById('confirm-remove-modal').classList.remove('flex');
   }
@@ -2179,7 +2189,8 @@ img,video{max-width:100%;height:auto}
 
   // ── User modal (login / register / profile) ───────────────────────────
   function openUserModal(tab = 'login') {
-        document.body.style.overflow = 'hidden';
+        document.body.style.top = `-${window.scrollY}px`;
+    document.body.classList.add('modal-open');
     document.getElementById('user-modal').classList.remove('hidden');
     document.getElementById('user-modal').classList.add('flex');
     // Show/hide profile tab based on login state
@@ -2191,7 +2202,10 @@ img,video{max-width:100%;height:auto}
   window.openUserModal = openUserModal;
 
   function closeUserModal() {
-        document.body.style.overflow = '';
+        const scrollY = document.body.style.top;
+    document.body.classList.remove('modal-open');
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY || '0') * -1);
     document.getElementById('user-modal').classList.add('hidden');
     document.getElementById('user-modal').classList.remove('flex');
   }
@@ -2349,14 +2363,18 @@ img,video{max-width:100%;height:auto}
     if (pctEl) { pctEl.value = m.progress || 0; }
     if (labelEl) { labelEl.textContent = (m.progress || 0) + '%'; }
     document.getElementById('my-progress-chapter').value = m.chapter || '';
-        document.body.style.overflow = 'hidden';
+        document.body.style.top = `-${window.scrollY}px`;
+    document.body.classList.add('modal-open');
     document.getElementById('my-progress-modal').classList.remove('hidden');
     document.getElementById('my-progress-modal').classList.add('flex');
   }
   window.openMyProgressModal = openMyProgressModal;
 
   function closeMyProgressModal() {
-        document.body.style.overflow = '';
+        const scrollY = document.body.style.top;
+    document.body.classList.remove('modal-open');
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY || '0') * -1);
     document.getElementById('my-progress-modal').classList.add('hidden');
     document.getElementById('my-progress-modal').classList.remove('flex');
   }
@@ -2382,7 +2400,8 @@ img,video{max-width:100%;height:auto}
   // ── Submit prediction ──────────────────────────────────────────────────
   function openPredictionModal(stopId = null) {
     if (!state.currentUser) { openUserModal('login'); return; }
-        document.body.style.overflow = 'hidden';
+        document.body.style.top = `-${window.scrollY}px`;
+    document.body.classList.add('modal-open');
     document.getElementById('prediction-modal').classList.remove('hidden');
     document.getElementById('prediction-modal').classList.add('flex');
     document.getElementById('prediction-text').value = '';
@@ -2395,7 +2414,10 @@ img,video{max-width:100%;height:auto}
   window.openPredictionModal = openPredictionModal;
 
   function closePredictionModal() {
-        document.body.style.overflow = '';
+        const scrollY = document.body.style.top;
+    document.body.classList.remove('modal-open');
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY || '0') * -1);
     document.getElementById('prediction-modal').classList.add('hidden');
     document.getElementById('prediction-modal').classList.remove('flex');
   }
@@ -2433,14 +2455,18 @@ img,video{max-width:100%;height:auto}
     // If signed in (admin or regular user), this button signs them out
     if (state.currentUser) { doSignOut(); return; }
     // Not signed in — open the admin login modal
-        document.body.style.overflow = 'hidden';
+        document.body.style.top = `-${window.scrollY}px`;
+    document.body.classList.add('modal-open');
     document.getElementById('auth-modal').classList.remove('hidden');
     document.getElementById('auth-modal').classList.add('flex');
     document.getElementById('auth-error').textContent = '';
   }
   window.openAuthModal = openAuthModal;
   function closeAuthModal() {
-        document.body.style.overflow = '';
+        const scrollY = document.body.style.top;
+    document.body.classList.remove('modal-open');
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY || '0') * -1);
     document.getElementById('auth-modal').classList.add('hidden');
     document.getElementById('auth-modal').classList.remove('flex');
   }
@@ -2468,7 +2494,8 @@ img,video{max-width:100%;height:auto}
   // ── Admin panel ────────────────────────────────────────────────────────
   function openAdminPanel() {
     if (!state.isAdmin) { openAuthModal(); return; }
-    document.body.style.overflow = 'hidden';
+    document.body.style.top = `-${window.scrollY}px`;
+    document.body.classList.add('modal-open');
     document.getElementById('admin-panel').classList.remove('hidden');
     document.getElementById('admin-panel').classList.add('flex');
     // Pre-fill fields
@@ -2522,7 +2549,10 @@ img,video{max-width:100%;height:auto}
   window.openAdminPanel = openAdminPanel;
 
   function closeAdminPanel() {
-    document.body.style.overflow = '';
+    const scrollY = document.body.style.top;
+    document.body.classList.remove('modal-open');
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY || '0') * -1);
     document.getElementById('admin-panel').classList.add('hidden');
     document.getElementById('admin-panel').classList.remove('flex');
   }
@@ -2883,14 +2913,18 @@ img,video{max-width:100%;height:auto}
     document.getElementById('wiz-cover-input').value = '';
     wizBuildDefaultStops();
     wizUpdateStepUI();
-        document.body.style.overflow = 'hidden';
+        document.body.style.top = `-${window.scrollY}px`;
+    document.body.classList.add('modal-open');
     document.getElementById('new-book-wizard').classList.remove('hidden');
     document.getElementById('new-book-wizard').classList.add('flex');
   }
   window.openNewBookWizard = openNewBookWizard;
 
   function closeNewBookWizard() {
-        document.body.style.overflow = '';
+        const scrollY = document.body.style.top;
+    document.body.classList.remove('modal-open');
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY || '0') * -1);
     document.getElementById('new-book-wizard').classList.add('hidden');
     document.getElementById('new-book-wizard').classList.remove('flex');
   }
@@ -3391,7 +3425,8 @@ img,video{max-width:100%;height:auto}
 
   function confirmRemoveStop(stopId) {
     document.getElementById('confirm-remove-stop-id').value = stopId;
-    document.body.style.overflow = 'hidden';
+    document.body.style.top = `-${window.scrollY}px`;
+    document.body.classList.add('modal-open');
     document.getElementById('confirm-remove-stop-modal').classList.remove('hidden');
     document.getElementById('confirm-remove-stop-modal').classList.add('flex');
   }
@@ -3413,7 +3448,10 @@ img,video{max-width:100%;height:auto}
   }
   window.doRemoveStop = doRemoveStop;
 
-  function cancelRemoveStop() { document.body.style.overflow = ''; document.getElementById('confirm-remove-stop-modal').classList.add('hidden'); document.getElementById('confirm-remove-stop-modal').classList.remove('flex'); }
+  function cancelRemoveStop() { const scrollY = document.body.style.top;
+    document.body.classList.remove('modal-open');
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY || '0') * -1); document.getElementById('confirm-remove-stop-modal').classList.add('hidden'); document.getElementById('confirm-remove-stop-modal').classList.remove('flex'); }
   window.cancelRemoveStop = cancelRemoveStop;
 
   async function revealAllPredictions() {}
@@ -3472,7 +3510,10 @@ img,video{max-width:100%;height:auto}
   window.openPhotoModal = openPhotoModal;
 
   function closePhotoModal() {
-        document.body.style.overflow = '';
+        const scrollY = document.body.style.top;
+    document.body.classList.remove('modal-open');
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY || '0') * -1);
     document.getElementById('photo-modal').classList.add('hidden');
     document.getElementById('photo-modal').classList.remove('flex');
     currentEditTarget = null;
@@ -3644,7 +3685,7 @@ img,video{max-width:100%;height:auto}
     </div>
 
     <!-- Scrollable steps -->
-    <div class="overflow-y-auto flex-1 px-6 py-5">
+    <div class="overflow-y-auto flex-1 px-6 py-5 modal-scroll-inner">
 
       <!-- Step 1: Book Info -->
       <div id="wiz-step-1" class="space-y-4">
@@ -3906,7 +3947,7 @@ img,video{max-width:100%;height:auto}
       </button>
     </div>
     <!-- Scrollable content -->
-    <div class="overflow-y-auto flex-1 px-6 py-4">
+    <div class="overflow-y-auto flex-1 px-6 py-4 modal-scroll-inner">
 
       <!-- BOOK TAB -->
       <div id="admin-tab-book" class="space-y-4">
@@ -3957,6 +3998,8 @@ img,video{max-width:100%;height:auto}
             </div>
           </div>
         </div>
+        <div>
+          <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Book Title</label>
           <input id="admin-book-title" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Book title"/>
         </div>
         <div>
@@ -4111,7 +4154,7 @@ img,video{max-width:100%;height:auto}
         <span class="material-symbols-outlined text-on-surface-variant text-xl">close</span>
       </button>
     </div>
-    <div class="overflow-y-auto flex-1 p-6 space-y-4">
+    <div class="overflow-y-auto flex-1 p-6 space-y-4 modal-scroll-inner">
       <input type="hidden" id="stop-modal-id"/>
       <div>
         <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Stop Title</label>
