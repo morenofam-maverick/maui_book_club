@@ -10,7 +10,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250617';
+  const APP_VERSION = '20250623';
   const cached = localStorage.getItem('app_version');
   if (cached && cached !== APP_VERSION) {
     localStorage.setItem('app_version', APP_VERSION);
@@ -1231,145 +1231,30 @@ img,video{max-width:100%;height:auto}
         <span class="font-label-md text-secondary uppercase tracking-widest mb-2">Currently Reading</span>
         <h2 class="font-headline-lg md:text-display-lg text-primary mb-4 leading-tight" data-editable="book-title">The Great Gatsby</h2>
         <p class="font-body-lg text-on-surface-variant max-w-xl mb-8 italic">"So we beat on, boats against the current, borne back ceaselessly into the past."</p>
-        <div class="flex items-center gap-4">
-          <div class="h-12 w-12 rounded-full bg-tertiary-fixed flex items-center justify-center">
-            <span class="material-symbols-outlined text-on-tertiary-fixed">auto_stories</span>
-          </div>
-          <div>
-            <p class="font-label-md text-on-surface">Chapter 9 of 12</p>
-            <p class="text-xs text-outline">Group Goal: Finish by Sunday</p>
-          </div>
+        <!-- Quick progress update — shown when logged in and linked to a member -->
+        <div id="quick-progress-update" class="hidden flex items-center gap-3 max-w-md">
+          <input id="quick-chapter-input" type="text" placeholder="Where are you? e.g. Chapter 7 or Page 142"
+            class="flex-1 rounded-lg border border-outline-variant px-4 py-2.5 font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-white"/>
+          <button onclick="saveQuickProgress()" class="shrink-0 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-label-md text-sm hover:opacity-90 transition-opacity active:scale-95">
+            Update
+          </button>
         </div>
       </div>
     </div>
   </section>
   <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
-    <!-- Mom -->
-    <div data-progress-card="mom" class="bg-surface-bright paper-texture border border-surface-container-high rounded-xl p-6 flex flex-col justify-between shadow-sm transition-transform hover:-translate-y-1 duration-300">
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full border-2 border-secondary-fixed overflow-hidden">
-            <img alt="Mom" data-editable="img" data-edit-id="member-mom" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgl4CUX86PREPZ3uwsBF6PV6ZAXVhVXpYnABpRfk0_ZxqZvDv00nH42ZktFil05kdoNvWwS1J0tGg8GYHolxiVEGKVdGyq5nM6_roE6wvYqON7-G77ZsyFhqYvrgQVfRATbXj_o9gCrqqa9H-uxInhY12UJD-6yf-rIKh92jtDPX6unD1QS4cQ5QHgGJj97BG62Knc8RxNIhdlTC-FFsQRRGaB1l65tah8e7WNXnh8U72HjlP5CUT7jVAJfGoJHnud349N1gETUBw"/>
-          </div>
-          <h3 class="font-headline-md text-primary">Mom</h3>
-        </div>
-        <span class="font-label-md text-secondary" data-member-percent="mom">85%</span>
-      </div>
-      <div class="space-y-4">
-        <div class="relative w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
-          <div class="absolute top-0 left-0 h-full bg-secondary" style="width:85%" data-member-progress="mom"></div>
-        </div>
-        <div class="flex justify-between items-center">
-          <p class="text-xs text-on-surface-variant italic" data-member-chapter="mom">Chapter 10: The Last Party</p>
-          <button class="group flex items-center gap-1 px-3 py-1.5 rounded-full hover:bg-secondary-container transition-colors active:scale-90">
-            <span class="material-symbols-outlined text-secondary text-sm">favorite</span>
-            <span class="font-label-md text-[12px] text-secondary">Cheer</span>
-          </button>
-        </div>
-      </div>
-    </div>
-    <!-- Dad -->
-    <div data-progress-card="dad" class="bg-surface-bright paper-texture border border-surface-container-high rounded-xl p-6 flex flex-col justify-between shadow-sm transition-transform hover:-translate-y-1 duration-300">
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full border-2 border-secondary-fixed overflow-hidden">
-            <img alt="Dad" data-editable="img" data-edit-id="member-dad" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVTGJHpmwTJG_TM-tDisEeSX7K1U030fxTuAR87RmKIoNT5pvYT5zS98EmCxpzWLj0rXy0Eg8ZKTjo4-PWTQhBk8CVd3r2h2UMFThnclNtNWT378Y_db008U8h0l9eX4KInkISC8TS1yPFOHStd_X-h4KVvvKST5JODc0CcWvM3xE2fYYkELfRddZArwYcrkNg-PmuV3yfLjhQouwp6VwGdyBEl_qd1uvnfsoPxvc2WqE0yn3ilutLieBiD8P-go950Nd2nJ47MkQ"/>
-          </div>
-          <h3 class="font-headline-md text-primary">Dad</h3>
-        </div>
-        <span class="font-label-md text-secondary" data-member-percent="dad">42%</span>
-      </div>
-      <div class="space-y-4">
-        <div class="relative w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
-          <div class="absolute top-0 left-0 h-full bg-secondary" style="width:42%" data-member-progress="dad"></div>
-        </div>
-        <div class="flex justify-between items-center">
-          <p class="text-xs text-on-surface-variant italic" data-member-chapter="dad">Chapter 5: Reunited</p>
-          <button class="group flex items-center gap-1 px-3 py-1.5 rounded-full hover:bg-secondary-container transition-colors active:scale-90">
-            <span class="material-symbols-outlined text-secondary text-sm">celebration</span>
-            <span class="font-label-md text-[12px] text-secondary">Cheer</span>
-          </button>
-        </div>
-      </div>
-    </div>
-    <!-- Sarah -->
-    <div data-progress-card="sarah" class="bg-surface-bright paper-texture border border-surface-container-high rounded-xl p-6 flex flex-col justify-between shadow-sm transition-transform hover:-translate-y-1 duration-300">
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full border-2 border-secondary-fixed overflow-hidden">
-            <img alt="Sarah" data-editable="img" data-edit-id="member-sarah" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCd9PbKfypSpf34d6ZdcAhG2HJKI2pzIyjKzO5sOsxzGVBJXskilhbzdDoEsiI1Wz_4YaRf_Uulr28EpKRIE5HR-9a_TY5uBDt-Z1aF6Bk3LJNpGQMAPnHRakps8HX8STz97YqFusDHkusuvoyq-5yENhN5meUcm736-u1U7qZ8ed6ZjEKeOM-GQm2Ezr8phAbECE31lqrUuMVvaf7vdwM-L_4fkMmEG9xDnEljV-wqpP9RxjWEA0yNrzzmt8MCamtAUVW8Bt5O2-4"/>
-          </div>
-          <h3 class="font-headline-md text-primary">Sarah</h3>
-        </div>
-        <span class="font-label-md text-secondary" data-member-percent="sarah">100%</span>
-      </div>
-      <div class="space-y-4">
-        <div class="relative w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
-          <div class="absolute top-0 left-0 h-full bg-secondary" style="width:100%" data-member-progress="sarah"></div>
-        </div>
-        <div class="flex justify-between items-center">
-          <p class="text-xs text-secondary font-semibold italic" data-member-chapter="sarah">Finished!</p>
-          <button class="group flex items-center gap-1 px-3 py-1.5 rounded-full hover:bg-secondary-container transition-colors active:scale-90">
-            <span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings:'FILL' 1">star</span>
-            <span class="font-label-md text-[12px] text-secondary">Cheer</span>
-          </button>
-        </div>
-      </div>
-    </div>
-    <!-- Leo -->
-    <div data-progress-card="leo" class="bg-surface-bright paper-texture border border-surface-container-high rounded-xl p-6 flex flex-col justify-between shadow-sm transition-transform hover:-translate-y-1 duration-300">
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full border-2 border-secondary-fixed overflow-hidden">
-            <img alt="Leo" data-editable="img" data-edit-id="member-leo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyASHijq6_nHfH-jlVKmj7Kc8kaLbUVWtoKz00VhwVpdrDsKw-Ut15Nx7qZjBslvMUL0Fhqkqr1Kpd2cmFNxA4UX7Alqz03jCZKiT7yvWnCZYVxYd4l5MYCgDd_8OD__1pv4VoIZkxN_eU02G619xO2jtxzG0pYZje7ReadoFuiMrpHkPJKiyGRJQcC_FyL-yYesp7_W-X5XpthkRrOyVX83r09V2I6lUIAmBjqv8I5zIZwbkDTghCOg1BFbGug_p0sNoRnYCdl10"/>
-          </div>
-          <h3 class="font-headline-md text-primary">Leo</h3>
-        </div>
-        <span class="font-label-md text-secondary" data-member-percent="leo">12%</span>
-      </div>
-      <div class="space-y-4">
-        <div class="relative w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
-          <div class="absolute top-0 left-0 h-full bg-secondary" style="width:12%" data-member-progress="leo"></div>
-        </div>
-        <div class="flex justify-between items-center">
-          <p class="text-xs text-on-surface-variant italic" data-member-chapter="leo">Chapter 1: The Valley</p>
-          <button class="group flex items-center gap-1 px-3 py-1.5 rounded-full hover:bg-secondary-container transition-colors active:scale-90">
-            <span class="material-symbols-outlined text-secondary text-sm">rocket_launch</span>
-            <span class="font-label-md text-[12px] text-secondary">Cheer</span>
-          </button>
-        </div>
+    <!-- Progress cards — rendered dynamically from Firebase -->
+    <div id="progress-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+      <div class="col-span-full text-center py-12 text-on-surface-variant font-body-md opacity-60">
+        <span class="material-symbols-outlined block text-3xl mb-2 opacity-40">group</span>
+        Loading members…
       </div>
     </div>
   </section>
 
-  <!-- Quick progress update — shown to logged-in members -->
-  <div id="quick-progress-update" class="hidden mt-6 bg-surface-container-low border border-outline-variant rounded-xl p-5 flex flex-col md:flex-row items-center gap-4">
-    <div class="flex items-center gap-3 shrink-0">
-      <span class="material-symbols-outlined text-primary text-xl">menu_book</span>
-      <p class="font-label-md text-on-surface text-sm">Where are you right now?</p>
-    </div>
-    <input id="quick-chapter-input" type="text" placeholder="e.g. Chapter 7 or Page 142"
-      class="flex-1 rounded-lg border border-outline-variant px-4 py-2.5 font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-white w-full md:w-auto"/>
-    <button onclick="saveQuickProgress()" class="shrink-0 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-label-md text-sm hover:opacity-90 transition-opacity active:scale-95">
-      Update
-    </button>
-  </div>
-
-  <section class="mt-16 max-w-2xl mx-auto">
-    <div class="relative bg-tertiary-fixed/30 p-8 rounded-lg border-l-4 border-tertiary shadow-sm paper-texture">
-      <div class="flex items-center gap-3 mb-4">
-        <div class="w-8 h-8 rounded-full border border-tertiary-fixed-dim overflow-hidden">
-          <img alt="Mom" data-editable="img" data-edit-id="member-mom" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWLzxmi_D6QXLcAEGvNfg-M_25rXWehY2HRznNwlGy1QXKc6lG_dAzaK-U7Kx_m4jgQYV8x6erxSzezscXfIAswKMhZKt8T3JxPytBTykFXq6CJhLPN5XehoaV5eRQpu8LW5yHaaCXnxyCoa6TjdJliPYYxbzGkfPCYcU0uZxC16Ca3_QHptv7Xx006g7OqjAvtFzk2k9bxcoHYkQdQklS57sQqmbIBSZYfVF5viltSulKLUVCSVcULWvO92S47WZ_yVYQBTXK_D8"/>
-        </div>
-        <span class="font-label-md text-tertiary">Mom's Prediction</span>
-      </div>
-      <p class="font-body-md text-on-tertiary-fixed-variant italic leading-relaxed">"I have a feeling Gatsby's past is much more complicated than he leads on. Look at how he reacted to the mention of San Francisco in Chapter 4—something doesn't fit."</p>
-      <div class="mt-4 flex gap-2">
-        <span class="material-symbols-outlined text-tertiary opacity-40 text-sm">edit_note</span>
-        <span class="text-[10px] text-outline uppercase tracking-tighter">Added 2 hours ago</span>
-      </div>
-      <div class="absolute -top-4 right-8 w-6 h-12 bg-secondary shadow-md rounded-b-sm"></div>
-    </div>
+  <!-- Marginalia section — latest revealed predictions from Firebase -->
+  <section class="mt-16 max-w-2xl mx-auto" id="progress-marginalia-section">
+    <!-- Rendered dynamically -->
   </section>
 </main>
 </div>
@@ -1410,7 +1295,7 @@ img,video{max-width:100%;height:auto}
   <!-- Bento Grid -->
   <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
     <!-- Link Copy Card -->
-    <div class="md:col-span-8 bg-white/70 backdrop-blur-sm border border-white/30 rounded-xl p-6 md:p-8 shadow-[0_10px_25px_-5px_rgba(0,119,139,0.08)] flex flex-col justify-between">
+    <div class="md:col-span-12 bg-white/70 backdrop-blur-sm border border-white/30 rounded-xl p-6 md:p-8 shadow-[0_10px_25px_-5px_rgba(0,119,139,0.08)] flex flex-col justify-between">
       <div>
         <h3 class="font-headline-md text-headline-md text-primary mb-2">Share Club Link</h3>
         <p class="font-body-md text-on-surface-variant mb-6">Anyone with this link can request to join your family folio.</p>
@@ -1418,7 +1303,7 @@ img,video{max-width:100%;height:auto}
       <div class="relative">
         <div class="flex items-center bg-white border border-outline-variant rounded-lg p-4 transition-all focus-within:ring-2 focus-within:ring-primary focus-within:border-primary">
           <span class="material-symbols-outlined text-primary mr-3">link</span>
-          <input class="bg-transparent border-none p-0 flex-grow font-label-md text-on-surface focus:ring-0 focus:outline-none text-sm" readonly type="text" value="mauibookclub.app/join/miller-family"/>
+          <input class="bg-transparent border-none p-0 flex-grow font-label-md text-on-surface focus:ring-0 focus:outline-none text-sm" readonly type="text" value="mauibookclub.app/join/La-Familia"/>
           <button class="ml-2 flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-label-md hover:opacity-90 transition-opacity active:scale-95" onclick="copyLink(this)">
             <span class="material-symbols-outlined text-[20px]">content_copy</span>
             <span>Copy</span>
@@ -1426,17 +1311,6 @@ img,video{max-width:100%;height:auto}
         </div>
         <div class="hidden absolute -top-10 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-xs px-3 py-1 rounded-full whitespace-nowrap" id="copy-toast">Copied!</div>
       </div>
-    </div>
-    <!-- QR Code Card -->
-    <div class="md:col-span-4 bg-white rounded-xl p-6 md:p-8 shadow-[0_10px_25px_-5px_rgba(0,119,139,0.08)] flex flex-col items-center justify-center text-center">
-      <div class="w-32 h-32 md:w-40 md:h-40 bg-surface-container-low rounded-xl p-4 mb-4 border-2 border-dashed border-primary/20 flex items-center justify-center">
-        <span class="material-symbols-outlined text-primary text-[80px]">qr_code_2</span>
-      </div>
-      <h4 class="font-headline-md text-body-lg font-bold text-primary mb-1">In-Person Join</h4>
-      <p class="font-label-md text-on-surface-variant text-xs">Let them scan this code to join instantly</p>
-      <button class="mt-4 text-primary font-label-md flex items-center gap-1 hover:underline text-sm">
-        <span class="material-symbols-outlined text-sm">download</span>Print Code
-      </button>
     </div>
     <!-- Direct Invite Form -->
     <div class="md:col-span-12 bg-white/70 backdrop-blur-sm border border-white/30 rounded-xl p-6 md:p-8 shadow-[0_10px_25px_-5px_rgba(0,119,139,0.08)]">
@@ -1694,10 +1568,17 @@ img,video{max-width:100%;height:auto}
   function buildCard(id, m) {
     const span = SIZE_SPANS[m.size||'medium'];
     const isAdmin = state.isAdmin;
+    const isOwn = state.userProfile?.memberId === id;
+    const canEdit = isAdmin || isOwn;
     const wrap = document.createElement('div');
     wrap.className = `members-card md:col-span-${span} bg-surface-container-lowest border border-surface-variant rounded-xl book-shadow transition-all relative overflow-visible`;
     wrap.dataset.memberId = id;
-    const ef = isAdmin ? 'editable-field cursor-pointer rounded px-1 hover:outline hover:outline-2 hover:outline-dashed hover:outline-secondary/50' : '';
+    const efAdmin = isAdmin ? 'editable-field cursor-pointer rounded px-1 hover:outline hover:outline-2 hover:outline-dashed hover:outline-secondary/50' : '';
+    const efOwn = canEdit ? 'editable-field cursor-pointer rounded px-1 hover:outline hover:outline-2 hover:outline-dashed hover:outline-secondary/50' : '';
+    const initials = (m.name||'?').slice(0,2).toUpperCase();
+    const avatarHtml = m.avatarUrl
+      ? `<img data-editable="img" data-edit-id="member-${id}" src="${m.avatarUrl}" alt="${m.name||''}" class="w-full h-full object-cover"/>`
+      : `<div class="w-full h-full flex items-center justify-center bg-primary"><span class="text-on-primary font-bold text-lg">${initials}</span></div>`;
     wrap.innerHTML = `
       ${isAdmin ? `<div class="member-admin-controls absolute top-2 right-2 z-20 flex gap-1">
         <div class="relative">
@@ -1714,29 +1595,31 @@ img,video{max-width:100%;height:auto}
       </div>` : ''}
       <div class="p-6 flex flex-col gap-4">
         <div class="flex items-center gap-4">
-          <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-surface-container-high shrink-0 ${isAdmin?'cursor-pointer':''}" ${isAdmin?`onclick='openPhotoModal("member-${id}")'`:''}>
-            <img data-editable="img" data-edit-id="member-${id}" src="${m.avatarUrl||''}" alt="${m.name||''}" class="w-full h-full object-cover"/>
+          <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-surface-container-high shrink-0">
+            ${avatarHtml}
           </div>
           <div class="flex-1 min-w-0">
-            <p class="member-name font-headline-md text-primary ${ef}" data-field="name" data-id="${id}">${m.name||'New Member'}</p>
-            <p class="member-role font-label-md text-secondary uppercase tracking-widest text-xs mt-1 ${ef}" data-field="role" data-id="${id}">${m.role||'Member'}</p>
+            <p class="member-name font-headline-md text-primary ${efAdmin}" data-field="name" data-id="${id}">${m.name||'New Member'}</p>
+            <p class="member-role font-label-md text-secondary uppercase tracking-widest text-xs mt-1 ${efAdmin}" data-field="role" data-id="${id}">${m.role||'Member'}</p>
           </div>
         </div>
-        <p class="member-bio font-body-md text-on-surface-variant text-sm leading-relaxed ${ef}" data-field="bio" data-id="${id}">${m.bio||'Add a bio...'}</p>
+        <p class="member-bio font-body-md text-on-surface-variant text-sm leading-relaxed ${efOwn}" data-field="bio" data-id="${id}" title="${canEdit?'Click to edit':''}">${m.bio||'Add a bio...'}</p>
         <div class="bg-surface-container-low p-3 rounded-lg border-l-4 border-primary">
           <p class="text-[10px] font-label-md text-outline uppercase mb-1">Favorite This Year</p>
-          <p class="member-favorite font-body-md text-sm text-primary italic ${ef}" data-field="favorite" data-id="${id}">${m.favorite||'Add favorite...'}</p>
-        </div>
-        <div class="grid grid-cols-3 gap-2 pt-3 border-t border-surface-variant">
-          <div class="text-center"><p class="text-[10px] font-label-md text-outline uppercase mb-1">Books</p><p class="font-headline-md text-sm text-primary ${ef}" data-field="books" data-id="${id}">${m.books||'0'}</p></div>
-          <div class="text-center"><p class="text-[10px] font-label-md text-outline uppercase mb-1">Pages</p><p class="font-headline-md text-sm text-primary ${ef}" data-field="pages" data-id="${id}">${m.pages||'0'}</p></div>
-          <div class="text-center"><p class="text-[10px] font-label-md text-outline uppercase mb-1">Streak</p><p class="font-headline-md text-sm text-primary ${ef}" data-field="streak" data-id="${id}">${m.streak||'0d'}</p></div>
+          <p class="member-favorite font-body-md text-sm text-primary italic ${efOwn}" data-field="favorite" data-id="${id}" title="${canEdit?'Click to edit':''}">${m.favorite||'Add favorite...'}</p>
         </div>
       </div>`;
+    if (canEdit) {
+      // Bio and favorite editable by owner or admin
+      wrap.querySelectorAll('.editable-field[data-field="bio"], .editable-field[data-field="favorite"]').forEach(el => {
+        el.addEventListener('click', e => { e.stopPropagation(); startInlineEdit(el); });
+      });
+    }
     if (isAdmin) {
-      wrap.querySelectorAll('.editable-field').forEach(el => el.addEventListener('click', e => { e.stopPropagation(); startInlineEdit(el); }));
-      const img = wrap.querySelector('[data-editable="img"]');
-      if (img) img.addEventListener('click', () => openPhotoModal(`member-${id}`));
+      // Name and role only editable by admin
+      wrap.querySelectorAll('.editable-field[data-field="name"], .editable-field[data-field="role"]').forEach(el => {
+        el.addEventListener('click', e => { e.stopPropagation(); startInlineEdit(el); });
+      });
     }
     return wrap;
   }
@@ -1822,6 +1705,7 @@ img,video{max-width:100%;height:auto}
       snap.forEach(d => { state.members[d.id] = d.data(); });
       applyMembersToDOM(state.members);
       renderMembersPage(state.members);
+      renderProgressCards(state.members);
       populateMemberSelects();
       if (state.currentUser) injectMyProgressButton();
       updateQuickProgressBar();
@@ -1864,7 +1748,10 @@ img,video{max-width:100%;height:auto}
       renderHeaderUser(user);
       injectMyProgressButton();
       updateQuickProgressBar();
-      if (Object.keys(state.members).length) renderHomeMemberRows(state.members);
+      if (Object.keys(state.members).length) {
+        renderHomeMemberRows(state.members);
+        renderProgressCards(state.members);
+      }
     } else {
       state.userProfile = null;
       state.isAdmin = false;
@@ -2362,7 +2249,89 @@ img,video{max-width:100%;height:auto}
   window.doSignOut = () => signOut(auth);
   window.showSaveToast = showSaveToast;
 
-  // ── Quick progress update on Progress page ────────────────────────────
+  // ── Progress page dynamic cards ───────────────────────────────────────
+  function renderProgressCards(members) {
+    const grid = document.getElementById('progress-cards-grid');
+    if (!grid) return;
+    const sorted = Object.entries(members).sort((a,b) => (b[1].progress||0)-(a[1].progress||0));
+    if (sorted.length === 0) {
+      grid.innerHTML = `<div class="col-span-full text-center py-12 text-on-surface-variant font-body-md opacity-60">
+        <span class="material-symbols-outlined block text-3xl mb-2 opacity-40">group</span>
+        No members yet.
+      </div>`;
+      return;
+    }
+    const myMemberId = state.userProfile?.memberId;
+    grid.innerHTML = sorted.map(([id, m]) => {
+      const isMe = id === myMemberId;
+      const pct = m.progress || 0;
+      const initials = (m.name||'?').slice(0,2).toUpperCase();
+      const avatarHtml = m.avatarUrl
+        ? `<img alt="${escHtml(m.name||'')}" data-edit-id="member-${id}" class="w-full h-full object-cover" src="${m.avatarUrl}"/>`
+        : `<div class="w-full h-full flex items-center justify-center bg-primary"><span class="text-on-primary font-bold text-sm">${initials}</span></div>`;
+      const chapterText = m.chapter || '';
+      const cheerIcons = ['favorite','celebration','star','rocket_launch'];
+      const cheerIcon = cheerIcons[Math.floor(Math.random() * cheerIcons.length)];
+      return `<div data-progress-card="${id}" class="bg-surface-bright paper-texture border ${isMe ? 'border-primary ring-2 ring-primary ring-offset-2' : 'border-surface-container-high'} rounded-xl p-6 flex flex-col justify-between shadow-sm transition-transform hover:-translate-y-1 duration-300">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full border-2 border-secondary-fixed overflow-hidden shrink-0">${avatarHtml}</div>
+            <div>
+              <h3 class="font-headline-md text-primary leading-tight">${escHtml(m.name||id)}</h3>
+              ${isMe ? '<span class="text-[10px] font-label-md text-primary uppercase tracking-wider">you</span>' : ''}
+            </div>
+          </div>
+          <span class="font-label-md text-secondary">${pct}%</span>
+        </div>
+        <div class="space-y-3">
+          <div class="relative w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+            <div class="absolute top-0 left-0 h-full bg-secondary rounded-full transition-all duration-700" style="width:${pct}%"></div>
+          </div>
+          <div class="flex justify-between items-center">
+            <p class="text-xs text-on-surface-variant italic">${escHtml(chapterText) || '<span class="opacity-40">No update yet</span>'}</p>
+            <button class="flex items-center gap-1 px-3 py-1.5 rounded-full hover:bg-secondary-container transition-colors active:scale-90">
+              <span class="material-symbols-outlined text-secondary text-sm">${cheerIcon}</span>
+              <span class="font-label-md text-[12px] text-secondary">Cheer</span>
+            </button>
+          </div>
+          ${isMe ? `<button onclick="openMyProgressModal()" class="w-full mt-1 flex items-center justify-center gap-1.5 border border-primary/30 text-primary rounded-lg py-1.5 font-label-md text-xs hover:bg-surface-container-low transition-colors active:scale-95">
+            <span class="material-symbols-outlined text-sm">edit</span>Update my progress
+          </button>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderProgressMarginalia(allPreds) {
+    const section = document.getElementById('progress-marginalia-section');
+    if (!section) return;
+    // Show up to 3 most recent revealed predictions as marginalia notes
+    const revealed = allPreds.filter(p => p.revealed && p.text).reverse().slice(0, 3);
+    if (revealed.length === 0) {
+      section.innerHTML = '';
+      return;
+    }
+    const rotations = ['-rotate-1', 'rotate-1', '-rotate-1'];
+    section.innerHTML = `
+      <h3 class="font-headline-md text-on-surface mb-6">Latest Predictions</h3>
+      <div class="grid grid-cols-1 md:grid-cols-${Math.min(revealed.length, 3)} gap-6">
+        ${revealed.map((p, i) => {
+          const initials = (p.authorName||'?').slice(0,2).toUpperCase();
+          const timeAgo = formatTimeAgo(p.createdAt);
+          return `<div class="p-5 rounded-lg border border-surface-container-highest shadow-[2px_2px_0px_rgba(44,30,15,0.05)] transform ${rotations[i]||''} hover:rotate-0 transition-transform bg-[#fefcf0] relative">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0">
+                <span class="text-on-primary font-bold" style="font-size:8px">${initials}</span>
+              </div>
+              <span class="font-label-md text-xs flex-1">${escHtml(p.authorName||'Member')}</span>
+              <span class="text-[10px] text-outline">${timeAgo}</span>
+            </div>
+            <p class="font-body-md text-sm text-on-surface leading-relaxed italic">"${escHtml((p.text||'').slice(0,120))}${(p.text||'').length>120?'…':''}"</p>
+            <div class="absolute -top-3 right-6 w-4 h-8 bg-secondary shadow-sm rounded-b-sm"></div>
+          </div>`;
+        }).join('')}
+      </div>`;
+  }
   async function saveQuickProgress() {
     const profile = state.userProfile;
     if (!profile?.memberId) return;
@@ -2479,6 +2448,7 @@ img,video{max-width:100%;height:auto}
       // Also update home marginalia
       const allPreds = Object.values(stopPreds).flat();
       renderHomeMarginalia(allPreds);
+      renderProgressMarginalia(allPreds);
     });
   }
 
