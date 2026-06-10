@@ -10,7 +10,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250623';
+  const APP_VERSION = '20250629';
   const cached = localStorage.getItem('app_version');
   if (cached && cached !== APP_VERSION) {
     localStorage.setItem('app_version', APP_VERSION);
@@ -1004,8 +1004,8 @@ img,video{max-width:100%;height:auto}
     <!-- Hero Card -->
     <div class="md:col-span-8 bg-surface-container-low rounded-xl p-6 md:p-8 flex flex-col md:flex-row gap-8 border border-surface-container-highest relative overflow-hidden group">
       <div class="w-full md:w-1/3 shrink-0 flex justify-center">
-        <div class="relative book-shadow rounded-sm transition-transform duration-500 group-hover:-translate-y-2">
-          <img class="w-full max-w-[200px] md:max-w-none rounded-sm border border-black/10 aspect-[2/3] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG9j5GEyXEcZOHepbH_cmDn4ERGIYNEnM6yYMFxV9-4tUQNm2fsjKnfC1rbTBThVIztdbSU-Pf6p7H6bKU0gaPYoVO4tXnwMeXXhr5IfOJ-TtO83DMI_-9JN61v5wshP1sqE5oJUyOukoxeWJcCz_BhYt-7uOBgVuqgwjarmNAqz1yBR1c5-082GKXtjsAxcgvu3NBabglPxOqgyEUfMvVazsLQAkQUaR61kDtsa4Aqw6FX1UGccw1Kcq5dCCAVEij0LtJEDewKz0" alt="The Shadow of the Wind book cover" data-editable="img" data-edit-id="book-cover-home"/>
+        <div class="relative book-shadow rounded-sm transition-transform duration-500 group-hover:-translate-y-2 w-full">
+          <img id="book-cover-home-img" class="w-full rounded-sm border border-black/10 aspect-[2/3] object-cover block" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG9j5GEyXEcZOHepbH_cmDn4ERGIYNEnM6yYMFxV9-4tUQNm2fsjKnfC1rbTBThVIztdbSU-Pf6p7H6bKU0gaPYoVO4tXnwMeXXhr5IfOJ-TtO83DMI_-9JN61v5wshP1sqE5oJUyOukoxeWJcCz_BhYt-7uOBgVuqgwjarmNAqz1yBR1c5-082GKXtjsAxcgvu3NBabglPxOqgyEUfMvVazsLQAkQUaR61kDtsa4Aqw6FX1UGccw1Kcq5dCCAVEij0LtJEDewKz0" alt="Book cover" data-editable="img" data-edit-id="book-cover-home"/>
           <div class="absolute -top-1 right-6 w-3 h-16 bg-secondary-fixed-dim rounded-b-full shadow-sm"></div>
         </div>
       </div>
@@ -1014,6 +1014,10 @@ img,video{max-width:100%;height:auto}
           <span class="font-label-md text-secondary uppercase tracking-widest mb-2 block">Currently Reading</span>
           <h3 class="font-headline-lg text-headline-lg text-primary mb-1" data-editable="book-title" data-edit-id="book-title-home">The Shadow of the Wind</h3>
           <p class="font-body-md text-on-surface-variant italic mb-6" data-editable="book-author" data-edit-id="book-author-home">by Carlos Ruiz Zafón</p>
+          <a id="buy-link-home" href="#" target="_blank" rel="noopener" class="hidden items-center gap-1.5 text-secondary font-label-md text-sm hover:opacity-70 transition-opacity mb-6">
+            <span class="material-symbols-outlined text-sm">shopping_cart</span>
+            <span id="buy-link-home-label">Buy this book →</span>
+          </a>
           <div class="mb-8">
             <div class="flex justify-between items-end mb-2">
               <span class="font-label-md text-on-surface">Overall Family Progress</span>
@@ -1027,7 +1031,7 @@ img,video{max-width:100%;height:auto}
             <!-- Populated dynamically: shows logged-in user + top members by progress -->
           </div>
         </div>
-        <button onclick="navigate('book')" class="mt-8 bg-primary text-on-primary py-3 px-8 rounded-full font-label-md transition-all hover:shadow-lg active:scale-95 self-start">Open Reader</button>
+
       </div>
     </div>
     <!-- Prediction Sidebar -->
@@ -1090,7 +1094,7 @@ img,video{max-width:100%;height:auto}
 <main class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-8 md:py-12">
   <section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-12">
     <div class="md:col-span-4 lg:col-span-3">
-      <div class="aspect-[2/3] rounded-lg overflow-hidden book-shadow bg-surface-container relative group cursor-zoom-in">
+      <div class="aspect-[2/3] rounded-lg overflow-hidden book-shadow bg-surface-container relative group">
         <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH5lbZaTkB84T3LqTjBPDewWMDg9BhRIr2LiD2dgjZGZj3aJi1sNNSAzwqisyzwXb3nXMd49o6rfg-XzbMH3llUCX0ciNi3fblv09ah_gGBSjG8k81nVmJAr6p9dCDhy5a29CRyFxDpv1ccOfRld6G_1SbEfnuX16hFSAOjh79F41e3A0UT8NxqTcox4cpY2QX-NaKlgNSfBBNcF40n-s_dME8VT-Ly6U43Z1djyfkYJvZ626JPfMOJZPUbwhPRjWORGCmAiBaygM" alt="Book cover" data-editable="img" data-edit-id="book-cover-detail"/>
       </div>
     </div>
@@ -1110,7 +1114,22 @@ img,video{max-width:100%;height:auto}
       </p>
       <div class="max-w-2xl">
         <h3 class="font-label-md text-primary uppercase tracking-widest mb-3">Synopsis</h3>
-        <p id="book-synopsis" class="font-body-lg text-body-lg leading-relaxed text-on-surface mb-8">In a world where stars are whispering secrets to those who listen, young astronomer Leo discovers an ancient manuscript hidden within the walls of the Great Observatory. As the constellations begin to shift in ways that defy physics, Leo must lead his family through a series of celestial trials to prevent the eternal eclipse. A story of heritage, hope, and the light that binds us together.</p>
+        <p id="book-synopsis" class="font-body-lg text-body-lg leading-relaxed text-on-surface mb-6">In a world where stars are whispering secrets to those who listen, young astronomer Leo discovers an ancient manuscript hidden within the walls of the Great Observatory. As the constellations begin to shift in ways that defy physics, Leo must lead his family through a series of celestial trials to prevent the eternal eclipse. A story of heritage, hope, and the light that binds us together.</p>
+        <a id="buy-link-book" href="#" target="_blank" rel="noopener" class="hidden self-start items-center gap-2 bg-secondary text-on-secondary px-6 py-3 rounded-full font-label-md hover:opacity-90 transition-all active:scale-95 shadow-sm mb-6">
+          <span class="material-symbols-outlined text-lg">shopping_cart</span>
+          <span id="buy-link-book-label">Purchase Book</span>
+        </a>
+      </div>
+      <!-- Chapter Overview -->
+      <div id="chapter-overview-section" class="hidden max-w-2xl mt-6 bg-surface-container-low rounded-xl p-6 border border-outline-variant">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-label-md text-primary uppercase tracking-widest">Chapter Overview</h3>
+          <span id="chapter-overview-edit-hint" class="hidden text-[10px] text-secondary font-label-md flex items-center gap-1 cursor-pointer opacity-60 hover:opacity-100" onclick="openAdminPanel()">
+            <span class="material-symbols-outlined text-sm">edit</span>Edit in Admin Panel
+          </span>
+        </div>
+        <p id="chapter-overview-intro" class="font-body-md text-on-surface-variant text-sm leading-relaxed mb-4"></p>
+        <ul id="chapter-overview-bullets" class="space-y-2"></ul>
       </div>
     </div>
   </section>
@@ -1312,38 +1331,12 @@ img,video{max-width:100%;height:auto}
         <div class="hidden absolute -top-10 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-xs px-3 py-1 rounded-full whitespace-nowrap" id="copy-toast">Copied!</div>
       </div>
     </div>
-    <!-- Direct Invite Form -->
-    <div class="md:col-span-12 bg-white/70 backdrop-blur-sm border border-white/30 rounded-xl p-6 md:p-8 shadow-[0_10px_25px_-5px_rgba(0,119,139,0.08)]">
-      <h3 class="font-headline-md text-headline-md text-primary mb-6">Direct Invites</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <!-- SMS -->
-        <div class="space-y-4">
-          <label class="font-label-md text-on-surface flex items-center gap-2">
-            <span class="material-symbols-outlined text-secondary">sms</span>Send via Text Message
-          </label>
-          <div class="flex gap-2">
-            <input class="flex-grow rounded-lg border border-outline-variant focus:border-primary focus:ring-primary bg-white px-4 py-3 text-sm" placeholder="(555) 000-0000" type="tel"/>
-            <button class="bg-secondary text-white px-6 py-3 rounded-lg font-label-md hover:opacity-90 transition-opacity">Send</button>
-          </div>
-        </div>
-        <!-- Email -->
-        <div class="space-y-4">
-          <label class="font-label-md text-on-surface flex items-center gap-2">
-            <span class="material-symbols-outlined text-tertiary">mail</span>Send via Email
-          </label>
-          <div class="flex gap-2">
-            <input class="flex-grow rounded-lg border border-outline-variant focus:border-primary focus:ring-primary bg-white px-4 py-3 text-sm" placeholder="family@example.com" type="email"/>
-            <button class="bg-tertiary text-on-primary px-6 py-3 rounded-lg font-label-md hover:opacity-90 transition-opacity">Send</button>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- Ohana Card -->
     <div class="md:col-span-12 bg-surface-container rounded-xl p-8 text-center border-t-4 border-secondary/20 relative overflow-hidden">
       <div class="relative z-10 max-w-xl mx-auto">
         <span class="material-symbols-outlined text-primary text-4xl mb-4 block">festival</span>
-        <h4 class="font-headline-md text-headline-md text-primary mb-2">Build Your Literary Ohana</h4>
-        <p class="font-body-md text-on-surface-variant">The Miller Family Folio currently has 4 members. Once your new invitees join, you can unlock shared reading goals and seasonal discussion badges.</p>
+        <h4 id="ohana-title" class="font-headline-md text-headline-md text-primary mb-2 cursor-pointer hover:opacity-70 transition-opacity" onclick="editBookNote('ohana-title')" title="Click to edit">Build Your Literary Ohana</h4>
+        <p id="ohana-body" class="font-body-md text-on-surface-variant cursor-pointer hover:opacity-70 transition-opacity" onclick="editBookNote('ohana-body')" title="Click to edit">Share the link above with your family and friends to join the club.</p>
       </div>
       <span class="material-symbols-outlined absolute -bottom-10 -right-10 text-[200px] text-primary opacity-5 select-none pointer-events-none">waves</span>
     </div>
@@ -1478,6 +1471,64 @@ img,video{max-width:100%;height:auto}
       const el = document.getElementById('book-note-body');
       if (el && !el.querySelector('input,textarea')) el.textContent = book.note_body;
     }
+    if (book['ohana-title']) {
+      const el = document.getElementById('ohana-title');
+      if (el && !el.querySelector('input,textarea')) el.textContent = book['ohana-title'];
+    }
+    if (book['ohana-body']) {
+      const el = document.getElementById('ohana-body');
+      if (el && !el.querySelector('input,textarea')) el.textContent = book['ohana-body'];
+    }
+    // Chapter Overview
+    const section = document.getElementById('chapter-overview-section');
+    const introEl = document.getElementById('chapter-overview-intro');
+    const bulletsEl = document.getElementById('chapter-overview-bullets');
+    const editHint = document.getElementById('chapter-overview-edit-hint');
+    if (section) {
+      const hasContent = book.chapterIntro || (book.chapterBullets && book.chapterBullets.length > 0);
+      section.classList.toggle('hidden', !hasContent);
+      if (introEl) introEl.textContent = book.chapterIntro || '';
+      if (bulletsEl) {
+        bulletsEl.innerHTML = (book.chapterBullets || []).map(b =>
+          `<li class="flex items-start gap-2 font-body-md text-sm text-on-surface">
+            <span class="material-symbols-outlined text-secondary text-sm mt-0.5 shrink-0">radio_button_checked</span>
+            <span>${escHtml(b)}</span>
+          </li>`
+        ).join('');
+      }
+      if (editHint) editHint.classList.toggle('hidden', !state.isAdmin);
+    }
+    const coverSize = book.coverSize || 'medium';
+    const sizeMap = { small: '120px', medium: '180px', large: '260px' };
+    const maxW = sizeMap[coverSize] || sizeMap.medium;
+    // Home cover — constrain width
+    const homeImg = document.getElementById('book-cover-home-img');
+    if (homeImg) homeImg.style.maxWidth = maxW;
+    // Book page cover — adjust column width via container max-width
+    const bookCoverWrap = document.querySelector('[data-edit-id="book-cover-detail"]')?.parentElement;
+    if (bookCoverWrap) bookCoverWrap.style.maxWidth = coverSize === 'small' ? '160px' : coverSize === 'large' ? '320px' : '220px';
+    // Progress cover — constrain
+    const progressCoverWrap = document.querySelector('[data-edit-id="book-cover-progress"]')?.parentElement;
+    if (progressCoverWrap) progressCoverWrap.style.maxWidth = coverSize === 'small' ? '140px' : coverSize === 'large' ? '280px' : '200px';
+    const buyUrl = book.buyUrl || '';
+    const buyLabel = book.buyLabel || 'Buy this book →';
+    const buyLabelBook = book.buyLabelBook || 'Purchase Book';
+    ['buy-link-home','buy-link-book'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (buyUrl) {
+        el.href = buyUrl;
+        el.classList.remove('hidden');
+        el.classList.add('flex');
+      } else {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      }
+    });
+    const homeLabel = document.getElementById('buy-link-home-label');
+    if (homeLabel) homeLabel.textContent = buyLabel;
+    const bookLabel = document.getElementById('buy-link-book-label');
+    if (bookLabel) bookLabel.textContent = buyLabelBook;
     // Checkpoints
     ['cp1-label','cp1-title','cp2-label','cp2-title','cp3-label','cp3-title'].forEach(id => {
       if (book[id]) {
@@ -1722,8 +1773,10 @@ img,video{max-width:100%;height:auto}
         coverUrl: '',
         synopsis: 'In a world where stories take on a life of their own, young Daniel Sempere discovers a mysterious book that leads him into a labyrinthine conspiracy.',
         altText: 'The Shadow of the Wind',
-        welcomeText: 'Welcome back, Miller Family',
-        alohaText: 'Aloha, Miller Family!'
+        welcomeText: 'Welcome back, La Familia',
+        alohaText: 'Aloha, La Familia!',
+        'ohana-title': 'Build Your Literary Ohana',
+        'ohana-body': 'Share the link above with your family and friends to join the club.'
       });
     }
     // Members are no longer seeded — each user creates their own card on registration
@@ -2110,8 +2163,21 @@ img,video{max-width:100%;height:auto}
     document.getElementById('admin-panel').classList.remove('hidden');
     document.getElementById('admin-panel').classList.add('flex');
     // Pre-fill fields
-    document.getElementById('admin-welcome-text').value = state.book.welcomeText || 'Welcome back, Miller Family';
-    document.getElementById('admin-aloha-text').value = state.book.alohaText || 'Aloha, Miller Family!';
+    document.getElementById('admin-welcome-text').value = state.book.welcomeText || '';
+    document.getElementById('admin-aloha-text').value = state.book.alohaText || '';
+    document.getElementById('admin-ohana-title').value = state.book['ohana-title'] || '';
+    document.getElementById('admin-ohana-body').value = state.book['ohana-body'] || '';
+    document.getElementById('admin-buy-url').value = state.book.buyUrl || '';
+    document.getElementById('admin-buy-label').value = state.book.buyLabel || '';
+    document.getElementById('admin-buy-label-book').value = state.book.buyLabelBook || '';
+    // Chapter overview
+    document.getElementById('admin-chapter-intro').value = state.book.chapterIntro || '';
+    const bulletsList = document.getElementById('admin-chapter-bullets-list');
+    bulletsList.innerHTML = '';
+    (state.book.chapterBullets || []).forEach(b => addChapterBullet(b));
+    const coverSize = state.book.coverSize || 'medium';
+    const sizeRadio = document.getElementById(`cover-size-${coverSize}`);
+    if (sizeRadio) sizeRadio.checked = true;
     document.getElementById('admin-book-title').value = state.book.title || '';
     document.getElementById('admin-book-author').value = state.book.author || '';
     document.getElementById('admin-book-synopsis').value = state.book.synopsis || '';
@@ -2175,6 +2241,14 @@ img,video{max-width:100%;height:auto}
       synopsis: document.getElementById('admin-book-synopsis').value.trim(),
       welcomeText: document.getElementById('admin-welcome-text').value.trim(),
       alohaText: document.getElementById('admin-aloha-text').value.trim(),
+      'ohana-title': document.getElementById('admin-ohana-title').value.trim(),
+      'ohana-body': document.getElementById('admin-ohana-body').value.trim(),
+      buyUrl: document.getElementById('admin-buy-url').value.trim(),
+      buyLabel: document.getElementById('admin-buy-label').value.trim() || 'Buy this book →',
+      buyLabelBook: document.getElementById('admin-buy-label-book').value.trim() || 'Purchase Book',
+      chapterIntro: document.getElementById('admin-chapter-intro').value.trim(),
+      chapterBullets: Array.from(document.querySelectorAll('#admin-chapter-bullets-list input')).map(i => i.value.trim()).filter(Boolean),
+      coverSize: document.querySelector('input[name="cover-size"]:checked')?.value || 'medium',
       coverUrl: state.book.coverUrl || ''
     };
 
@@ -2667,7 +2741,19 @@ img,video{max-width:100%;height:auto}
   function closeStopModal() { document.getElementById('stop-modal').classList.add('hidden'); document.getElementById('stop-modal').classList.remove('flex'); }
   window.closeStopModal = closeStopModal;
 
-  function addBulletField(value='') {
+  function addChapterBullet(value = '') {
+    const list = document.getElementById('admin-chapter-bullets-list');
+    if (!list) return;
+    const row = document.createElement('div');
+    row.className = 'flex items-center gap-2';
+    row.innerHTML = `<span class="material-symbols-outlined text-secondary text-sm shrink-0">radio_button_checked</span>
+      <input type="text" value="${escHtml(value)}" class="flex-1 rounded-lg border border-outline-variant px-3 py-2 font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. Chapters 1–21: Sets the scene…"/>
+      <button onclick="this.parentElement.remove()" class="w-7 h-7 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-error hover:text-white transition-colors shrink-0">
+        <span class="material-symbols-outlined text-sm">remove_circle</span>
+      </button>`;
+    list.appendChild(row);
+  }
+  window.addChapterBullet = addChapterBullet;
     const list = document.getElementById('stop-bullets-list');
     const row = document.createElement('div'); row.className = 'flex items-center gap-2';
     row.innerHTML = `<span class="material-symbols-outlined text-secondary text-sm shrink-0">radio_button_checked</span><input type="text" value="${escHtml(value)}" class="flex-1 rounded-lg border border-outline-variant px-3 py-2 font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Bullet point requirement"/><button onclick='this.parentElement.remove()' class="w-7 h-7 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-error hover:text-white transition-colors shrink-0"><span class="material-symbols-outlined text-sm">remove_circle</span></button>`;
@@ -3091,14 +3177,50 @@ img,video{max-width:100%;height:auto}
         <p class="text-sm text-on-surface-variant font-body-md">Changes save instantly for all club members.</p>
         <div>
           <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Welcome Message (Home page)</label>
-          <input id="admin-welcome-text" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Welcome back, Miller Family"/>
+          <input id="admin-welcome-text" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Welcome back, La Familia"/>
         </div>
         <div>
           <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Aloha Greeting (Invite page)</label>
-          <input id="admin-aloha-text" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Aloha, Miller Family!"/>
+          <input id="admin-aloha-text" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Aloha, La Familia!"/>
         </div>
         <div>
-          <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Book Title</label>
+          <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Ohana Section Title</label>
+          <input id="admin-ohana-title" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Build Your Literary Ohana"/>
+        </div>
+        <div>
+          <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Ohana Section Body</label>
+          <input id="admin-ohana-body" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Share the link above to invite others…"/>
+        </div>
+        <div>
+          <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Buy Link URL</label>
+          <input id="admin-buy-url" type="url" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="https://www.amazon.com/..."/>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Home Link Text</label>
+            <input id="admin-buy-label" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Buy this book →"/>
+          </div>
+          <div>
+            <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Book Page Button Text</label>
+            <input id="admin-buy-label-book" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Purchase Book"/>
+          </div>
+        </div>
+        <div class="border-t border-outline-variant pt-4">
+          <p class="font-label-md text-primary text-xs uppercase tracking-widest mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-sm">format_list_bulleted</span>Chapter Overview</p>
+          <div class="space-y-3">
+            <div>
+              <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Intro Sentence</label>
+              <textarea id="admin-chapter-intro" rows="2" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary resize-none" placeholder="e.g. The book features a split-timeline told by seven characters…"></textarea>
+            </div>
+            <div>
+              <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Bullet Points</label>
+              <div id="admin-chapter-bullets-list" class="space-y-2 mb-3"></div>
+              <button onclick="addChapterBullet()" class="flex items-center gap-1 text-primary font-label-md text-sm hover:opacity-70 transition-opacity">
+                <span class="material-symbols-outlined text-lg">add_circle</span>Add bullet
+              </button>
+            </div>
+          </div>
+        </div>
           <input id="admin-book-title" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Book title"/>
         </div>
         <div>
@@ -3108,6 +3230,29 @@ img,video{max-width:100%;height:auto}
         <div>
           <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Synopsis</label>
           <textarea id="admin-book-synopsis" rows="3" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary resize-none" placeholder="Brief description of the book…"></textarea>
+        </div>
+        <div>
+          <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Cover Display Size</label>
+          <div class="flex gap-3">
+            <label class="flex-1 cursor-pointer">
+              <input type="radio" name="cover-size" id="cover-size-small" value="small" class="sr-only peer"/>
+              <div class="border-2 border-outline-variant rounded-xl p-3 text-center font-label-md text-sm peer-checked:border-primary peer-checked:bg-primary/5 transition-all">
+                <div class="w-8 h-12 bg-surface-container-highest rounded mx-auto mb-1"></div>Small
+              </div>
+            </label>
+            <label class="flex-1 cursor-pointer">
+              <input type="radio" name="cover-size" id="cover-size-medium" value="medium" class="sr-only peer" checked/>
+              <div class="border-2 border-outline-variant rounded-xl p-3 text-center font-label-md text-sm peer-checked:border-primary peer-checked:bg-primary/5 transition-all">
+                <div class="w-10 h-14 bg-surface-container-highest rounded mx-auto mb-1"></div>Medium
+              </div>
+            </label>
+            <label class="flex-1 cursor-pointer">
+              <input type="radio" name="cover-size" id="cover-size-large" value="large" class="sr-only peer"/>
+              <div class="border-2 border-outline-variant rounded-xl p-3 text-center font-label-md text-sm peer-checked:border-primary peer-checked:bg-primary/5 transition-all">
+                <div class="w-12 h-16 bg-surface-container-highest rounded mx-auto mb-1"></div>Large
+              </div>
+            </label>
+          </div>
         </div>
         <div>
           <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Book Cover</label>
