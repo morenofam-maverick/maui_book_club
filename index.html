@@ -10,7 +10,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250712';
+  const APP_VERSION = '20250716';
   const cached = localStorage.getItem('app_version');
   if (cached && cached !== APP_VERSION) {
     localStorage.setItem('app_version', APP_VERSION);
@@ -1020,7 +1020,7 @@ img,video{max-width:100%;height:auto}
         <span id="nav-home" class="font-label-md text-primary cursor-pointer transition-colors hover:text-primary-container nav-link" onclick="navigate('home')">Home</span>
         <span id="nav-book" class="font-label-md text-on-surface-variant cursor-pointer transition-colors hover:text-primary nav-link" onclick="navigate('book')">Book</span>
         <span id="nav-predictions" class="font-label-md text-on-surface-variant cursor-pointer transition-colors hover:text-primary nav-link" onclick="navigate('predictions')">Predictions</span>
-        <span id="nav-progress" class="font-label-md text-on-surface-variant cursor-pointer transition-colors hover:text-primary nav-link" onclick="navigate('progress')">Progress</span>
+        <span id="nav-progress" class="hidden font-label-md text-on-surface-variant cursor-pointer transition-colors hover:text-primary nav-link" onclick="navigate('progress')">Progress</span>
         <span id="nav-members" class="font-label-md text-on-surface-variant cursor-pointer transition-colors hover:text-primary nav-link" onclick="navigate('members')">Family</span>
         <span id="nav-invite" class="font-label-md text-on-surface-variant cursor-pointer transition-colors hover:text-primary nav-link" onclick="navigate('invite')">Invite</span>
       </div>
@@ -1063,10 +1063,10 @@ img,video{max-width:100%;height:auto}
           <div class="mb-8">
             <div class="flex justify-between items-end mb-2">
               <span class="font-label-md text-on-surface">Overall Family Progress</span>
-              <span class="font-label-md text-primary">64%</span>
+              <span id="home-family-pct" class="font-label-md text-primary">0%</span>
             </div>
             <div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-              <div class="h-full bg-secondary transition-all duration-1000 w-[64%]"></div>
+              <div id="home-family-bar" class="h-full bg-secondary transition-all duration-1000" style="width:0%"></div>
             </div>
           </div>
           <div id="home-member-rows" class="space-y-4">
@@ -1094,11 +1094,6 @@ img,video{max-width:100%;height:auto}
             <p id="pred-card-quote" class="text-sm font-body-md italic text-on-tertiary-fixed-variant" onclick="editBookNote('pred-card-quote')" title="Click to edit">"The secret is not in the place, but in the person who finds it..."</p>
           </div>
           <div class="mt-auto">
-            <div class="flex -space-x-2 mb-4">
-              <div class="w-8 h-8 rounded-full border-2 border-tertiary-fixed bg-secondary-container flex items-center justify-center text-[10px] font-bold">L</div>
-              <div class="w-8 h-8 rounded-full border-2 border-tertiary-fixed bg-primary-container flex items-center justify-center text-[10px] font-bold text-white">M</div>
-              <div class="w-8 h-8 rounded-full border-2 border-tertiary-fixed bg-surface-container-highest flex items-center justify-center text-xs text-on-surface-variant font-bold">+2</div>
-            </div>
             <button onclick="navigate('predictions')" class="w-full bg-tertiary text-on-tertiary py-3 rounded-lg font-label-md hover:opacity-90 transition-opacity">Cast Your Prediction</button>
           </div>
         </div>
@@ -1162,13 +1157,19 @@ img,video{max-width:100%;height:auto}
           <span id="buy-link-book-label">Purchase Book</span>
         </a>
       </div>
-      <!-- Chapter Overview — always visible, fully inline-editable by admins -->
+      <!-- Chapter Overview — always visible, edit mode toggled by button -->
       <div id="chapter-overview-wrap" class="max-w-2xl mt-6 bg-surface-container-low rounded-xl p-6 border border-outline-variant">
         <div class="flex items-center justify-between mb-4">
           <h3 class="font-label-md text-primary uppercase tracking-widest">Chapter Overview</h3>
-          <button id="chapter-add-bullet-btn" onclick="chapterAddBullet()" class="hidden items-center gap-1 text-secondary font-label-md text-xs hover:opacity-70 transition-opacity">
-            <span class="material-symbols-outlined text-sm">add_circle</span>Add bullet
-          </button>
+          <div class="flex items-center gap-2">
+            <button id="chapter-add-bullet-btn" onclick="chapterAddBullet()" class="hidden items-center gap-1 text-secondary font-label-md text-xs hover:opacity-70 transition-opacity">
+              <span class="material-symbols-outlined text-sm">add_circle</span>Add bullet
+            </button>
+            <button id="chapter-edit-toggle-btn" onclick="toggleChapterEdit()" class="hidden items-center gap-1 font-label-md text-xs px-3 py-1 rounded-full border border-outline-variant hover:bg-surface-container transition-colors text-on-surface-variant">
+              <span class="material-symbols-outlined text-sm">edit</span>
+              <span id="chapter-edit-toggle-label">Edit</span>
+            </button>
+          </div>
         </div>
         <p id="chapter-overview-intro" class="font-body-md text-on-surface-variant text-sm leading-relaxed mb-4">The book features a split-timeline that alternates between the past and the present, told by seven different characters.</p>
         <ul id="chapter-overview-bullets" class="space-y-2">
@@ -1191,13 +1192,19 @@ img,video{max-width:100%;height:auto}
   <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
     <div class="md:col-span-2 space-y-6">
       <div class="bg-surface-container-high rounded-xl p-6 border border-outline-variant">
-        <h3 class="font-headline-md text-headline-md text-primary mb-6">Checkpoints</h3>
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="font-headline-md text-headline-md text-primary">Checkpoints</h3>
+          <button id="checkpoint-edit-toggle-btn" onclick="toggleCheckpointEdit()" class="hidden items-center gap-1 font-label-md text-xs px-3 py-1 rounded-full border border-outline-variant hover:bg-surface-container transition-colors text-on-surface-variant">
+            <span class="material-symbols-outlined text-sm">edit</span>
+            <span id="checkpoint-edit-toggle-label">Edit</span>
+          </button>
+        </div>
         <div class="space-y-4">
           <div class="p-4 rounded-lg bg-surface-bright border border-secondary-fixed-dim flex items-center gap-4 transition-all hover:scale-[1.02] cursor-pointer" onclick="navigate('predictions')">
             <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-secondary"><span class="material-symbols-outlined">task_alt</span></div>
             <div class="flex-1">
-              <p id="cp1-label" class="text-[10px] uppercase tracking-widest text-secondary font-bold" onclick="editCheckpoint(event,'cp1-label')" title="Click to edit">Chapter 5</p>
-              <h4 id="cp1-title" class="font-label-md text-on-surface" onclick="editCheckpoint(event,'cp1-title')" title="Click to edit">The Awakening</h4>
+              <p id="cp1-label" class="text-[10px] uppercase tracking-widest text-secondary font-bold">Chapter 5</p>
+              <h4 id="cp1-title" class="font-label-md text-on-surface">The Awakening</h4>
               <p class="text-xs text-secondary">Completed</p>
             </div>
             <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
@@ -1206,8 +1213,8 @@ img,video{max-width:100%;height:auto}
             <div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
             <div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container"><span class="material-symbols-outlined">psychology_alt</span></div>
             <div class="flex-1">
-              <p id="cp2-label" class="text-[10px] uppercase tracking-widest text-primary font-bold" onclick="editCheckpoint(event,'cp2-label')" title="Click to edit">Chapter 10</p>
-              <h4 id="cp2-title" class="font-label-md text-primary" onclick="editCheckpoint(event,'cp2-title')" title="Click to edit">Hidden Glyphs</h4>
+              <p id="cp2-label" class="text-[10px] uppercase tracking-widest text-primary font-bold">Chapter 10</p>
+              <h4 id="cp2-title" class="font-label-md text-primary">Hidden Glyphs</h4>
               <p class="text-xs text-primary font-semibold">In Progress</p>
             </div>
             <span class="material-symbols-outlined text-primary">pending</span>
@@ -1215,8 +1222,8 @@ img,video{max-width:100%;height:auto}
           <div class="p-4 rounded-lg bg-surface-container-low border border-outline-variant flex items-center gap-4 opacity-75">
             <div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-outline"><span class="material-symbols-outlined">lock</span></div>
             <div class="flex-1">
-              <p id="cp3-label" class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold" onclick="editCheckpoint(event,'cp3-label')" title="Click to edit">Chapter 15</p>
-              <h4 id="cp3-title" class="font-label-md text-on-surface-variant" onclick="editCheckpoint(event,'cp3-title')" title="Click to edit">Celestial Choice</h4>
+              <p id="cp3-label" class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Chapter 15</p>
+              <h4 id="cp3-title" class="font-label-md text-on-surface-variant">Celestial Choice</h4>
               <p class="text-xs text-on-surface-variant">Locked</p>
             </div>
           </div>
@@ -1416,7 +1423,7 @@ img,video{max-width:100%;height:auto}
     <span class="material-symbols-outlined">psychology_alt</span>
     <span class="font-label-md text-label-md text-xs">Predictions</span>
   </a>
-  <a id="mob-progress" class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-95 duration-200 cursor-pointer" onclick="navigate('progress')">
+  <a id="mob-progress" class="hidden flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-95 duration-200 cursor-pointer" onclick="navigate('progress')">
     <span class="material-symbols-outlined">bar_chart</span>
     <span class="font-label-md text-label-md text-xs">Progress</span>
   </a>
@@ -1855,7 +1862,19 @@ img,video{max-width:100%;height:auto}
         el.textContent = m.name || memberId;
       });
     });
+
+    // Overall family progress — average of all members' progress
+    const memberList = Object.values(members);
+    if (memberList.length > 0) {
+      const avg = Math.round(memberList.reduce((sum, m) => sum + (m.progress || 0), 0) / memberList.length);
+      const pctEl = document.getElementById('home-family-pct');
+      const barEl = document.getElementById('home-family-bar');
+      if (pctEl) pctEl.textContent = avg + '%';
+      if (barEl) barEl.style.width = avg + '%';
+    }
+
     renderHomeMemberRows(members);
+    renderProgressCards(members);
   }
 
   function renderHomeMemberRows(members) {
@@ -1877,17 +1896,19 @@ img,video{max-width:100%;height:auto}
         ? `<img alt="${escHtml(m.name||'')}" class="w-8 h-8 rounded-full border border-surface-container-highest object-cover" src="${m.avatarUrl}"/>`
         : `<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center border border-surface-container-highest shrink-0"><span class="text-on-primary font-bold" style="font-size:9px">${initials}</span></div>`;
       const isMe = id === myMemberId;
+      const pct = m.progress || 0;
       return `<div class="flex items-center gap-3">
         ${avatarHtml}
         <div class="flex-1">
           <div class="flex justify-between text-xs font-label-md">
             <span>${escHtml(m.name||id)}${isMe ? ' <span class="text-primary">(you)</span>' : ''}</span>
-            <span>${escHtml(m.chapter||'')}</span>
+            <span class="text-on-surface-variant">${escHtml(m.chapter||'')}</span>
           </div>
           <div class="h-1 w-full bg-surface-container-highest rounded-full mt-1">
-            <div class="h-full bg-primary rounded-full transition-all duration-700" style="width:${m.progress||0}%"></div>
+            <div class="h-full bg-primary rounded-full transition-all duration-700" style="width:${pct}%"></div>
           </div>
         </div>
+        <span class="font-label-md text-xs text-primary shrink-0 w-8 text-right">${pct}%</span>
       </div>`;
     }).join('');
   }
@@ -2064,10 +2085,10 @@ img,video{max-width:100%;height:auto}
       snap.forEach(d => { state.members[d.id] = d.data(); });
       applyMembersToDOM(state.members);
       renderMembersPage(state.members);
-      renderProgressCards(state.members);
       populateMemberSelects();
       if (state.currentUser) injectMyProgressButton();
       updateQuickProgressBar();
+      updateProgressNavVisibility();
     });
   }
 
@@ -2503,6 +2524,7 @@ img,video{max-width:100%;height:auto}
     document.getElementById('admin-aloha-text').value = state.book.alohaText || '';
     document.getElementById('admin-ohana-title').value = state.book['ohana-title'] || '';
     document.getElementById('admin-ohana-body').value = state.book['ohana-body'] || '';
+    document.getElementById('admin-total-pages').value = state.book.totalPages || '';
     document.getElementById('admin-buy-url').value = state.book.buyUrl || '';
     document.getElementById('admin-buy-label').value = state.book.buyLabel || '';
     document.getElementById('admin-buy-label-book').value = state.book.buyLabelBook || '';
@@ -2580,6 +2602,7 @@ img,video{max-width:100%;height:auto}
       title: document.getElementById('admin-book-title').value.trim(),
       author: document.getElementById('admin-book-author').value.trim(),
       synopsis: document.getElementById('admin-book-synopsis').value.trim(),
+      totalPages: parseInt(document.getElementById('admin-total-pages').value) || 0,
       welcomeText: document.getElementById('admin-welcome-text').value.trim(),
       alohaText: document.getElementById('admin-aloha-text').value.trim(),
       'ohana-title': document.getElementById('admin-ohana-title').value.trim(),
@@ -2747,7 +2770,22 @@ img,video{max-width:100%;height:auto}
         }).join('')}
       </div>`;
   }
-  // ── Family streak ──────────────────────────────────────────────────────
+  // ── Show/hide Progress page nav based on member count ─────────────────
+  function updateProgressNavVisibility() {
+    const membersWithProgress = Object.values(state.members).filter(m => (m.progress || 0) > 0 || m.chapter).length;
+    const totalMembers = Object.keys(state.members).length;
+    // Show if 3+ members exist (regardless of progress) or if any member has logged progress
+    const shouldShow = totalMembers >= 3 || membersWithProgress >= 1;
+    const desktopNav = document.getElementById('nav-progress');
+    const mobileNav = document.getElementById('mob-progress');
+    if (desktopNav) {
+      desktopNav.classList.toggle('hidden', !shouldShow);
+    }
+    if (mobileNav) {
+      mobileNav.classList.toggle('hidden', !shouldShow);
+      mobileNav.classList.toggle('flex', shouldShow);
+    }
+  }
   function startStreakListener() {
     onSnapshot(doc(db, 'config', 'streakData'), snap => {
       updateStreakDisplay(snap.exists() ? snap.data() : {});
@@ -2816,10 +2854,75 @@ img,video{max-width:100%;height:auto}
     }
   }
   // ── Chapter Overview inline editing ───────────────────────────────────
+  let chapterEditMode = false;
+  let checkpointEditMode = false;
+
+  function toggleChapterEdit() {
+    chapterEditMode = !chapterEditMode;
+    const btn = document.getElementById('chapter-edit-toggle-btn');
+    const label = document.getElementById('chapter-edit-toggle-label');
+    const addBtn = document.getElementById('chapter-add-bullet-btn');
+    if (btn) {
+      btn.classList.toggle('bg-secondary', chapterEditMode);
+      btn.classList.toggle('text-on-primary', chapterEditMode);
+      btn.classList.toggle('border-secondary', chapterEditMode);
+      btn.classList.toggle('text-on-surface-variant', !chapterEditMode);
+    }
+    if (label) label.textContent = chapterEditMode ? 'Done' : 'Edit';
+    if (addBtn) addBtn.classList.toggle('hidden', !chapterEditMode);
+    if (addBtn) addBtn.classList.toggle('flex', chapterEditMode);
+    // Wire/unwire click handlers
+    const intro = document.getElementById('chapter-overview-intro');
+    if (intro) {
+      if (chapterEditMode) {
+        intro.classList.add('cursor-pointer','hover:opacity-70','transition-opacity');
+        intro.title = 'Click to edit';
+        intro.onclick = () => chapterEditIntro();
+      } else {
+        intro.classList.remove('cursor-pointer','hover:opacity-70');
+        intro.title = '';
+        intro.onclick = null;
+      }
+    }
+    rebuildBulletListeners();
+  }
+  window.toggleChapterEdit = toggleChapterEdit;
+
+  function toggleCheckpointEdit() {
+    checkpointEditMode = !checkpointEditMode;
+    const btn = document.getElementById('checkpoint-edit-toggle-btn');
+    const label = document.getElementById('checkpoint-edit-toggle-label');
+    if (btn) {
+      btn.classList.toggle('bg-secondary', checkpointEditMode);
+      btn.classList.toggle('text-on-primary', checkpointEditMode);
+      btn.classList.toggle('border-secondary', checkpointEditMode);
+      btn.classList.toggle('text-on-surface-variant', !checkpointEditMode);
+    }
+    if (label) label.textContent = checkpointEditMode ? 'Done' : 'Edit';
+    // Wire/unwire checkpoint click handlers
+    ['cp1-label','cp1-title','cp2-label','cp2-title','cp3-label','cp3-title'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (checkpointEditMode) {
+        el.classList.add('cursor-pointer','hover:opacity-70','transition-opacity');
+        el.title = 'Click to edit';
+        el.onclick = (e) => editCheckpoint(e, id);
+      } else {
+        el.classList.remove('cursor-pointer','hover:opacity-70');
+        el.title = '';
+        el.onclick = null;
+      }
+    });
+  }
+  window.toggleCheckpointEdit = toggleCheckpointEdit;
+
   function applyChapterOverview(book) {
     const intro = document.getElementById('chapter-overview-intro');
     const bulletsList = document.getElementById('chapter-overview-bullets');
+    const editToggleBtn = document.getElementById('chapter-edit-toggle-btn');
+    const checkpointToggleBtn = document.getElementById('checkpoint-edit-toggle-btn');
     const addBtn = document.getElementById('chapter-add-bullet-btn');
+
     if (intro && book.chapterIntro) intro.textContent = book.chapterIntro;
     if (bulletsList && book.chapterBullets?.length) {
       bulletsList.innerHTML = book.chapterBullets.map((b, i) =>
@@ -2828,29 +2931,43 @@ img,video{max-width:100%;height:auto}
           <span class="flex-1">${escHtml(b)}</span>
         </li>`).join('');
     }
-    if (state.isAdmin) {
-      if (addBtn) { addBtn.classList.remove('hidden'); addBtn.classList.add('flex'); }
-      if (intro) { intro.classList.add('cursor-pointer','hover:opacity-70','transition-opacity'); intro.title='Click to edit'; intro.onclick = () => chapterEditIntro(); }
-      rebuildBulletListeners();
-    } else {
-      if (addBtn) { addBtn.classList.add('hidden'); addBtn.classList.remove('flex'); }
-    }
+
+    // Show Edit buttons only to logged-in users
+    const canEdit = !!state.currentUser;
+    if (editToggleBtn) { editToggleBtn.classList.toggle('hidden', !canEdit); editToggleBtn.classList.toggle('flex', canEdit); }
+    if (checkpointToggleBtn) { checkpointToggleBtn.classList.toggle('hidden', !canEdit); checkpointToggleBtn.classList.toggle('flex', canEdit); }
+
+    // Reset edit modes
+    chapterEditMode = false; checkpointEditMode = false;
+    if (addBtn) { addBtn.classList.add('hidden'); addBtn.classList.remove('flex'); }
+    const lbl = document.getElementById('chapter-edit-toggle-label'); if (lbl) lbl.textContent = 'Edit';
+    const cpLbl = document.getElementById('checkpoint-edit-toggle-label'); if (cpLbl) cpLbl.textContent = 'Edit';
+    // Remove any stale click handlers
+    if (intro) { intro.classList.remove('cursor-pointer','hover:opacity-70'); intro.onclick = null; }
+    document.querySelectorAll('.chapter-bullet span.flex-1').forEach(s => { s.classList.remove('cursor-pointer','hover:opacity-70'); s.onclick = null; });
+    document.querySelectorAll('.chapter-del-btn').forEach(b => b.remove());
   }
 
   function rebuildBulletListeners() {
     document.querySelectorAll('.chapter-bullet').forEach(li => {
       const span = li.querySelector('span.flex-1');
       if (!span) return;
-      if (!li.querySelector('.chapter-del-btn')) {
+      // Remove stale delete buttons
+      li.querySelectorAll('.chapter-del-btn').forEach(b => b.remove());
+      if (chapterEditMode) {
         const del = document.createElement('button');
         del.className = 'chapter-del-btn w-6 h-6 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-error hover:text-white transition-colors shrink-0 ml-1';
         del.innerHTML = '<span class="material-symbols-outlined text-sm">remove_circle</span>';
         del.onclick = e => { e.stopPropagation(); li.remove(); chapterSaveToFirebase(); };
         li.appendChild(del);
+        span.classList.add('cursor-pointer','hover:opacity-70','transition-opacity');
+        span.title = 'Click to edit';
+        span.onclick = () => chapterEditBullet(span);
+      } else {
+        span.classList.remove('cursor-pointer','hover:opacity-70');
+        span.title = '';
+        span.onclick = null;
       }
-      span.classList.add('cursor-pointer','hover:opacity-70','transition-opacity');
-      span.title = 'Click to edit';
-      span.onclick = () => chapterEditBullet(span);
     });
   }
 
@@ -3048,6 +3165,7 @@ img,video{max-width:100%;height:auto}
         title: document.getElementById('wiz-title').value.trim(),
         author: document.getElementById('wiz-author').value.trim(),
         synopsis: document.getElementById('wiz-synopsis').value.trim(),
+        totalPages: parseInt(document.getElementById('wiz-total-pages').value) || 0,
         buyUrl: document.getElementById('wiz-buy-url').value.trim(),
         buyLabel:'Buy this book →', buyLabelBook:'Purchase Book',
         coverUrl, coverSize:'medium',
@@ -3703,6 +3821,11 @@ img,video{max-width:100%;height:auto}
           <textarea id="wiz-synopsis" rows="3" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary resize-none" placeholder="Brief description…"></textarea>
         </div>
         <div>
+          <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Total Pages</label>
+          <input id="wiz-total-pages" type="number" min="1" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. 342"/>
+          <p class="text-xs text-on-surface-variant mt-1">Used to calculate member progress bars</p>
+        </div>
+        <div>
           <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Buy Link URL</label>
           <input id="wiz-buy-url" type="url" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="https://www.amazon.com/..."/>
         </div>
@@ -3997,6 +4120,11 @@ img,video{max-width:100%;height:auto}
               </button>
             </div>
           </div>
+        </div>
+        <div>
+          <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Total Pages in Book</label>
+          <input id="admin-total-pages" type="number" min="1" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. 342"/>
+          <p class="text-xs text-on-surface-variant mt-1">Used to calculate member progress bars</p>
         </div>
         <div>
           <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Book Title</label>
