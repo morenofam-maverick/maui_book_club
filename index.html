@@ -10,7 +10,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250610';
+  const APP_VERSION = '20250611';
   const cached = localStorage.getItem('app_version');
   if (cached && cached !== APP_VERSION) {
     localStorage.setItem('app_version', APP_VERSION);
@@ -2338,6 +2338,58 @@ img,video{max-width:100%;height:auto}
       const allPreds = Object.values(stopPreds).flat();
       renderHomeMarginalia(allPreds);
     });
+  }
+
+  function renderHomeMarginalia(preds) {
+    const grid = document.getElementById('home-marginalia-grid');
+    if (!grid) return;
+    const totalMembers = Object.keys(state.members).length;
+    const submittedCount = new Set(preds.map(p => p.memberId).filter(Boolean)).size;
+    const allRevealed = preds.length > 0 && preds.every(p => p.revealed);
+    const recent = [...preds].reverse().slice(0, 3);
+    const rotations = ['-rotate-1', 'rotate-1', '-rotate-1'];
+
+    if (recent.length === 0) {
+      grid.innerHTML = `<div class="p-5 rounded-lg border border-surface-container-highest bg-[#fefcf0] text-center text-on-surface-variant text-sm font-body-md col-span-3 py-10 opacity-60">
+        <span class="material-symbols-outlined block text-3xl mb-2 opacity-40">edit_note</span>
+        No predictions yet — be the first!
+      </div>`;
+      return;
+    }
+
+    const counterHtml = `<div class="md:col-span-3 flex items-center gap-3 mb-2">
+      <div class="px-3 py-1 rounded-full bg-surface-container border border-outline-variant font-label-md text-xs text-on-surface-variant">
+        ${submittedCount} of ${totalMembers} submitted
+      </div>
+      ${allRevealed ? '<span class="px-3 py-1 rounded-full bg-secondary-container text-secondary font-label-md text-xs">✓ Revealed</span>' : ''}
+    </div>`;
+
+    const cardsHtml = recent.map((p, i) => {
+      const name = escHtml(p.authorName || 'Member');
+      const initials = (p.authorName || '?').slice(0, 2).toUpperCase();
+      const rot = rotations[i] || '';
+      const hiddenClass = i === 2 ? 'hidden md:block' : '';
+      const isOwn = state.currentUser?.uid === p.authorId;
+      const canSeeText = allRevealed || state.isAdmin;
+      return `<div class="${hiddenClass} p-5 rounded-lg border border-surface-container-highest shadow-[2px_2px_0px_rgba(44,30,15,0.05)] transform ${rot} hover:rotate-0 transition-transform bg-[#fefcf0] cursor-pointer" onclick="navigate('predictions')">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0">
+            <span class="text-on-primary font-bold" style="font-size:8px">${initials}</span>
+          </div>
+          <span class="font-label-md text-xs flex-1">${name}</span>
+          ${allRevealed ? '<span class="material-symbols-outlined text-secondary text-sm icon-filled">verified</span>' : '<span class="material-symbols-outlined text-outline-variant text-sm">lock</span>'}
+        </div>
+        ${canSeeText
+          ? `<p class="font-body-md text-sm text-on-surface leading-relaxed italic">"${escHtml((p.text||'').slice(0,100))}${(p.text||'').length>100?'…':''}"</p>`
+          : `<div class="flex items-center gap-2 py-1">
+               <span class="material-symbols-outlined text-outline text-sm">lock</span>
+               <span class="text-xs text-on-surface-variant font-body-md">${isOwn ? 'Your prediction is sealed' : 'Sealed until everyone submits'}</span>
+             </div>`
+        }
+      </div>`;
+    }).join('');
+
+    grid.innerHTML = counterHtml + cardsHtml;
   }
 
   async function seedStopsIfEmpty() {
