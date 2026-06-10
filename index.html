@@ -10,7 +10,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250708';
+  const APP_VERSION = '20250710';
   const cached = localStorage.getItem('app_version');
   if (cached && cached !== APP_VERSION) {
     localStorage.setItem('app_version', APP_VERSION);
@@ -2016,6 +2016,7 @@ img,video{max-width:100%;height:auto}
     const name = document.querySelector(`[data-member-id="${id}"] .member-name`)?.textContent || 'this member';
     document.getElementById('confirm-remove-name').textContent = name;
     document.getElementById('confirm-remove-id').value = id;
+    document.body.style.overflow = 'hidden';
     document.getElementById('confirm-remove-modal').classList.remove('hidden');
     document.getElementById('confirm-remove-modal').classList.add('flex');
   }
@@ -2023,6 +2024,7 @@ img,video{max-width:100%;height:auto}
 
   async function doRemoveMember() {
     const id = document.getElementById('confirm-remove-id').value;
+    document.body.style.overflow = '';
     document.getElementById('confirm-remove-modal').classList.add('hidden');
     document.getElementById('confirm-remove-modal').classList.remove('flex');
     try {
@@ -2034,6 +2036,7 @@ img,video{max-width:100%;height:auto}
   window.doRemoveMember = doRemoveMember;
 
   function cancelRemoveMember() {
+    document.body.style.overflow = '';
     document.getElementById('confirm-remove-modal').classList.add('hidden');
     document.getElementById('confirm-remove-modal').classList.remove('flex');
   }
@@ -2176,6 +2179,7 @@ img,video{max-width:100%;height:auto}
 
   // ── User modal (login / register / profile) ───────────────────────────
   function openUserModal(tab = 'login') {
+        document.body.style.overflow = 'hidden';
     document.getElementById('user-modal').classList.remove('hidden');
     document.getElementById('user-modal').classList.add('flex');
     // Show/hide profile tab based on login state
@@ -2187,6 +2191,7 @@ img,video{max-width:100%;height:auto}
   window.openUserModal = openUserModal;
 
   function closeUserModal() {
+        document.body.style.overflow = '';
     document.getElementById('user-modal').classList.add('hidden');
     document.getElementById('user-modal').classList.remove('flex');
   }
@@ -2344,12 +2349,14 @@ img,video{max-width:100%;height:auto}
     if (pctEl) { pctEl.value = m.progress || 0; }
     if (labelEl) { labelEl.textContent = (m.progress || 0) + '%'; }
     document.getElementById('my-progress-chapter').value = m.chapter || '';
+        document.body.style.overflow = 'hidden';
     document.getElementById('my-progress-modal').classList.remove('hidden');
     document.getElementById('my-progress-modal').classList.add('flex');
   }
   window.openMyProgressModal = openMyProgressModal;
 
   function closeMyProgressModal() {
+        document.body.style.overflow = '';
     document.getElementById('my-progress-modal').classList.add('hidden');
     document.getElementById('my-progress-modal').classList.remove('flex');
   }
@@ -2375,6 +2382,7 @@ img,video{max-width:100%;height:auto}
   // ── Submit prediction ──────────────────────────────────────────────────
   function openPredictionModal(stopId = null) {
     if (!state.currentUser) { openUserModal('login'); return; }
+        document.body.style.overflow = 'hidden';
     document.getElementById('prediction-modal').classList.remove('hidden');
     document.getElementById('prediction-modal').classList.add('flex');
     document.getElementById('prediction-text').value = '';
@@ -2387,6 +2395,7 @@ img,video{max-width:100%;height:auto}
   window.openPredictionModal = openPredictionModal;
 
   function closePredictionModal() {
+        document.body.style.overflow = '';
     document.getElementById('prediction-modal').classList.add('hidden');
     document.getElementById('prediction-modal').classList.remove('flex');
   }
@@ -2424,12 +2433,14 @@ img,video{max-width:100%;height:auto}
     // If signed in (admin or regular user), this button signs them out
     if (state.currentUser) { doSignOut(); return; }
     // Not signed in — open the admin login modal
+        document.body.style.overflow = 'hidden';
     document.getElementById('auth-modal').classList.remove('hidden');
     document.getElementById('auth-modal').classList.add('flex');
     document.getElementById('auth-error').textContent = '';
   }
   window.openAuthModal = openAuthModal;
   function closeAuthModal() {
+        document.body.style.overflow = '';
     document.getElementById('auth-modal').classList.add('hidden');
     document.getElementById('auth-modal').classList.remove('flex');
   }
@@ -2457,6 +2468,7 @@ img,video{max-width:100%;height:auto}
   // ── Admin panel ────────────────────────────────────────────────────────
   function openAdminPanel() {
     if (!state.isAdmin) { openAuthModal(); return; }
+    document.body.style.overflow = 'hidden';
     document.getElementById('admin-panel').classList.remove('hidden');
     document.getElementById('admin-panel').classList.add('flex');
     // Pre-fill fields
@@ -2510,6 +2522,7 @@ img,video{max-width:100%;height:auto}
   window.openAdminPanel = openAdminPanel;
 
   function closeAdminPanel() {
+    document.body.style.overflow = '';
     document.getElementById('admin-panel').classList.add('hidden');
     document.getElementById('admin-panel').classList.remove('flex');
   }
@@ -2870,12 +2883,14 @@ img,video{max-width:100%;height:auto}
     document.getElementById('wiz-cover-input').value = '';
     wizBuildDefaultStops();
     wizUpdateStepUI();
+        document.body.style.overflow = 'hidden';
     document.getElementById('new-book-wizard').classList.remove('hidden');
     document.getElementById('new-book-wizard').classList.add('flex');
   }
   window.openNewBookWizard = openNewBookWizard;
 
   function closeNewBookWizard() {
+        document.body.style.overflow = '';
     document.getElementById('new-book-wizard').classList.add('hidden');
     document.getElementById('new-book-wizard').classList.remove('flex');
   }
@@ -3376,6 +3391,7 @@ img,video{max-width:100%;height:auto}
 
   function confirmRemoveStop(stopId) {
     document.getElementById('confirm-remove-stop-id').value = stopId;
+    document.body.style.overflow = 'hidden';
     document.getElementById('confirm-remove-stop-modal').classList.remove('hidden');
     document.getElementById('confirm-remove-stop-modal').classList.add('flex');
   }
@@ -3397,7 +3413,7 @@ img,video{max-width:100%;height:auto}
   }
   window.doRemoveStop = doRemoveStop;
 
-  function cancelRemoveStop() { document.getElementById('confirm-remove-stop-modal').classList.add('hidden'); document.getElementById('confirm-remove-stop-modal').classList.remove('flex'); }
+  function cancelRemoveStop() { document.body.style.overflow = ''; document.getElementById('confirm-remove-stop-modal').classList.add('hidden'); document.getElementById('confirm-remove-stop-modal').classList.remove('flex'); }
   window.cancelRemoveStop = cancelRemoveStop;
 
   async function revealAllPredictions() {}
@@ -3456,6 +3472,7 @@ img,video{max-width:100%;height:auto}
   window.openPhotoModal = openPhotoModal;
 
   function closePhotoModal() {
+        document.body.style.overflow = '';
     document.getElementById('photo-modal').classList.add('hidden');
     document.getElementById('photo-modal').classList.remove('flex');
     currentEditTarget = null;
@@ -3994,6 +4011,8 @@ img,video{max-width:100%;height:auto}
           <!-- Populated dynamically from state.members -->
         </div>
         <button id="admin-save-members-btn" onclick="saveMembers()" class="w-full py-3 rounded-xl bg-secondary text-on-primary font-label-md hover:opacity-90 transition-opacity">Save Progress — Updates Everyone Instantly</button>
+      </div>
+
       <!-- THEME TAB -->
       <div id="admin-tab-theme" class="hidden space-y-4">
         <p class="text-sm text-on-surface-variant font-body-md">Choose a color palette for the app. Changes instantly for everyone.</p>
@@ -4069,10 +4088,9 @@ img,video{max-width:100%;height:auto}
         <p class="text-xs text-on-surface-variant font-body-md text-center pt-2">The selected theme is highlighted with a ring. Click any to switch instantly.</p>
       </div>
 
-      </div>
-    </div>
-  </div>
-</div>
+    </div><!-- end scrollable content -->
+  </div><!-- end modal inner -->
+</div><!-- end admin panel -->
 <div class="fixed top-20 right-4 md:right-8 z-50 flex flex-col items-end gap-2">
   <button id="admin-panel-btn" onclick="openAdminPanel()" class="hidden bg-primary text-on-primary flex items-center gap-2 px-4 py-2.5 rounded-full font-label-md shadow-lg hover:opacity-90 transition-all active:scale-95">
     <span class="material-symbols-outlined text-xl">admin_panel_settings</span>
