@@ -1123,71 +1123,10 @@ img,video{max-width:100%;height:auto}
         <h3 class="font-label-md text-primary uppercase tracking-widest mb-3">Synopsis</h3>
         <p id="book-synopsis" class="font-body-lg text-body-lg leading-relaxed text-on-surface mb-8">In a world where stars are whispering secrets to those who listen, young astronomer Leo discovers an ancient manuscript hidden within the walls of the Great Observatory. As the constellations begin to shift in ways that defy physics, Leo must lead his family through a series of celestial trials to prevent the eternal eclipse. A story of heritage, hope, and the light that binds us together.</p>
       </div>
-      <div class="flex flex-wrap gap-4">
-        <button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-md hover:opacity-90 transition-opacity flex items-center gap-2">
-          <span class="material-symbols-outlined">auto_stories</span>Continue Reading
-        </button>
-        <button class="border border-tertiary text-tertiary px-8 py-3 rounded-lg font-label-md hover:bg-surface-container-low transition-colors flex items-center gap-2">
-          <span class="material-symbols-outlined">share</span>Share Progress
-        </button>
-      </div>
     </div>
   </section>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
     <div class="md:col-span-2 space-y-6">
-      <div class="bg-surface-container-low rounded-xl p-8 border border-surface-container-highest">
-        <div class="flex items-center justify-between mb-8">
-          <h3 class="font-headline-md text-headline-md text-primary">Reading Schedule</h3>
-          <div class="flex items-center gap-2 text-secondary font-label-md">
-            <span class="material-symbols-outlined">calendar_today</span><span>Week 3 of 5</span>
-          </div>
-        </div>
-        <div class="space-y-6">
-          <div class="relative pl-8 border-l-2 border-secondary-container">
-            <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-secondary"></div>
-            <div class="flex justify-between items-start mb-2">
-              <div>
-                <h4 class="font-label-md text-primary">Week 3: The Observatory Trials</h4>
-                <p class="text-on-surface-variant text-sm">Chapters 11–15 • Due Oct 24</p>
-              </div>
-              <span class="bg-secondary-container text-secondary text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Active</span>
-            </div>
-            <div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden mt-4"><div class="bg-secondary h-full" style="width:65%"></div></div>
-            <p class="text-sm mt-2 text-on-surface-variant italic">Family Goal: Finish before Saturday's movie night.</p>
-          </div>
-          <div class="relative pl-8 border-l-2 border-outline-variant">
-            <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-outline-variant"></div>
-            <div class="flex justify-between items-start opacity-60">
-              <div>
-                <h4 class="font-label-md text-on-surface">Week 2: Hidden Manuscript</h4>
-                <p class="text-on-surface-variant text-sm">Chapters 6–10 • Completed Oct 17</p>
-              </div>
-              <span class="material-symbols-outlined text-secondary">check_circle</span>
-            </div>
-          </div>
-          <div class="relative pl-8 border-l-2 border-outline-variant">
-            <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full border-2 border-outline-variant bg-surface"></div>
-            <div class="flex justify-between items-start text-on-surface-variant">
-              <div>
-                <h4 class="font-label-md">Week 4: The Starry Threshold</h4>
-                <p class="text-sm">Chapters 16–22 • Starts Oct 25</p>
-              </div>
-              <span class="material-symbols-outlined">lock</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="bg-[#FEF9E7] p-8 rounded-xl border border-[#F9E79F] relative rotate-1 shadow-sm paper-texture">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center border border-tertiary-fixed-dim overflow-hidden">
-            <img alt="Grandma" data-editable="img" data-edit-id="member-grandma" class="w-full h-full object-cover rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSzr-ctCN1TCosgFyC7OT4wl8wMR8YQ6IwlbYSRwmZJnLa-yaxVConnjQQAuE3gr_DnVswrQxsyZVbO19tkkpIIbde-RqjG7nyQiblXuHGuTHpnlkI9C2IrRDEyF1FB2wVBWgY2VveFFzwDnOzzZvrtMCcunFMBG6kQDYhnJscCElKShnDd13TjMVL520asHmQW-8gJRUKpOjK-bNHzNM3HciNOCo-ttGqvR2bEwQjuCvSIaPgZ57Stz6yFLoPE8RrKRB1WBNMblk"/>
-          </div>
-          <span class="font-label-md text-tertiary">Grandma June's Note</span>
-        </div>
-        <p class="font-body-md text-on-tertiary-fixed-variant leading-relaxed italic">"The way Leo's father describes the constellations reminds me so much of how your grandfather used to point out the Big Dipper on our summer trips. I think Chapter 12 is going to reveal something about the mother's disappearance!"</p>
-      </div>
-    </div>
-    <div class="space-y-6">
       <div class="bg-surface-container-high rounded-xl p-6 border border-outline-variant">
         <h3 class="font-headline-md text-headline-md text-primary mb-6">Checkpoints</h3>
         <div class="space-y-4">
@@ -1228,6 +1167,15 @@ img,video{max-width:100%;height:auto}
           </div>
         </div>
       </div>
+      <div class="bg-[#FEF9E7] p-8 rounded-xl border border-[#F9E79F] relative rotate-1 shadow-sm paper-texture">
+        <div class="flex items-center justify-between mb-4">
+          <span id="book-note-label" class="font-label-md text-tertiary cursor-pointer hover:opacity-70 transition-opacity" onclick="editBookNote('label')" title="Click to edit">Grandma June's Note</span>
+          <span class="material-symbols-outlined text-tertiary/40 text-sm">edit_note</span>
+        </div>
+        <p id="book-note-body" class="font-body-md text-on-tertiary-fixed-variant leading-relaxed italic cursor-pointer hover:opacity-70 transition-opacity" onclick="editBookNote('body')" title="Click to edit">"The way Leo's father describes the constellations reminds me so much of how your grandfather used to point out the Big Dipper on our summer trips. I think Chapter 12 is going to reveal something about the mother's disappearance!"</p>
+      </div>
+    </div>
+    <div class="space-y-6">
       <div class="bg-secondary-container/30 p-6 rounded-xl border border-secondary-fixed-dim">
         <h4 class="font-label-md text-secondary mb-4 flex items-center gap-2">
           <span class="material-symbols-outlined text-[20px]">auto_awesome</span>Family Sentiment
@@ -1246,56 +1194,39 @@ img,video{max-width:100%;height:auto}
 <!-- ===== PREDICTIONS PAGE ===== -->
 <div id="page-predictions" class="page">
 <main class="max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop py-8 pb-32">
+
   <!-- Header -->
-  <div class="mb-10">
+  <div class="mb-8">
     <div class="flex items-center gap-2 text-on-surface-variant mb-2">
       <span class="material-symbols-outlined text-[18px]">auto_stories</span>
       <span class="font-label-md text-label-md uppercase tracking-widest">Current Reading</span>
     </div>
-    <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-4" data-editable="book-title">The Shadow of the Wind</h2>
-    <div class="flex items-center justify-between flex-wrap gap-4">
-      <div id="predictions-submitter-avatars" class="flex items-center gap-4">
-        <div class="flex -space-x-2" id="predictions-avatar-stack"></div>
-        <span id="predictions-count-label" class="font-body-md text-on-surface-variant"></span>
+    <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-1" data-editable="book-title">The Shadow of the Wind</h2>
+  </div>
+
+  <!-- Admin toolbar -->
+  <div id="predictions-admin-bar" class="hidden mb-8 bg-primary/5 border border-primary/20 rounded-xl px-5 py-4">
+    <div class="flex items-center justify-between flex-wrap gap-3">
+      <div>
+        <p class="font-label-md text-primary flex items-center gap-2">
+          <span class="material-symbols-outlined text-lg">admin_panel_settings</span>Admin Controls
+        </p>
+        <p id="predictions-admin-status" class="text-xs text-on-surface-variant mt-1 font-body-md">Manage prediction stops below.</p>
       </div>
-      <button onclick="openPredictionModal()" class="flex items-center gap-2 bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-md hover:opacity-90 active:scale-95 transition-all shadow-sm">
-        <span class="material-symbols-outlined text-[20px]">add_circle</span>Cast Prediction
+      <button onclick="openAddStopModal()" class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2.5 rounded-full font-label-md hover:opacity-90 transition-all active:scale-95">
+        <span class="material-symbols-outlined text-lg">add_circle</span>Add Stop
       </button>
     </div>
   </div>
 
-  <!-- Admin reveal bar — only visible to admins -->
-  <div id="predictions-admin-bar" class="hidden mb-6 border rounded-xl px-5 py-4 bg-primary/5 border-primary/20">
-    <div class="flex items-center justify-between flex-wrap gap-3">
-      <div>
-        <p class="font-label-md text-primary flex items-center gap-2">
-          <span class="material-symbols-outlined text-lg">admin_panel_settings</span>
-          Admin Controls
-        </p>
-        <p id="predictions-admin-status" class="text-xs text-on-surface-variant mt-1 font-body-md">Waiting for all members to submit…</p>
-      </div>
-      <div class="flex items-center gap-3">
-        <div id="predictions-submission-counter" class="px-3 py-1.5 bg-surface-container rounded-full font-label-md text-sm text-on-surface-variant border border-outline-variant">
-          0 of 0 submitted
-        </div>
-        <button id="reveal-all-btn" onclick="revealAllPredictions()" disabled
-          class="flex items-center gap-2 px-5 py-2.5 rounded-full font-label-md transition-all opacity-50 cursor-not-allowed bg-secondary text-on-primary">
-          <span class="material-symbols-outlined text-lg">visibility</span>Reveal All
-        </button>
-        <button id="hide-all-btn" onclick="hideAllPredictions()" class="hidden flex items-center gap-2 px-5 py-2.5 rounded-full font-label-md transition-all bg-surface-container text-on-surface-variant border border-outline-variant hover:bg-error hover:text-white">
-          <span class="material-symbols-outlined text-lg">visibility_off</span>Re-seal All
-        </button>
-      </div>
+  <!-- Stops feed -->
+  <div id="stops-feed" class="space-y-10">
+    <div class="text-center py-16 text-on-surface-variant font-body-md">
+      <span class="material-symbols-outlined text-4xl mb-3 block opacity-40">psychology_alt</span>
+      Loading prediction stops…
     </div>
   </div>
 
-  <!-- Cards injected here -->
-  <div id="predictions-feed" class="space-y-6">
-    <div class="text-center py-16 text-on-surface-variant font-body-md">
-      <span class="material-symbols-outlined text-4xl mb-3 block opacity-40">psychology_alt</span>
-      Loading predictions…
-    </div>
-  </div>
 </main>
 </div>
 
@@ -1661,6 +1592,14 @@ img,video{max-width:100%;height:auto}
     if (book.alohaText) {
       const el = document.getElementById('invite-aloha');
       if (el) el.textContent = book.alohaText;
+    }
+    if (book.note_label) {
+      const el = document.getElementById('book-note-label');
+      if (el && !el.querySelector('input,textarea')) el.textContent = book.note_label;
+    }
+    if (book.note_body) {
+      const el = document.getElementById('book-note-body');
+      if (el && !el.querySelector('input,textarea')) el.textContent = book.note_body;
     }
   }
 
@@ -2149,11 +2088,16 @@ img,video{max-width:100%;height:auto}
   window.saveMyProgress = saveMyProgress;
 
   // ── Submit prediction ──────────────────────────────────────────────────
-  function openPredictionModal() {
+  function openPredictionModal(stopId = null) {
     if (!state.currentUser) { openUserModal('login'); return; }
     document.getElementById('prediction-modal').classList.remove('hidden');
     document.getElementById('prediction-modal').classList.add('flex');
     document.getElementById('prediction-text').value = '';
+    document.getElementById('prediction-modal').dataset.stopId = stopId || '';
+    // Show stop title in modal
+    const stop = stopId ? stopsData[stopId] : null;
+    const labelEl = document.getElementById('prediction-book-label');
+    if (labelEl) labelEl.textContent = stop ? stop.title : (state.book.title || '');
   }
   window.openPredictionModal = openPredictionModal;
 
@@ -2173,11 +2117,14 @@ img,video{max-width:100%;height:auto}
     const memberData = memberId ? state.members[memberId] : null;
     try {
       const { addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const stopId = document.getElementById('prediction-modal').dataset.stopId || null;
       await addDoc(collection(db, 'predictions'), {
         text, authorName: profile?.displayName || state.currentUser.email.split('@')[0],
         authorId: state.currentUser.uid, memberId,
         avatarUrl: memberData?.avatarUrl || '',
-        bookTitle: state.book.title || '', createdAt: serverTimestamp(), revealed: false
+        bookTitle: state.book.title || '',
+        stopId,
+        createdAt: serverTimestamp(), revealed: false
       });
       closePredictionModal();
       showSaveToast('Prediction posted!');
@@ -2333,239 +2280,280 @@ img,video{max-width:100%;height:auto}
   }
   window.showSaveToast = showSaveToast;
 
-  // ── Predictions system ────────────────────────────────────────────────
+  // ── Book note (any logged-in user can edit) ────────────────────────────
+  function editBookNote(field) {
+    if (!state.currentUser) { openUserModal('login'); return; }
+    const elId = field === 'label' ? 'book-note-label' : 'book-note-body';
+    const el = document.getElementById(elId);
+    if (!el || el.querySelector('input,textarea')) return;
+    const current = el.textContent.trim();
+    const isMulti = field === 'body';
+    const inp = document.createElement(isMulti ? 'textarea' : 'input');
+    inp.value = current;
+    inp.className = 'w-full bg-white/80 border-2 border-tertiary rounded-lg px-3 py-2 font-body-md text-on-tertiary-fixed-variant focus:outline-none resize-none text-sm italic';
+    if (isMulti) { inp.rows = 4; inp.style.minHeight = '80px'; }
+    el.textContent = '';
+    el.appendChild(inp);
+    inp.focus(); inp.select();
+    const save = async () => {
+      const val = inp.value.trim() || current;
+      el.textContent = val;
+      if (val !== current) {
+        try {
+          await updateDoc(doc(db, 'config', 'currentBook'), { [`note_${field}`]: val });
+          showSaveToast('Note updated!');
+        } catch(e) { console.error(e); }
+      }
+    };
+    inp.addEventListener('blur', save);
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !isMulti) { e.preventDefault(); save(); } if (e.key === 'Escape') { el.textContent = current; } });
+  }
+  window.editBookNote = editBookNote;
+  // ── Prediction Stops system ───────────────────────────────────────────
+  const DEFAULT_STOPS = [
+    { id:'stop_1', order:0, title:'Prediction Stop #1: Read to about 25% of the book', subtitle:'', bullets:['Who you trust the LEAST','Who seems the most suspicious','Your early guess for who might die','Any wild theories'], footer:'Date/time/page# to be included', progress:'25%' },
+    { id:'stop_2', order:1, title:'Prediction Stop #2: Read to about 50% of the book', subtitle:'Now that more secrets are coming out…', bullets:['Your main suspect','Who has the strongest motive','Your prediction for what REALLY happened','Any updated theories'], footer:'Date/time/page# to be included', progress:'50%' },
+    { id:'stop_3', order:2, title:'Prediction Stop #3 … if you want: Final Theory', subtitle:"Think you've solved it? Before finishing the book, write down your FINAL theory on a card, date it, and seal it in the envelope.", bullets:['Who you think is responsible','What you think really happened','Your biggest clue/evidence','Any final wild predictions'], footer:'', progress:'100%' }
+  ];
+  let stopsData = {}, stopPreds = {};
+
   function startPredictionsListener() {
-    const { query, orderBy } = window._firestoreExtras || {};
-    // Listen to all predictions for current book, ordered by time
+    onSnapshot(collection(db, 'predictionStops'), snap => {
+      stopsData = {};
+      snap.forEach(d => { stopsData[d.id] = { id:d.id, ...d.data() }; });
+      renderStopsPage();
+    });
     onSnapshot(collection(db, 'predictions'), snap => {
-      const preds = [];
-      snap.forEach(d => preds.push({ id: d.id, ...d.data() }));
-      // Sort by createdAt ascending
-      preds.sort((a,b) => {
-        const ta = a.createdAt?.toMillis?.() || 0;
-        const tb = b.createdAt?.toMillis?.() || 0;
-        return ta - tb;
+      stopPreds = {};
+      snap.forEach(d => {
+        const p = { id:d.id, ...d.data() };
+        const sid = p.stopId || 'legacy';
+        if (!stopPreds[sid]) stopPreds[sid] = [];
+        stopPreds[sid].push(p);
       });
-      renderPredictions(preds);
-      renderHomeMarginalia(preds);
+      Object.values(stopPreds).forEach(arr => arr.sort((a,b)=>(a.createdAt?.toMillis?.()??0)-(b.createdAt?.toMillis?.()??0)));
+      renderStopsPage();
+      // Also update home marginalia
+      const allPreds = Object.values(stopPreds).flat();
+      renderHomeMarginalia(allPreds);
     });
   }
 
-  function renderPredictions(preds) {
-    const feed = document.getElementById('predictions-feed');
+  async function seedStopsIfEmpty() {
+    const snap = await getDocs(collection(db, 'predictionStops'));
+    if (snap.empty) {
+      for (const s of DEFAULT_STOPS) {
+        const { id, ...data } = s;
+        await setDoc(doc(db, 'predictionStops', id), data);
+      }
+    }
+  }
+
+  function renderStopsPage() {
+    const feed = document.getElementById('stops-feed');
     const adminBar = document.getElementById('predictions-admin-bar');
-    const avatarStack = document.getElementById('predictions-avatar-stack');
-    const countLabel = document.getElementById('predictions-count-label');
     if (!feed) return;
-
     if (adminBar) adminBar.classList.toggle('hidden', !state.isAdmin);
-
-    // Count total expected members and how many have submitted
-    const totalMembers = Object.keys(state.members).length;
-    const submittedIds = new Set(preds.map(p => p.authorId).filter(Boolean));
-    // Use memberId linkage to check which member cards are covered
-    const submittedMemberIds = new Set(preds.map(p => p.memberId).filter(Boolean));
-    const submittedCount = submittedMemberIds.size;
-    const allSubmitted = totalMembers > 0 && submittedCount >= totalMembers;
-    const anyRevealed = preds.some(p => p.revealed);
-    const allRevealed = preds.length > 0 && preds.every(p => p.revealed);
-
-    // Update counter pill (visible to everyone)
-    const counterEl = document.getElementById('predictions-submission-counter');
-    if (counterEl) counterEl.textContent = `${submittedCount} of ${totalMembers} submitted`;
-
-    // Update count label in header
-    if (countLabel) {
-      countLabel.textContent = submittedCount === 0
-        ? 'No predictions yet'
-        : allRevealed
-          ? `${submittedCount} prediction${submittedCount===1?'':'s'} revealed`
-          : `${submittedCount} of ${totalMembers} submitted`;
-    }
-
-    // Update admin bar status + button state
-    const statusEl = document.getElementById('predictions-admin-status');
-    const revealBtn = document.getElementById('reveal-all-btn');
-    const hideBtn = document.getElementById('hide-all-btn');
-    if (statusEl) {
-      if (allRevealed) statusEl.textContent = 'All predictions are revealed.';
-      else if (allSubmitted) statusEl.textContent = '✓ All members submitted — ready to reveal!';
-      else statusEl.textContent = `Waiting for ${totalMembers - submittedCount} more member${totalMembers - submittedCount === 1 ? '' : 's'} to submit…`;
-    }
-    if (revealBtn) {
-      const canReveal = allSubmitted && !allRevealed;
-      revealBtn.disabled = !canReveal;
-      revealBtn.classList.toggle('opacity-50', !canReveal);
-      revealBtn.classList.toggle('cursor-not-allowed', !canReveal);
-      revealBtn.classList.toggle('hover:opacity-90', canReveal);
-      revealBtn.classList.toggle('active:scale-95', canReveal);
-      revealBtn.classList.toggle('hidden', allRevealed);
-    }
-    if (hideBtn) {
-      hideBtn.classList.toggle('hidden', !allRevealed);
-    }
-
-    // Update avatar stack — show initials of who has submitted
-    if (avatarStack) {
-      const unique = {};
-      preds.forEach(p => { if (p.authorId && !unique[p.authorId]) unique[p.authorId] = p; });
-      avatarStack.innerHTML = Object.values(unique).slice(0,6).map(p => {
-        const initials = (p.authorName||'?').slice(0,2).toUpperCase();
-        return `<div class="w-8 h-8 rounded-full border-2 border-surface bg-primary flex items-center justify-center" title="${escHtml(p.authorName||'')}">
-          <span class="text-on-primary font-bold" style="font-size:9px">${initials}</span>
-        </div>`;
-      }).join('');
-    }
-
-    if (preds.length === 0) {
-      feed.innerHTML = `<div class="text-center py-16 text-on-surface-variant font-body-md">
-        <span class="material-symbols-outlined text-4xl mb-3 block opacity-40">psychology_alt</span>
-        No predictions yet — be the first to cast one!
-      </div>`;
+    const sorted = Object.values(stopsData).sort((a,b)=>(a.order??0)-(b.order??0));
+    if (sorted.length === 0) {
+      feed.innerHTML = `<div class="text-center py-16 text-on-surface-variant font-body-md"><span class="material-symbols-outlined text-4xl mb-3 block opacity-40">psychology_alt</span>No prediction stops yet${state.isAdmin?' — click "Add Stop" to create one.':'.'}</div>`;
       return;
     }
-
     feed.innerHTML = '';
-    preds.forEach(p => feed.appendChild(buildPredictionCard(p, allRevealed)));
+    sorted.forEach(stop => feed.appendChild(buildStopCard(stop)));
   }
 
-  function buildPredictionCard(p, allRevealed) {
-    const isOwn = state.currentUser?.uid === p.authorId;
-    const revealed = !!p.revealed && allRevealed;
-    const canSee = revealed || state.isAdmin;
-    const initials = (p.authorName||'?').slice(0,2).toUpperCase();
-    const timeAgo = formatTimeAgo(p.createdAt);
-
-    const card = document.createElement('div');
-    card.className = 'prediction-card bg-surface-bright border border-surface-container-highest rounded-xl p-6 marginalia-shadow transition-all hover:-translate-y-0.5 relative';
-    card.dataset.predId = p.id;
-
-    const avatarHtml = `<div class="w-full h-full rounded-full bg-primary flex items-center justify-center">
-      <span class="text-on-primary font-bold text-xs">${initials}</span>
-    </div>`;
-
-    card.innerHTML = `
-      <div class="flex items-start justify-between mb-4">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full overflow-hidden bg-primary shrink-0">${avatarHtml}</div>
-          <div>
-            <h4 class="font-label-md text-on-surface">${escHtml(p.authorName || 'Member')}</h4>
-            <p class="font-body-md text-xs text-on-surface-variant">${timeAgo} • ${revealed ? 'Revealed' : 'Sealed'}</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          ${revealed
-            ? '<span class="material-symbols-outlined text-secondary text-lg" style="font-variation-settings:\'FILL\' 1" title="Revealed">verified</span>'
-            : '<span class="material-symbols-outlined text-outline-variant text-lg" title="Sealed">lock</span>'}
-          ${state.isAdmin ? `
-            <button onclick="deletePrediction('${p.id}')" title="Delete prediction"
-              class="w-8 h-8 rounded-full flex items-center justify-center bg-surface-container text-on-surface-variant hover:bg-error hover:text-white transition-colors">
-              <span class="material-symbols-outlined text-lg">delete</span>
-            </button>` : ''}
-        </div>
-      </div>
-
-      ${canSee
-        ? `<div class="bg-[#fef9e7] p-4 rounded-lg border-l-4 border-tertiary-fixed-dim italic font-body-md text-on-tertiary-fixed-variant leading-relaxed">
-            "${escHtml(p.text || '')}"
-           </div>`
-        : `<div class="bg-[#fef9e7] p-4 rounded-lg border border-dashed border-tertiary-fixed-dim flex items-center gap-3 text-on-surface-variant">
-            <span class="material-symbols-outlined text-outline text-xl shrink-0">lock</span>
-            <div>
-              <p class="font-label-md text-sm text-on-surface">Prediction sealed</p>
-              <p class="text-xs mt-0.5">${isOwn ? 'Your prediction is submitted and waiting for others.' : 'Waiting for all members to submit before reveal.'}</p>
-            </div>
-           </div>`
-      }`;
-
-    return card;
-  }
-
-  function renderHomeMarginalia(preds) {
-    const grid = document.getElementById('home-marginalia-grid');
-    if (!grid) return;
-
+  function buildStopCard(stop) {
+    const preds = stopPreds[stop.id] || [];
     const totalMembers = Object.keys(state.members).length;
-    const submittedCount = new Set(preds.map(p => p.memberId).filter(Boolean)).size;
-    const allRevealed = preds.length > 0 && preds.every(p => p.revealed);
-    const recent = [...preds].reverse().slice(0, 3);
-    const rotations = ['-rotate-1', 'rotate-1', '-rotate-1'];
-
-    if (recent.length === 0) {
-      grid.innerHTML = `<div class="p-5 rounded-lg border border-surface-container-highest bg-[#fefcf0] text-center text-on-surface-variant text-sm font-body-md col-span-3 py-10 opacity-60">
-        <span class="material-symbols-outlined block text-3xl mb-2 opacity-40">edit_note</span>
-        No predictions yet — be the first!
-      </div>`;
-      return;
-    }
-
-    // Counter pill always shown above cards
-    const counterHtml = `<div class="md:col-span-3 flex items-center gap-3 mb-2">
-      <div class="px-3 py-1 rounded-full bg-surface-container border border-outline-variant font-label-md text-xs text-on-surface-variant">
-        ${submittedCount} of ${totalMembers} submitted
-      </div>
-      ${allRevealed ? '<span class="px-3 py-1 rounded-full bg-secondary-container text-secondary font-label-md text-xs">✓ Revealed</span>' : ''}
-    </div>`;
-
-    const cardsHtml = recent.map((p, i) => {
-      const name = escHtml(p.authorName || 'Member');
-      const initials = (p.authorName || '?').slice(0, 2).toUpperCase();
-      const rot = rotations[i] || '';
-      const hiddenClass = i === 2 ? 'hidden md:block' : '';
-      const isOwn = state.currentUser?.uid === p.authorId;
-      const canSeeText = allRevealed || state.isAdmin;
-
-      return `<div class="${hiddenClass} p-5 rounded-lg border border-surface-container-highest shadow-[2px_2px_0px_rgba(44,30,15,0.05)] transform ${rot} hover:rotate-0 transition-transform bg-[#fefcf0] cursor-pointer" onclick="navigate('predictions')">
-        <div class="flex items-center gap-2 mb-3">
-          <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0">
-            <span class="text-on-primary font-bold" style="font-size:8px">${initials}</span>
+    const submittedCount = new Set(preds.map(p=>p.memberId).filter(Boolean)).size;
+    const allSubmitted = totalMembers > 0 && submittedCount >= totalMembers;
+    const allRevealed = preds.length > 0 && preds.every(p=>p.revealed);
+    const myPred = state.currentUser ? preds.find(p=>p.authorId===state.currentUser.uid) : null;
+    const pct = parseInt(stop.progress)||0;
+    const badgeColor = pct<=25?'bg-tertiary-fixed text-on-tertiary-fixed':pct<=50?'bg-secondary-container text-secondary':'bg-primary-container text-primary';
+    const wrap = document.createElement('div');
+    wrap.className = 'stop-card bg-surface-bright border border-surface-container-highest rounded-2xl overflow-hidden shadow-sm';
+    wrap.dataset.stopId = stop.id;
+    wrap.innerHTML = `
+      <div class="p-6 border-b border-surface-container-highest">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2 flex-wrap">
+              ${stop.progress?`<span class="px-3 py-1 rounded-full font-label-md text-xs ${badgeColor}">${stop.progress}</span>`:''}
+              <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container border border-outline-variant font-label-md text-xs text-on-surface-variant">
+                <span class="material-symbols-outlined text-sm">group</span><span>${submittedCount} of ${totalMembers} submitted</span>
+              </div>
+              ${allRevealed?'<span class="px-3 py-1 rounded-full bg-secondary-container text-secondary font-label-md text-xs flex items-center gap-1"><span class="material-symbols-outlined text-sm">verified</span>Revealed</span>':''}
+            </div>
+            <h3 class="font-headline-md text-primary text-lg leading-snug mb-1">${escHtml(stop.title||'')}</h3>
+            ${stop.subtitle?`<p class="font-body-md text-on-surface-variant text-sm italic mt-1">${escHtml(stop.subtitle)}</p>`:''}
           </div>
-          <span class="font-label-md text-xs flex-1">${name}</span>
-          ${allRevealed
-            ? '<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings:\'FILL\' 1">verified</span>'
-            : '<span class="material-symbols-outlined text-outline-variant text-sm">lock</span>'}
+          ${state.isAdmin?`<div class="flex gap-2 shrink-0">
+            <button onclick="openEditStopModal('${stop.id}')" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center hover:bg-primary hover:text-white transition-colors" title="Edit"><span class="material-symbols-outlined text-sm">edit</span></button>
+            <button onclick="confirmRemoveStop('${stop.id}')" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center hover:bg-error hover:text-white transition-colors" title="Delete"><span class="material-symbols-outlined text-sm">delete</span></button>
+          </div>`:''}
         </div>
-        ${canSeeText
-          ? `<p class="font-body-md text-sm text-on-surface leading-relaxed italic">"${escHtml((p.text||'').slice(0,100))}${(p.text||'').length>100?'…':''}"</p>`
-          : `<div class="flex items-center gap-2 py-1">
-               <span class="material-symbols-outlined text-outline text-sm">lock</span>
-               <span class="text-xs text-on-surface-variant font-body-md">${isOwn ? 'Your prediction is sealed' : 'Sealed until everyone submits'}</span>
-             </div>`
+        ${stop.bullets?.length?`<div class="mt-4 bg-surface-container-low rounded-xl p-4 border border-outline-variant">
+          <p class="font-label-md text-xs text-outline uppercase tracking-widest mb-3">For your prediction, include:</p>
+          <ul class="space-y-1.5">${stop.bullets.map(b=>`<li class="flex items-start gap-2 font-body-md text-sm text-on-surface"><span class="material-symbols-outlined text-secondary text-sm mt-0.5 shrink-0">radio_button_checked</span>${escHtml(b)}</li>`).join('')}</ul>
+          ${stop.footer?`<p class="font-label-md text-xs text-outline mt-3 pt-3 border-t border-outline-variant">${escHtml(stop.footer)}</p>`:''}
+        </div>`:''}
+      </div>
+      <div class="p-6 border-b border-surface-container-highest bg-surface-container-lowest">
+        ${!state.currentUser
+          ?`<button onclick="openUserModal('login')" class="w-full flex items-center justify-center gap-2 border-2 border-dashed border-primary/30 rounded-xl py-4 font-label-md text-primary hover:border-primary hover:bg-surface-container-low transition-all"><span class="material-symbols-outlined">login</span>Sign in to submit your prediction</button>`
+          :myPred
+            ?`<div class="flex items-center gap-3 p-4 bg-secondary-container/40 rounded-xl border border-secondary-fixed-dim"><span class="material-symbols-outlined text-secondary text-xl">check_circle</span><div><p class="font-label-md text-secondary text-sm">Your prediction is submitted</p><p class="text-xs text-on-surface-variant font-body-md">${allRevealed?'Revealed to everyone.':'Sealed until all members submit.'}</p></div></div>`
+            :`<button onclick="openPredictionModal('${stop.id}')" class="w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-3.5 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95 shadow-sm"><span class="material-symbols-outlined">psychology_alt</span>Cast My Prediction for This Stop</button>`
+        }
+      </div>
+      ${state.isAdmin?`<div class="px-6 py-3 bg-primary/5 border-b border-primary/10 flex items-center justify-between gap-3 flex-wrap">
+        <p class="text-xs font-label-md text-primary">${allRevealed?'All predictions revealed.':allSubmitted?'✓ Ready to reveal!':`Waiting for ${totalMembers-submittedCount} more…`}</p>
+        <div class="flex gap-2">
+          ${!allRevealed
+            ?`<button onclick="revealStopPredictions('${stop.id}')" ${allSubmitted?'':'disabled'} class="flex items-center gap-1.5 px-4 py-1.5 rounded-full font-label-md text-xs transition-all ${allSubmitted?'bg-secondary text-on-primary hover:opacity-90 active:scale-95':'bg-surface-container text-on-surface-variant opacity-50 cursor-not-allowed'}"><span class="material-symbols-outlined text-sm">visibility</span>Reveal All</button>`
+            :`<button onclick="hideStopPredictions('${stop.id}')" class="flex items-center gap-1.5 px-4 py-1.5 rounded-full font-label-md text-xs bg-surface-container text-on-surface-variant border border-outline-variant hover:bg-error hover:text-white transition-all"><span class="material-symbols-outlined text-sm">visibility_off</span>Re-seal</button>`
+          }
+        </div>
+      </div>`:''}
+      <div class="p-6 space-y-4">${buildStopPredsList(stop.id, preds, allRevealed)}</div>`;
+    return wrap;
+  }
+
+  function buildStopPredsList(stopId, preds, allRevealed) {
+    if (!preds.length) return `<p class="text-center text-sm text-on-surface-variant font-body-md py-4 opacity-60">No predictions yet for this stop.</p>`;
+    return preds.map(p => {
+      const isOwn = state.currentUser?.uid===p.authorId;
+      const canSee = allRevealed||state.isAdmin;
+      const initials = (p.authorName||'?').slice(0,2).toUpperCase();
+      return `<div class="bg-white border border-surface-container-highest rounded-xl p-4 marginalia-shadow">
+        <div class="flex items-start justify-between mb-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="text-on-primary font-bold" style="font-size:9px">${initials}</span></div>
+            <div><p class="font-label-md text-on-surface text-sm">${escHtml(p.authorName||'Member')}</p><p class="text-xs text-on-surface-variant font-body-md">${formatTimeAgo(p.createdAt)} · ${allRevealed?'Revealed':'Sealed'}</p></div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            ${allRevealed?'<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings:'FILL' 1">verified</span>':'<span class="material-symbols-outlined text-outline-variant text-base">lock</span>'}
+            ${state.isAdmin?`<button onclick="deletePrediction('${p.id}')" class="w-7 h-7 rounded-full flex items-center justify-center bg-surface-container text-on-surface-variant hover:bg-error hover:text-white transition-colors"><span class="material-symbols-outlined text-sm">delete</span></button>`:''}
+          </div>
+        </div>
+        ${canSee
+          ?`<div class="bg-[#fef9e7] p-3 rounded-lg border-l-4 border-tertiary-fixed-dim italic font-body-md text-sm text-on-tertiary-fixed-variant leading-relaxed">"${escHtml(p.text||'')}"</div>`
+          :`<div class="flex items-center gap-2 py-1 text-on-surface-variant"><span class="material-symbols-outlined text-outline text-sm">lock</span><span class="text-xs font-body-md">${isOwn?'Your prediction is sealed — waiting for all members.':'Sealed until everyone submits.'}</span></div>`
         }
       </div>`;
     }).join('');
-
-    grid.innerHTML = counterHtml + cardsHtml;
   }
 
-  async function revealAllPredictions() {
+  async function revealStopPredictions(stopId) {
     if (!state.isAdmin) return;
-    const btn = document.getElementById('reveal-all-btn');
-    if (btn) { btn.innerHTML = '<span class="material-symbols-outlined text-lg">visibility</span>Revealing…'; btn.disabled = true; }
     try {
       const { writeBatch } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
       const snap = await getDocs(collection(db, 'predictions'));
       const batch = writeBatch(db);
-      snap.forEach(d => batch.update(doc(db, 'predictions', d.id), { revealed: true }));
+      snap.forEach(d => { if (d.data().stopId===stopId) batch.update(doc(db,'predictions',d.id),{revealed:true}); });
       await batch.commit();
-      showSaveToast('🎉 All predictions revealed!');
-    } catch(e) { showSaveToast('Reveal failed'); console.error(e); }
+      showSaveToast('Predictions revealed!');
+    } catch(e) { console.error(e); }
   }
-  window.revealAllPredictions = revealAllPredictions;
+  window.revealStopPredictions = revealStopPredictions;
 
-  async function hideAllPredictions() {
+  async function hideStopPredictions(stopId) {
     if (!state.isAdmin) return;
-    const btn = document.getElementById('hide-all-btn');
-    if (btn) { btn.innerHTML = '<span class="material-symbols-outlined text-lg">visibility_off</span>Re-sealing…'; btn.disabled = true; }
     try {
       const { writeBatch } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
       const snap = await getDocs(collection(db, 'predictions'));
       const batch = writeBatch(db);
-      snap.forEach(d => batch.update(doc(db, 'predictions', d.id), { revealed: false }));
+      snap.forEach(d => { if (d.data().stopId===stopId) batch.update(doc(db,'predictions',d.id),{revealed:false}); });
       await batch.commit();
       showSaveToast('Predictions re-sealed');
-    } catch(e) { showSaveToast('Failed'); console.error(e); }
+    } catch(e) { console.error(e); }
   }
+  window.hideStopPredictions = hideStopPredictions;
+
+  function openAddStopModal() {
+    document.getElementById('stop-modal-title').textContent = 'Add Prediction Stop';
+    document.getElementById('stop-modal-id').value = '';
+    ['stop-title','stop-subtitle','stop-footer','stop-progress'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('stop-bullets-list').innerHTML = '';
+    addBulletField();
+    document.getElementById('stop-modal').classList.remove('hidden');
+    document.getElementById('stop-modal').classList.add('flex');
+  }
+  window.openAddStopModal = openAddStopModal;
+
+  function openEditStopModal(stopId) {
+    const stop = stopsData[stopId]; if (!stop) return;
+    document.getElementById('stop-modal-title').textContent = 'Edit Prediction Stop';
+    document.getElementById('stop-modal-id').value = stopId;
+    document.getElementById('stop-title').value = stop.title||'';
+    document.getElementById('stop-subtitle').value = stop.subtitle||'';
+    document.getElementById('stop-footer').value = stop.footer||'';
+    document.getElementById('stop-progress').value = stop.progress||'';
+    const list = document.getElementById('stop-bullets-list'); list.innerHTML = '';
+    (stop.bullets||[]).forEach(b => addBulletField(b));
+    if (!stop.bullets?.length) addBulletField();
+    document.getElementById('stop-modal').classList.remove('hidden');
+    document.getElementById('stop-modal').classList.add('flex');
+  }
+  window.openEditStopModal = openEditStopModal;
+
+  function closeStopModal() { document.getElementById('stop-modal').classList.add('hidden'); document.getElementById('stop-modal').classList.remove('flex'); }
+  window.closeStopModal = closeStopModal;
+
+  function addBulletField(value='') {
+    const list = document.getElementById('stop-bullets-list');
+    const row = document.createElement('div'); row.className = 'flex items-center gap-2';
+    row.innerHTML = `<span class="material-symbols-outlined text-secondary text-sm shrink-0">radio_button_checked</span><input type="text" value="${escHtml(value)}" class="flex-1 rounded-lg border border-outline-variant px-3 py-2 font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Bullet point requirement"/><button onclick="this.parentElement.remove()" class="w-7 h-7 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-error hover:text-white transition-colors shrink-0"><span class="material-symbols-outlined text-sm">remove_circle</span></button>`;
+    list.appendChild(row);
+  }
+  window.addBulletField = addBulletField;
+
+  async function saveStop() {
+    const id = document.getElementById('stop-modal-id').value;
+    const title = document.getElementById('stop-title').value.trim();
+    if (!title) { showSaveToast('Title is required'); return; }
+    const btn = document.getElementById('stop-modal-save-btn'); btn.textContent='Saving…'; btn.disabled=true;
+    const bullets = Array.from(document.querySelectorAll('#stop-bullets-list input')).map(i=>i.value.trim()).filter(Boolean);
+    const data = { title, subtitle:document.getElementById('stop-subtitle').value.trim(), footer:document.getElementById('stop-footer').value.trim(), progress:document.getElementById('stop-progress').value.trim(), bullets, order:id?(stopsData[id]?.order??Object.keys(stopsData).length):Object.keys(stopsData).length };
+    try {
+      await setDoc(doc(db,'predictionStops',id||('stop_'+Date.now())), data);
+      closeStopModal(); showSaveToast(id?'Stop updated!':'Stop added!');
+    } catch(e) { console.error(e); showSaveToast('Save failed'); }
+    btn.textContent='Save Stop'; btn.disabled=false;
+  }
+  window.saveStop = saveStop;
+
+  function confirmRemoveStop(stopId) {
+    document.getElementById('confirm-remove-stop-id').value = stopId;
+    document.getElementById('confirm-remove-stop-modal').classList.remove('hidden');
+    document.getElementById('confirm-remove-stop-modal').classList.add('flex');
+  }
+  window.confirmRemoveStop = confirmRemoveStop;
+
+  async function doRemoveStop() {
+    const id = document.getElementById('confirm-remove-stop-id').value;
+    document.getElementById('confirm-remove-stop-modal').classList.add('hidden');
+    document.getElementById('confirm-remove-stop-modal').classList.remove('flex');
+    try {
+      const { deleteDoc, writeBatch } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      await deleteDoc(doc(db,'predictionStops',id));
+      const snap = await getDocs(collection(db,'predictions'));
+      const batch = writeBatch(db);
+      snap.forEach(d => { if (d.data().stopId===id) batch.delete(doc(db,'predictions',d.id)); });
+      await batch.commit();
+      showSaveToast('Stop removed');
+    } catch(e) { console.error(e); }
+  }
+  window.doRemoveStop = doRemoveStop;
+
+  function cancelRemoveStop() { document.getElementById('confirm-remove-stop-modal').classList.add('hidden'); document.getElementById('confirm-remove-stop-modal').classList.remove('flex'); }
+  window.cancelRemoveStop = cancelRemoveStop;
+
+  async function revealAllPredictions() {}
+  window.revealAllPredictions = revealAllPredictions;
+  async function hideAllPredictions() {}
   window.hideAllPredictions = hideAllPredictions;
 
   async function deletePrediction(predId) {
@@ -2718,6 +2706,7 @@ img,video{max-width:100%;height:auto}
 
     // Seed + start listeners
     await seedIfEmpty();
+    await seedStopsIfEmpty();
     startListeners();
     startPredictionsListener();
 
@@ -3077,6 +3066,66 @@ img,video{max-width:100%;height:auto}
     <span class="material-symbols-outlined text-xl">lock</span>
     <span class="hidden md:inline" id="auth-btn-label">Admin Login</span>
   </button>
+</div>
+
+<!-- ===== ADD / EDIT STOP MODAL ===== -->
+<div id="stop-modal" class="hidden fixed inset-0 z-[100] items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col" style="max-height:90vh">
+    <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-surface-container-highest shrink-0">
+      <h3 id="stop-modal-title" class="font-headline-md text-headline-md text-primary">Add Prediction Stop</h3>
+      <button onclick="closeStopModal()" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant text-xl">close</span>
+      </button>
+    </div>
+    <div class="overflow-y-auto flex-1 p-6 space-y-4">
+      <input type="hidden" id="stop-modal-id"/>
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Stop Title</label>
+        <input id="stop-title" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. Prediction Stop #1: Read to about 25% of the book"/>
+      </div>
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Subtitle / Context (optional)</label>
+        <input id="stop-subtitle" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. Now that more secrets are coming out…"/>
+      </div>
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Footer Note (optional)</label>
+        <input id="stop-footer" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. Date/time/page# to be included"/>
+      </div>
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Bullet Point Requirements</label>
+        <div id="stop-bullets-list" class="space-y-2 mb-3"></div>
+        <button onclick="addBulletField()" class="flex items-center gap-1 text-primary font-label-md text-sm hover:opacity-70 transition-opacity">
+          <span class="material-symbols-outlined text-lg">add_circle</span>Add bullet point
+        </button>
+      </div>
+      <div>
+        <label class="font-label-md text-on-surface-variant text-xs uppercase tracking-widest mb-2 block">Read Progress Target</label>
+        <input id="stop-progress" type="text" class="w-full rounded-xl border border-outline-variant px-4 py-3 font-body-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. 25%"/>
+      </div>
+    </div>
+    <div class="px-6 pb-6 pt-2 shrink-0 flex gap-3">
+      <button onclick="closeStopModal()" class="flex-1 py-3 rounded-xl border border-outline-variant font-label-md text-on-surface-variant hover:bg-surface-container transition-colors">Cancel</button>
+      <button id="stop-modal-save-btn" onclick="saveStop()" class="flex-1 py-3 rounded-xl bg-primary text-on-primary font-label-md hover:opacity-90 transition-opacity">Save Stop</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONFIRM REMOVE STOP MODAL ===== -->
+<div id="confirm-remove-stop-modal" class="hidden fixed inset-0 z-[150] items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden">
+    <div class="p-6 text-center">
+      <div class="w-14 h-14 rounded-full bg-error-container flex items-center justify-center mx-auto mb-4">
+        <span class="material-symbols-outlined text-error text-2xl">delete</span>
+      </div>
+      <h3 class="font-headline-md text-headline-md text-on-surface mb-2">Remove Stop?</h3>
+      <p class="font-body-md text-on-surface-variant text-sm mb-6">This will permanently delete this prediction stop and all its submissions.</p>
+      <input type="hidden" id="confirm-remove-stop-id"/>
+      <div class="flex gap-3">
+        <button onclick="cancelRemoveStop()" class="flex-1 py-3 rounded-xl border border-outline-variant font-label-md text-on-surface-variant hover:bg-surface-container transition-colors">Cancel</button>
+        <button onclick="doRemoveStop()" class="flex-1 py-3 rounded-xl bg-error text-on-error font-label-md hover:opacity-90 transition-opacity">Delete</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== CONFIRM REMOVE MEMBER MODAL ===== -->
