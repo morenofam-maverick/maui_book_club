@@ -11,7 +11,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250722';
+  const APP_VERSION = '20250723';
   // Force clear any old localStorage version keys
   ['app_version','appVersion','version'].forEach(k => {
     if (localStorage.getItem(k) && localStorage.getItem(k) !== APP_VERSION) {
@@ -2490,15 +2490,48 @@ img,video{max-width:100%;height:auto}
   window.saveMyProgress = saveMyProgress;
 
   // ── Submit prediction ──────────────────────────────────────────────────
+  function switchPredTab(tab) {
+    const isType = tab === 'type';
+    document.getElementById('pred-tab-type').className = `flex-1 py-2 rounded-full font-label-md text-sm transition-all flex items-center justify-center gap-1.5 ${isType ? 'bg-primary text-on-primary' : 'text-on-surface-variant border border-outline-variant'}`;
+    document.getElementById('pred-tab-photo').className = `flex-1 py-2 rounded-full font-label-md text-sm transition-all flex items-center justify-center gap-1.5 ${!isType ? 'bg-primary text-on-primary' : 'text-on-surface-variant border border-outline-variant'}`;
+    document.getElementById('pred-input-type').classList.toggle('hidden', !isType);
+    document.getElementById('pred-input-photo').classList.toggle('hidden', isType);
+  }
+  window.switchPredTab = switchPredTab;
+
+  function previewPredPhoto(input) {
+    const file = input.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const preview = document.getElementById('pred-photo-preview');
+      const wrap = document.getElementById('pred-photo-preview-wrap');
+      const uploadLabel = document.getElementById('pred-photo-upload-label');
+      preview.src = e.target.result;
+      wrap.classList.remove('hidden');
+      uploadLabel.classList.add('hidden');
+    };
+    reader.readAsDataURL(file);
+  }
+  window.previewPredPhoto = previewPredPhoto;
+
+  function clearPredPhoto() {
+    document.getElementById('prediction-photo-input').value = '';
+    document.getElementById('pred-photo-preview').src = '';
+    document.getElementById('pred-photo-preview-wrap').classList.add('hidden');
+    document.getElementById('pred-photo-upload-label').classList.remove('hidden');
+  }
+  window.clearPredPhoto = clearPredPhoto;
+
   function openPredictionModal(stopId = null) {
     if (!state.currentUser) { openUserModal('login'); return; }
-        document.body.style.top = `-${window.scrollY}px`;
+    document.body.style.top = `-${window.scrollY}px`;
     document.body.classList.add('modal-open');
     document.getElementById('prediction-modal').classList.remove('hidden');
     document.getElementById('prediction-modal').classList.add('flex');
     document.getElementById('prediction-text').value = '';
+    clearPredPhoto();
+    switchPredTab('type');
     document.getElementById('prediction-modal').dataset.stopId = stopId || '';
-    // Show stop title in modal
     const stop = stopId ? stopsData[stopId] : null;
     const labelEl = document.getElementById('prediction-book-label');
     if (labelEl) labelEl.textContent = stop ? stop.title : (state.book.title || '');
@@ -2516,29 +2549,42 @@ img,video{max-width:100%;height:auto}
   window.closePredictionModal = closePredictionModal;
 
   async function submitPrediction() {
+    const isPhotoTab = !document.getElementById('pred-input-photo').classList.contains('hidden');
     const text = document.getElementById('prediction-text').value.trim();
-    if (!text) return;
+    const photoFile = document.getElementById('prediction-photo-input').files[0];
+    if (!isPhotoTab && !text) { showSaveToast('Please write your prediction first'); return; }
+    if (isPhotoTab && !photoFile) { showSaveToast('Please select a photo first'); return; }
     const btn = document.getElementById('prediction-submit-btn');
-    btn.textContent = 'Posting…'; btn.disabled = true;
+    btn.innerHTML = '<span class="material-symbols-outlined text-sm">refresh</span>Posting…'; btn.disabled = true;
     const profile = state.userProfile;
     const memberId = profile?.memberId || null;
     const memberData = memberId ? state.members[memberId] : null;
+    const stopId = document.getElementById('prediction-modal').dataset.stopId || null;
     try {
       const { addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-      const stopId = document.getElementById('prediction-modal').dataset.stopId || null;
+      let photoUrl = '';
+      if (isPhotoTab && photoFile) {
+        photoUrl = await new Promise(res => { const r=new FileReader(); r.onload=e=>res(e.target.result); r.readAsDataURL(photoFile); });
+        try {
+          const imgRef = storageRef(storage, `predictions/${state.currentUser.uid}_${Date.now()}.jpg`);
+          await uploadString(imgRef, photoUrl, 'data_url');
+          photoUrl = await getDownloadURL(imgRef);
+        } catch(e) { /* keep base64 */ }
+      }
       await addDoc(collection(db, 'predictions'), {
-        text, authorName: profile?.displayName || state.currentUser.email.split('@')[0],
+        text: isPhotoTab ? '' : text,
+        photoUrl: photoUrl || '',
+        type: isPhotoTab ? 'photo' : 'text',
+        authorName: profile?.displayName || state.currentUser.email.split('@')[0],
         authorId: state.currentUser.uid, memberId,
         avatarUrl: memberData?.avatarUrl || '',
         bookTitle: state.book.title || '',
-        stopId,
-        createdAt: serverTimestamp(), revealed: false
+        stopId, createdAt: serverTimestamp(), revealed: false
       });
       closePredictionModal();
-      showSaveToast('Prediction posted!');
-      navigate('predictions');
-    } catch(e) { showSaveToast('Failed to post'); }
-    btn.textContent = 'Post Prediction'; btn.disabled = false;
+      showSaveToast('Prediction posted! 🔐');
+    } catch(e) { console.error(e); showSaveToast('Failed to post — please try again'); }
+    btn.innerHTML = '<span class="material-symbols-outlined text-sm">psychology_alt</span>Post Prediction'; btn.disabled = false;
   }
   window.submitPrediction = submitPrediction;
 
@@ -3514,7 +3560,9 @@ img,video{max-width:100%;height:auto}
           ${allRevealed ? '<span class="material-symbols-outlined text-secondary text-sm icon-filled">verified</span>' : '<span class="material-symbols-outlined text-outline-variant text-sm">lock</span>'}
         </div>
         ${canSeeText
-          ? `<p class="font-body-md text-sm text-on-surface leading-relaxed italic">"${escHtml((p.text||'').slice(0,100))}${(p.text||'').length>100?'…':''}"</p>`
+          ? (p.photoUrl
+              ? `<div class="flex items-center gap-2 py-1"><span class="material-symbols-outlined text-secondary text-sm">photo_camera</span><span class="text-xs font-body-md text-on-surface-variant">Photo prediction</span></div>`
+              : `<p class="font-body-md text-sm text-on-surface leading-relaxed italic">"${escHtml((p.text||'').slice(0,100))}${(p.text||'').length>100?'…':''}"</p>`)
           : `<div class="flex items-center gap-2 py-1">
                <span class="material-symbols-outlined text-outline text-sm">lock</span>
                <span class="text-xs text-on-surface-variant font-body-md">Sealed until the admin reveals all predictions</span>
@@ -3625,8 +3673,10 @@ img,video{max-width:100%;height:auto}
           </div>
         </div>
         ${canSee
-          ?`<div class="bg-[#fef9e7] p-3 rounded-lg border-l-4 border-tertiary-fixed-dim italic font-body-md text-sm text-on-tertiary-fixed-variant leading-relaxed">"${escHtml(p.text||'')}"</div>`
-          :`<div class="flex items-center gap-2 py-1 text-on-surface-variant"><span class="material-symbols-outlined text-outline text-sm">lock</span><span class="text-xs font-body-md">Sealed until the admin reveals all predictions.</span></div>`
+          ? (p.photoUrl
+              ? `<img src="${escHtml(p.photoUrl)}" alt="Prediction photo" class="w-full rounded-lg border border-outline-variant object-contain max-h-64"/>`
+              : `<div class="bg-[#fef9e7] p-3 rounded-lg border-l-4 border-tertiary-fixed-dim italic font-body-md text-sm text-on-tertiary-fixed-variant leading-relaxed">"${escHtml(p.text||'')}"</div>`)
+          : `<div class="flex items-center gap-2 py-1 text-on-surface-variant"><span class="material-symbols-outlined text-outline text-sm">lock</span><span class="text-xs font-body-md">Sealed until the admin reveals all predictions.</span></div>`
         }
       </div>`;
     }).join('');
@@ -4198,11 +4248,45 @@ img,video{max-width:100%;height:auto}
         <span class="material-symbols-outlined text-on-surface-variant text-xl">close</span>
       </button>
     </div>
+
+    <!-- Input type toggle -->
+    <div class="flex gap-2 px-6 pt-4">
+      <button id="pred-tab-type" onclick="switchPredTab('type')" class="flex-1 py-2 rounded-full font-label-md text-sm bg-primary text-on-primary transition-all flex items-center justify-center gap-1.5">
+        <span class="material-symbols-outlined text-sm">edit</span>Type it
+      </button>
+      <button id="pred-tab-photo" onclick="switchPredTab('photo')" class="flex-1 py-2 rounded-full font-label-md text-sm text-on-surface-variant border border-outline-variant transition-all flex items-center justify-center gap-1.5">
+        <span class="material-symbols-outlined text-sm">photo_camera</span>Upload photo
+      </button>
+    </div>
+
     <div class="p-6 space-y-4">
-      <div class="bg-tertiary-fixed/30 rounded-xl p-4 border border-tertiary-fixed-dim">
-        <p class="text-xs font-label-md text-outline uppercase tracking-widest mb-1">What do you think happens next?</p>
-        <textarea id="prediction-text" rows="4" class="w-full bg-transparent font-body-md text-on-surface focus:outline-none resize-none text-sm leading-relaxed" placeholder="Write your prediction here... What secrets will be revealed? Who is the mystery figure?"></textarea>
+
+      <!-- Type tab -->
+      <div id="pred-input-type">
+        <div class="bg-tertiary-fixed/30 rounded-xl p-4 border border-tertiary-fixed-dim">
+          <p class="text-xs font-label-md text-outline uppercase tracking-widest mb-1">What do you think happens next?</p>
+          <textarea id="prediction-text" rows="4" class="w-full bg-transparent font-body-md text-on-surface focus:outline-none resize-none text-sm leading-relaxed" placeholder="Write your prediction here... What secrets will be revealed? Who is the mystery figure?"></textarea>
+        </div>
       </div>
+
+      <!-- Photo tab -->
+      <div id="pred-input-photo" class="hidden">
+        <div id="pred-photo-preview-wrap" class="hidden mb-3 relative">
+          <img id="pred-photo-preview" class="w-full rounded-xl object-contain max-h-64 border border-outline-variant" src="" alt="Your prediction"/>
+          <button onclick="clearPredPhoto()" class="absolute top-2 right-2 w-7 h-7 rounded-full bg-error text-white flex items-center justify-center hover:opacity-90">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+        <label class="block cursor-pointer" id="pred-photo-upload-label">
+          <div class="border-2 border-dashed border-primary/30 rounded-xl p-8 text-center hover:border-primary hover:bg-surface-container-low transition-all">
+            <span class="material-symbols-outlined text-primary text-4xl mb-2 block">photo_camera</span>
+            <p class="font-label-md text-on-surface text-sm mb-1">Take a photo or upload from your camera roll</p>
+            <p class="text-xs text-on-surface-variant">Your handwritten prediction, a sticky note, anything works</p>
+          </div>
+          <input id="prediction-photo-input" type="file" accept="image/*" capture="environment" class="hidden" onchange="previewPredPhoto(this)"/>
+        </label>
+      </div>
+
       <div class="flex gap-3">
         <button onclick="closePredictionModal()" class="flex-1 py-3 rounded-xl border border-outline-variant font-label-md text-on-surface-variant hover:bg-surface-container transition-colors">Cancel</button>
         <button id="prediction-submit-btn" onclick="submitPrediction()" class="flex-1 py-3 rounded-xl bg-primary text-on-primary font-label-md hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
