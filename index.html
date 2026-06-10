@@ -4,6 +4,21 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Maui Book Club 2026 — Family Folio</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<!-- v20250609 -->
+<script>
+  // Force fresh load if cached version is outdated
+  const APP_VERSION = '20250609';
+  const cached = localStorage.getItem('app_version');
+  if (cached && cached !== APP_VERSION) {
+    localStorage.setItem('app_version', APP_VERSION);
+    window.location.reload(true);
+  } else {
+    localStorage.setItem('app_version', APP_VERSION);
+  }
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style id="tw-generated">
@@ -734,6 +749,7 @@ img,video{max-width:100%;height:auto}
 .cursor-default{cursor:default}
 .resize-none{resize:none}
 .backdrop-blur-sm{backdrop-filter:blur(4px)}
+.blur-sm{filter:blur(4px)}
 .backdrop-blur-\[2px\]{backdrop-filter:blur(2px)}
 .grayscale-\[0\.2\]{filter:grayscale(0.2)}
 .focus\:ring-0:focus{box-shadow:none}
@@ -1066,29 +1082,13 @@ img,video{max-width:100%;height:auto}
     <div class="md:col-span-12">
       <div class="flex justify-between items-end mb-6">
         <h3 class="font-headline-md text-on-surface">Recent Marginalia</h3>
-        <a class="font-label-md text-secondary underline underline-offset-4 decoration-secondary/30 cursor-pointer" onclick="navigate('progress')">View all notes</a>
+        <a class="font-label-md text-secondary underline underline-offset-4 decoration-secondary/30 cursor-pointer" onclick="navigate('predictions')">View all predictions</a>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="p-5 rounded-lg border border-surface-container-highest shadow-[2px_2px_0px_rgba(44,30,15,0.05)] transform -rotate-1 hover:rotate-0 transition-transform bg-[#fefcf0]">
-          <div class="flex items-center gap-2 mb-3">
-            <img alt="Leo" data-editable="img" data-edit-id="member-leo" class="w-6 h-6 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYa3wK3DaVKOTr9yfyJSgjW9S70QeeZCO24c1W7-8lQIV2CNY6ye5wKIgdjBipEcYEE6QXafnDcQs7qiev7HO6tRbR1kumluzwW_fztQ_8Daez_KvDccc7P4yh_9pjUuSu0mUvc5TcSuo6XodwWLmHPXPNrR_IICt8IzjXctTrgHdKojojvdrwzJwasaLsAOmbF213vjBUIEN4c3bQdV2XcfVGVnVRCxfduaUo679HjnMBYAtWGoDFQV5JkdyktRwxqnDCzcdf4CQ"/>
-            <span class="font-label-md text-xs">Leo • Page 84</span>
-          </div>
-          <p class="font-body-md text-sm text-on-surface leading-relaxed">"I think Daniel is going to find the author! The way the mist is described feels like a movie."</p>
-        </div>
-        <div class="p-5 rounded-lg border border-surface-container-highest shadow-[2px_2px_0px_rgba(44,30,15,0.05)] transform rotate-1 hover:rotate-0 transition-transform bg-[#fefcf0]">
-          <div class="flex items-center gap-2 mb-3">
-            <img alt="Sarah" data-editable="img" data-edit-id="member-sarah" class="w-6 h-6 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAK7ma_8YSFDk3FOQFbZUpCCMQTLG_IXdffThf11799KQqOXqx8ZWjeugJPo0J1Pi7VqDdb5heixzrEt4Ul4irEMsnM7pO9RP3lSSgC2L_jRHhc6UtxMlb-KQx9_r684Bi7yDdalbgs1HR7TeiVOmqmpwEk6HLt9rl5OO5Fw0NmCfC7DJ1K_lHaMwJy40HpPB6zzDwwnD9a6wIVV0yZ-Ob7PNXoA5R5nEYK1hpzw1lQXQ3SGnJV7-1w-mV3kaQY4yBMhitCELtlfjk"/>
-            <span class="font-label-md text-xs">Sarah • Page 102</span>
-          </div>
-          <p class="font-body-md text-sm text-on-surface leading-relaxed">"This prose is exquisite. Reminds me of our trip to Spain last summer. Look at the architecture descriptions!"</p>
-        </div>
-        <div class="hidden md:block p-5 rounded-lg border border-surface-container-highest shadow-[2px_2px_0px_rgba(44,30,15,0.05)] transform -rotate-1 hover:rotate-0 transition-transform bg-[#fefcf0]">
-          <div class="flex items-center gap-2 mb-3">
-            <img alt="Arthur" data-editable="img" data-edit-id="member-arthur" class="w-6 h-6 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt6l3eoNA5eFmM-_0RGcc6YRVIX3wAlrMEQEMAban8Bn9ROXHN39SJLb90f7qreEJ5H9eXDSwG88W0Ks1r9OO9bmdEtq_vs_3kf4weKSjKStfo_qA5PugiOl4zCK0GCJICexIdFhZxbunBCGQA0S6cC6GyyysvKEih01YSEvcpvn3o7u9xg9Hdo6CLGemrAACP0DY2l4-WAiqAyt7E7T3PIY9yofgPQgH0NUxlY8F2Q0UudwWueFGU0lB0fRpDQ89DmNfrWE5_dwk"/>
-            <span class="font-label-md text-xs">Arthur • Page 145</span>
-          </div>
-          <p class="font-body-md text-sm text-on-surface leading-relaxed">"The mystery deepens. The shadow figure — is it a ghost or a memory?"</p>
+      <div id="home-marginalia-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Injected by JS from predictions Firestore -->
+        <div class="p-5 rounded-lg border border-surface-container-highest bg-[#fefcf0] text-center text-on-surface-variant text-sm font-body-md col-span-3 py-10 opacity-60">
+          <span class="material-symbols-outlined block text-3xl mb-2 opacity-40">edit_note</span>
+          No predictions yet — be the first!
         </div>
       </div>
     </div>
@@ -1246,113 +1246,54 @@ img,video{max-width:100%;height:auto}
 <!-- ===== PREDICTIONS PAGE ===== -->
 <div id="page-predictions" class="page">
 <main class="max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop py-8 pb-32">
-  <div class="mb-12">
+  <!-- Header -->
+  <div class="mb-10">
     <div class="flex items-center gap-2 text-on-surface-variant mb-2">
       <span class="material-symbols-outlined text-[18px]">auto_stories</span>
       <span class="font-label-md text-label-md uppercase tracking-widest">Current Reading</span>
     </div>
     <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-4" data-editable="book-title">The Shadow of the Wind</h2>
     <div class="flex items-center justify-between flex-wrap gap-4">
-      <div class="flex items-center gap-4">
-        <div class="flex -space-x-2">
-          <img class="w-8 h-8 rounded-full border-2 border-surface" data-editable="img" data-edit-id="member-mom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8qFGU7mC0gv8xlQY07xI1TJG4BBT0G1Xh2nhO-IUKGepxEScbldlLBPxkEBiZ0w66PJk8mMxTJhacbYoDzIdtMUhG0TbOvi5QXOR8iSKvflS_pcaKRx246yZ7rqyFxDJjwJXGLzxb9dYK-JIJAtswOspvbe-cqtUgo1eBM-gfK15JBT0nKwkJBC4DL6UXv8bVqEzpPtua9VJ7JU1UVDygN_K9Kz_FATmxmtnvag0iJKCw2mq7rYUSe_QeOF-Okh9-xR-orek-Yg0" alt="Mom"/>
-          <img class="w-8 h-8 rounded-full border-2 border-surface" data-editable="img" data-edit-id="member-dad" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDt1Xzwso8W9p38QdsW42EIVb17t471Zb7zy65-uFatJvovZfSlj9IdwPZuwOMfQZIrIw_J2e1US49up38sOd8PlcBVh8-rMDt1GoZ37TsRG_i69skrV4yQ7ohplAbf6nZzJjImPp2A4jKcqhPyuZUl3PICZUcS2TednxHwDWQ3bRlDWJuspVQaX4UJBYf91Ez5VEURe7iuxp2KmYr3COB9wpMnuCF_WQ0C7u2JGzHEwzolfATbuCwd5vUcT-odTQOo_-8kwaZcQTg" alt="Dad"/>
-          <img class="w-8 h-8 rounded-full border-2 border-surface" data-editable="img" data-edit-id="member-leo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB03bZ9yMSz-jIHz8ovC5Qa53kNwOl9yJxQ7_HtFEODVhOLqA0bCq6LrtuqrKs6q3OxhGeF04yhRbdkM8DFems3QG7tIdzOZNNZj_-zd5DP_vUflku_pr3TOOSR2KB_sfwQeG4huVgWO_1wG_7JwpTTNZvuIyYCR7RKz6pyZBhKdpiVb7kYJPMhN91_9q4Qlu1wR7AdL-f86iwD5wasXae6OQPMxL735WK5P7fRO4qIn3fQGFt8ks3ILJhULs9WMT3PsM6qC5Y0mE" alt="Teen"/>
-        </div>
-        <span class="font-body-md text-body-md text-on-surface-variant">3 family members predicted</span>
+      <div id="predictions-submitter-avatars" class="flex items-center gap-4">
+        <div class="flex -space-x-2" id="predictions-avatar-stack"></div>
+        <span id="predictions-count-label" class="font-body-md text-on-surface-variant"></span>
       </div>
       <button onclick="openPredictionModal()" class="flex items-center gap-2 bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-md hover:opacity-90 active:scale-95 transition-all shadow-sm">
-        <span class="material-symbols-outlined text-[20px]">add_circle</span>Make Prediction
+        <span class="material-symbols-outlined text-[20px]">add_circle</span>Cast Prediction
       </button>
     </div>
-    <div class="mt-8 relative h-1 bg-surface-container-highest rounded-full overflow-hidden">
-      <div class="absolute top-0 left-0 h-full bg-secondary w-3/4 rounded-full"></div>
-    </div>
-    <div class="flex justify-between mt-2 font-label-md text-on-surface-variant opacity-70">
-      <span>Chapter 12</span><span>75% complete</span>
+  </div>
+
+  <!-- Admin reveal bar — only visible to admins -->
+  <div id="predictions-admin-bar" class="hidden mb-6 border rounded-xl px-5 py-4 bg-primary/5 border-primary/20">
+    <div class="flex items-center justify-between flex-wrap gap-3">
+      <div>
+        <p class="font-label-md text-primary flex items-center gap-2">
+          <span class="material-symbols-outlined text-lg">admin_panel_settings</span>
+          Admin Controls
+        </p>
+        <p id="predictions-admin-status" class="text-xs text-on-surface-variant mt-1 font-body-md">Waiting for all members to submit…</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <div id="predictions-submission-counter" class="px-3 py-1.5 bg-surface-container rounded-full font-label-md text-sm text-on-surface-variant border border-outline-variant">
+          0 of 0 submitted
+        </div>
+        <button id="reveal-all-btn" onclick="revealAllPredictions()" disabled
+          class="flex items-center gap-2 px-5 py-2.5 rounded-full font-label-md transition-all opacity-50 cursor-not-allowed bg-secondary text-on-primary">
+          <span class="material-symbols-outlined text-lg">visibility</span>Reveal All
+        </button>
+        <button id="hide-all-btn" onclick="hideAllPredictions()" class="hidden flex items-center gap-2 px-5 py-2.5 rounded-full font-label-md transition-all bg-surface-container text-on-surface-variant border border-outline-variant hover:bg-error hover:text-white">
+          <span class="material-symbols-outlined text-lg">visibility_off</span>Re-seal All
+        </button>
+      </div>
     </div>
   </div>
-  <div class="space-y-8">
-    <div class="flex items-center gap-4 mb-6">
-      <div class="h-[1px] flex-grow bg-outline-variant"></div>
-      <span class="font-label-md text-outline uppercase tracking-widest px-2 text-xs text-center">Checkpoint: The Cemetery of Forgotten Books</span>
-      <div class="h-[1px] flex-grow bg-outline-variant"></div>
-    </div>
-    <!-- Card 1 -->
-    <div class="bg-surface-bright border border-surface-container-highest rounded-xl p-6 marginalia-shadow transition-all hover:-translate-y-0.5">
-      <div class="flex items-start justify-between mb-4">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-secondary-container overflow-hidden">
-            <img data-editable="img" data-edit-id="member-mom" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRGbj8Kzkinr2tPaFqMQzZnS9EwLihpkWLEOB9s2g88K4_mpHskI6MknFCS7_bG2cF9g7PlD3IKvjWZKuKfp4m0uVbnHgMTuX3hu6Vvelr7Wqsw2l042gIg1O2BWGbXE-EPrcKCJ75_-eaE0wI2RyCP7Gdiy5eSlg0GLFt-7PQ-7pxsoeOZedNzpbnwTZBWsjgDtRMlDLj6v38Bs7XXk5C3c0CZUQOl9CpXzKtxQAmjEec586B7-GqPASncflQeUm5TLsUWD0lah0" alt="Mom"/>
-          </div>
-          <div>
-            <h4 class="font-label-md text-on-surface">Mom's Thought</h4>
-            <p class="font-body-md text-xs text-on-surface-variant">2 hours ago • Reached Checkpoint</p>
-          </div>
-        </div>
-        <span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1">verified</span>
-      </div>
-      <div class="bg-[#fef9e7] p-4 rounded-lg border-l-4 border-tertiary-fixed-dim italic font-body-md text-on-tertiary-fixed-variant leading-relaxed">
-        "I suspect Daniel's choice of 'The Shadow of the Wind' isn't accidental. The librarian seemed to recognize the book—I think Julian Carax is actually still alive and watching from the shadows."
-      </div>
-      <div class="mt-4 flex items-center gap-6">
-        <button class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors">
-          <span class="material-symbols-outlined text-[18px]">favorite</span><span class="font-label-md text-[12px]">12</span>
-        </button>
-        <button class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors">
-          <span class="material-symbols-outlined text-[18px]">chat_bubble</span><span class="font-label-md text-[12px]">3</span>
-        </button>
-      </div>
-    </div>
-    <!-- Card 2: Locked -->
-    <div class="relative bg-surface-bright border border-surface-container-highest rounded-xl p-6 marginalia-shadow overflow-hidden">
-      <div class="absolute inset-0 z-10 bg-surface/40 backdrop-blur-[2px] flex flex-col items-center justify-center p-8 text-center">
-        <div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container mb-4">
-          <span class="material-symbols-outlined">lock</span>
-        </div>
-        <h5 class="font-headline-md text-body-lg text-primary mb-2">Hidden Content</h5>
-        <p class="font-body-md text-sm text-on-surface-variant max-w-[240px]">Finish Chapter 15 to reveal Sarah's prediction for this milestone.</p>
-      </div>
-      <div class="prediction-blur opacity-40">
-        <div class="flex items-start justify-between mb-4">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center overflow-hidden">
-              <img data-editable="img" data-edit-id="member-sarah" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfPWfICk2fE9juvyiJ39OkwbSfY3zAonoZ6uxse3whcjZ2aw_UBHQZ5hxTQ-HMDdvukceGkTcEkVE-bEj9Ft5DUDHVbV9JA9zKK1UZnGXezVXC-PdgwCG3I0M9Q6vK_2wlXtCl4gCYJncPbMYntZimtqCPk-LcHblbJU4ctY0jzjgtzLlD1eQZijx0RqTFp0vbXgHo-lBt96oFmN2RDyoPC1OBvm31VHeaEg30gzHL4f12_LdrpB1Pd3mIfEDIoSaWUHnOWsH5bv4" alt="Sarah"/>
-            </div>
-            <div>
-              <h4 class="font-label-md text-on-surface">Sarah's Theory</h4>
-              <p class="font-body-md text-xs text-on-surface-variant">5 hours ago • Hidden</p>
-            </div>
-          </div>
-        </div>
-        <div class="bg-[#fef9e7] p-4 rounded-lg italic font-body-md text-on-tertiary-fixed-variant leading-relaxed">This prediction is hidden until you reach the checkpoint.</div>
-      </div>
-    </div>
-    <!-- Card 3 -->
-    <div class="bg-surface-bright border border-surface-container-highest rounded-xl p-6 marginalia-shadow transition-all hover:-translate-y-0.5">
-      <div class="flex items-start justify-between mb-4">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-primary-container overflow-hidden">
-            <img data-editable="img" data-edit-id="member-dad" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjqoT54TuavRLIvY1J2wIz-WGCighmN6kdwJKXJBJM2TuzmZnosF-iTQQBvzUM2W3BMty14UIAYVsAMUlrPHHuGcB8SY9NPNofAPaZvVCGF0x_nzq_G10yhvCuM7MR7mAImGpLnlI_EooYuonQSDpJLDtW8bkTQYbQO6NE3FOPtXudoDFb-KAcFSNtIOmJwcZuSw6aYTkGI50psepNnzI-bpfrBZbRzXM5XHIZMtFl89WTTqoZFV1ok1ioCMVMXVjAC7l9ZsnvtQs" alt="Dad"/>
-          </div>
-          <div>
-            <h4 class="font-label-md text-on-surface">Dad's Insight</h4>
-            <p class="font-body-md text-xs text-on-surface-variant">Yesterday • Reached Checkpoint</p>
-          </div>
-        </div>
-        <span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1">verified</span>
-      </div>
-      <div class="bg-[#fef9e7] p-4 rounded-lg border-l-4 border-tertiary-fixed-dim italic font-body-md text-on-tertiary-fixed-variant leading-relaxed">
-        "The atmospheric descriptions of Barcelona are incredible. My prediction? The book itself is a map. The page numbers correspond to coordinates we'll see later in the story."
-      </div>
-      <div class="mt-4 flex items-center gap-6">
-        <button class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors">
-          <span class="material-symbols-outlined text-[18px]">favorite</span><span class="font-label-md text-[12px]">8</span>
-        </button>
-        <button class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors">
-          <span class="material-symbols-outlined text-[18px]">chat_bubble</span><span class="font-label-md text-[12px]">1</span>
-        </button>
-      </div>
+
+  <!-- Cards injected here -->
+  <div id="predictions-feed" class="space-y-6">
+    <div class="text-center py-16 text-on-surface-variant font-body-md">
+      <span class="material-symbols-outlined text-4xl mb-3 block opacity-40">psychology_alt</span>
+      Loading predictions…
     </div>
   </div>
 </main>
@@ -2236,7 +2177,7 @@ img,video{max-width:100%;height:auto}
         text, authorName: profile?.displayName || state.currentUser.email.split('@')[0],
         authorId: state.currentUser.uid, memberId,
         avatarUrl: memberData?.avatarUrl || '',
-        bookTitle: state.book.title || '', createdAt: serverTimestamp(), revealed: true
+        bookTitle: state.book.title || '', createdAt: serverTimestamp(), revealed: false
       });
       closePredictionModal();
       showSaveToast('Prediction posted!');
@@ -2392,7 +2333,267 @@ img,video{max-width:100%;height:auto}
   }
   window.showSaveToast = showSaveToast;
 
-  // ── Photo edit modal ───────────────────────────────────────────────────
+  // ── Predictions system ────────────────────────────────────────────────
+  function startPredictionsListener() {
+    const { query, orderBy } = window._firestoreExtras || {};
+    // Listen to all predictions for current book, ordered by time
+    onSnapshot(collection(db, 'predictions'), snap => {
+      const preds = [];
+      snap.forEach(d => preds.push({ id: d.id, ...d.data() }));
+      // Sort by createdAt ascending
+      preds.sort((a,b) => {
+        const ta = a.createdAt?.toMillis?.() || 0;
+        const tb = b.createdAt?.toMillis?.() || 0;
+        return ta - tb;
+      });
+      renderPredictions(preds);
+      renderHomeMarginalia(preds);
+    });
+  }
+
+  function renderPredictions(preds) {
+    const feed = document.getElementById('predictions-feed');
+    const adminBar = document.getElementById('predictions-admin-bar');
+    const avatarStack = document.getElementById('predictions-avatar-stack');
+    const countLabel = document.getElementById('predictions-count-label');
+    if (!feed) return;
+
+    if (adminBar) adminBar.classList.toggle('hidden', !state.isAdmin);
+
+    // Count total expected members and how many have submitted
+    const totalMembers = Object.keys(state.members).length;
+    const submittedIds = new Set(preds.map(p => p.authorId).filter(Boolean));
+    // Use memberId linkage to check which member cards are covered
+    const submittedMemberIds = new Set(preds.map(p => p.memberId).filter(Boolean));
+    const submittedCount = submittedMemberIds.size;
+    const allSubmitted = totalMembers > 0 && submittedCount >= totalMembers;
+    const anyRevealed = preds.some(p => p.revealed);
+    const allRevealed = preds.length > 0 && preds.every(p => p.revealed);
+
+    // Update counter pill (visible to everyone)
+    const counterEl = document.getElementById('predictions-submission-counter');
+    if (counterEl) counterEl.textContent = `${submittedCount} of ${totalMembers} submitted`;
+
+    // Update count label in header
+    if (countLabel) {
+      countLabel.textContent = submittedCount === 0
+        ? 'No predictions yet'
+        : allRevealed
+          ? `${submittedCount} prediction${submittedCount===1?'':'s'} revealed`
+          : `${submittedCount} of ${totalMembers} submitted`;
+    }
+
+    // Update admin bar status + button state
+    const statusEl = document.getElementById('predictions-admin-status');
+    const revealBtn = document.getElementById('reveal-all-btn');
+    const hideBtn = document.getElementById('hide-all-btn');
+    if (statusEl) {
+      if (allRevealed) statusEl.textContent = 'All predictions are revealed.';
+      else if (allSubmitted) statusEl.textContent = '✓ All members submitted — ready to reveal!';
+      else statusEl.textContent = `Waiting for ${totalMembers - submittedCount} more member${totalMembers - submittedCount === 1 ? '' : 's'} to submit…`;
+    }
+    if (revealBtn) {
+      const canReveal = allSubmitted && !allRevealed;
+      revealBtn.disabled = !canReveal;
+      revealBtn.classList.toggle('opacity-50', !canReveal);
+      revealBtn.classList.toggle('cursor-not-allowed', !canReveal);
+      revealBtn.classList.toggle('hover:opacity-90', canReveal);
+      revealBtn.classList.toggle('active:scale-95', canReveal);
+      revealBtn.classList.toggle('hidden', allRevealed);
+    }
+    if (hideBtn) {
+      hideBtn.classList.toggle('hidden', !allRevealed);
+    }
+
+    // Update avatar stack — show initials of who has submitted
+    if (avatarStack) {
+      const unique = {};
+      preds.forEach(p => { if (p.authorId && !unique[p.authorId]) unique[p.authorId] = p; });
+      avatarStack.innerHTML = Object.values(unique).slice(0,6).map(p => {
+        const initials = (p.authorName||'?').slice(0,2).toUpperCase();
+        return `<div class="w-8 h-8 rounded-full border-2 border-surface bg-primary flex items-center justify-center" title="${escHtml(p.authorName||'')}">
+          <span class="text-on-primary font-bold" style="font-size:9px">${initials}</span>
+        </div>`;
+      }).join('');
+    }
+
+    if (preds.length === 0) {
+      feed.innerHTML = `<div class="text-center py-16 text-on-surface-variant font-body-md">
+        <span class="material-symbols-outlined text-4xl mb-3 block opacity-40">psychology_alt</span>
+        No predictions yet — be the first to cast one!
+      </div>`;
+      return;
+    }
+
+    feed.innerHTML = '';
+    preds.forEach(p => feed.appendChild(buildPredictionCard(p, allRevealed)));
+  }
+
+  function buildPredictionCard(p, allRevealed) {
+    const isOwn = state.currentUser?.uid === p.authorId;
+    const revealed = !!p.revealed && allRevealed;
+    const canSee = revealed || state.isAdmin;
+    const initials = (p.authorName||'?').slice(0,2).toUpperCase();
+    const timeAgo = formatTimeAgo(p.createdAt);
+
+    const card = document.createElement('div');
+    card.className = 'prediction-card bg-surface-bright border border-surface-container-highest rounded-xl p-6 marginalia-shadow transition-all hover:-translate-y-0.5 relative';
+    card.dataset.predId = p.id;
+
+    const avatarHtml = `<div class="w-full h-full rounded-full bg-primary flex items-center justify-center">
+      <span class="text-on-primary font-bold text-xs">${initials}</span>
+    </div>`;
+
+    card.innerHTML = `
+      <div class="flex items-start justify-between mb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full overflow-hidden bg-primary shrink-0">${avatarHtml}</div>
+          <div>
+            <h4 class="font-label-md text-on-surface">${escHtml(p.authorName || 'Member')}</h4>
+            <p class="font-body-md text-xs text-on-surface-variant">${timeAgo} • ${revealed ? 'Revealed' : 'Sealed'}</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          ${revealed
+            ? '<span class="material-symbols-outlined text-secondary text-lg" style="font-variation-settings:\'FILL\' 1" title="Revealed">verified</span>'
+            : '<span class="material-symbols-outlined text-outline-variant text-lg" title="Sealed">lock</span>'}
+          ${state.isAdmin ? `
+            <button onclick="deletePrediction('${p.id}')" title="Delete prediction"
+              class="w-8 h-8 rounded-full flex items-center justify-center bg-surface-container text-on-surface-variant hover:bg-error hover:text-white transition-colors">
+              <span class="material-symbols-outlined text-lg">delete</span>
+            </button>` : ''}
+        </div>
+      </div>
+
+      ${canSee
+        ? `<div class="bg-[#fef9e7] p-4 rounded-lg border-l-4 border-tertiary-fixed-dim italic font-body-md text-on-tertiary-fixed-variant leading-relaxed">
+            "${escHtml(p.text || '')}"
+           </div>`
+        : `<div class="bg-[#fef9e7] p-4 rounded-lg border border-dashed border-tertiary-fixed-dim flex items-center gap-3 text-on-surface-variant">
+            <span class="material-symbols-outlined text-outline text-xl shrink-0">lock</span>
+            <div>
+              <p class="font-label-md text-sm text-on-surface">Prediction sealed</p>
+              <p class="text-xs mt-0.5">${isOwn ? 'Your prediction is submitted and waiting for others.' : 'Waiting for all members to submit before reveal.'}</p>
+            </div>
+           </div>`
+      }`;
+
+    return card;
+  }
+
+  function renderHomeMarginalia(preds) {
+    const grid = document.getElementById('home-marginalia-grid');
+    if (!grid) return;
+
+    const totalMembers = Object.keys(state.members).length;
+    const submittedCount = new Set(preds.map(p => p.memberId).filter(Boolean)).size;
+    const allRevealed = preds.length > 0 && preds.every(p => p.revealed);
+    const recent = [...preds].reverse().slice(0, 3);
+    const rotations = ['-rotate-1', 'rotate-1', '-rotate-1'];
+
+    if (recent.length === 0) {
+      grid.innerHTML = `<div class="p-5 rounded-lg border border-surface-container-highest bg-[#fefcf0] text-center text-on-surface-variant text-sm font-body-md col-span-3 py-10 opacity-60">
+        <span class="material-symbols-outlined block text-3xl mb-2 opacity-40">edit_note</span>
+        No predictions yet — be the first!
+      </div>`;
+      return;
+    }
+
+    // Counter pill always shown above cards
+    const counterHtml = `<div class="md:col-span-3 flex items-center gap-3 mb-2">
+      <div class="px-3 py-1 rounded-full bg-surface-container border border-outline-variant font-label-md text-xs text-on-surface-variant">
+        ${submittedCount} of ${totalMembers} submitted
+      </div>
+      ${allRevealed ? '<span class="px-3 py-1 rounded-full bg-secondary-container text-secondary font-label-md text-xs">✓ Revealed</span>' : ''}
+    </div>`;
+
+    const cardsHtml = recent.map((p, i) => {
+      const name = escHtml(p.authorName || 'Member');
+      const initials = (p.authorName || '?').slice(0, 2).toUpperCase();
+      const rot = rotations[i] || '';
+      const hiddenClass = i === 2 ? 'hidden md:block' : '';
+      const isOwn = state.currentUser?.uid === p.authorId;
+      const canSeeText = allRevealed || state.isAdmin;
+
+      return `<div class="${hiddenClass} p-5 rounded-lg border border-surface-container-highest shadow-[2px_2px_0px_rgba(44,30,15,0.05)] transform ${rot} hover:rotate-0 transition-transform bg-[#fefcf0] cursor-pointer" onclick="navigate('predictions')">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0">
+            <span class="text-on-primary font-bold" style="font-size:8px">${initials}</span>
+          </div>
+          <span class="font-label-md text-xs flex-1">${name}</span>
+          ${allRevealed
+            ? '<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings:\'FILL\' 1">verified</span>'
+            : '<span class="material-symbols-outlined text-outline-variant text-sm">lock</span>'}
+        </div>
+        ${canSeeText
+          ? `<p class="font-body-md text-sm text-on-surface leading-relaxed italic">"${escHtml((p.text||'').slice(0,100))}${(p.text||'').length>100?'…':''}"</p>`
+          : `<div class="flex items-center gap-2 py-1">
+               <span class="material-symbols-outlined text-outline text-sm">lock</span>
+               <span class="text-xs text-on-surface-variant font-body-md">${isOwn ? 'Your prediction is sealed' : 'Sealed until everyone submits'}</span>
+             </div>`
+        }
+      </div>`;
+    }).join('');
+
+    grid.innerHTML = counterHtml + cardsHtml;
+  }
+
+  async function revealAllPredictions() {
+    if (!state.isAdmin) return;
+    const btn = document.getElementById('reveal-all-btn');
+    if (btn) { btn.innerHTML = '<span class="material-symbols-outlined text-lg">visibility</span>Revealing…'; btn.disabled = true; }
+    try {
+      const { writeBatch } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const snap = await getDocs(collection(db, 'predictions'));
+      const batch = writeBatch(db);
+      snap.forEach(d => batch.update(doc(db, 'predictions', d.id), { revealed: true }));
+      await batch.commit();
+      showSaveToast('🎉 All predictions revealed!');
+    } catch(e) { showSaveToast('Reveal failed'); console.error(e); }
+  }
+  window.revealAllPredictions = revealAllPredictions;
+
+  async function hideAllPredictions() {
+    if (!state.isAdmin) return;
+    const btn = document.getElementById('hide-all-btn');
+    if (btn) { btn.innerHTML = '<span class="material-symbols-outlined text-lg">visibility_off</span>Re-sealing…'; btn.disabled = true; }
+    try {
+      const { writeBatch } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const snap = await getDocs(collection(db, 'predictions'));
+      const batch = writeBatch(db);
+      snap.forEach(d => batch.update(doc(db, 'predictions', d.id), { revealed: false }));
+      await batch.commit();
+      showSaveToast('Predictions re-sealed');
+    } catch(e) { showSaveToast('Failed'); console.error(e); }
+  }
+  window.hideAllPredictions = hideAllPredictions;
+
+  async function deletePrediction(predId) {
+    if (!state.currentUser) return;
+    try {
+      const { deleteDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      await deleteDoc(doc(db, 'predictions', predId));
+      showSaveToast('Prediction removed');
+    } catch(e) { console.error(e); }
+  }
+  window.deletePrediction = deletePrediction;
+
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function formatTimeAgo(ts) {
+    if (!ts) return 'Just now';
+    const ms = ts.toMillis ? ts.toMillis() : Date.now();
+    const diff = Math.floor((Date.now() - ms) / 1000);
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
+    if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
+    return `${Math.floor(diff/86400)}d ago`;
+  }
+
+  // Also update predictions page admin bar when auth changes
+  // (handled by re-render via onSnapshot since state.isAdmin is checked in renderPredictions)
   let currentEditTarget = null;
 
   function openPhotoModal(editId) {
@@ -2518,6 +2719,7 @@ img,video{max-width:100%;height:auto}
     // Seed + start listeners
     await seedIfEmpty();
     startListeners();
+    startPredictionsListener();
 
     // Enter on password field
     document.getElementById('auth-password').addEventListener('keydown', e => {
