@@ -11,7 +11,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250724';
+  const APP_VERSION = '20250725';
   // Force clear any old localStorage version keys
   ['app_version','appVersion','version'].forEach(k => {
     if (localStorage.getItem(k) && localStorage.getItem(k) !== APP_VERSION) {
@@ -2991,29 +2991,39 @@ img,video{max-width:100%;height:auto}
     const file = input.files[0]; if (!file) return;
     showSaveToast('Uploading photo…');
     try {
-      // Read as data URL
-      const dataUrl = await new Promise(res => {
-        const reader = new FileReader();
-        reader.onload = e => res(e.target.result);
-        reader.readAsDataURL(file);
-      });
-      // Try Firebase Storage, fall back to base64
-      let photoUrl = dataUrl;
-      try {
-        const imgRef = storageRef(storage, `members/${memberId}_avatar.jpg`);
-        await uploadString(imgRef, dataUrl, 'data_url');
-        photoUrl = await getDownloadURL(imgRef);
-      } catch(e) { /* keep base64 if storage fails */ }
-      // Save to Firestore
-      await updateDoc(doc(db, 'members', memberId), { avatarUrl: photoUrl });
+      // Resize image to max 400x400 before storing to keep size small
+      const resized = await resizeImage(file, 400);
+      await updateDoc(doc(db, 'members', memberId), { avatarUrl: resized });
       showSaveToast('Photo updated! 🌺');
     } catch(e) {
-      console.error(e);
+      console.error('Photo upload error:', e);
       showSaveToast('Upload failed — please try again');
     }
     input.value = '';
   }
   window.handleMemberPhotoUpload = handleMemberPhotoUpload;
+
+  function resizeImage(file, maxSize) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let w = img.width, h = img.height;
+          if (w > h) { if (w > maxSize) { h = h * maxSize / w; w = maxSize; } }
+          else { if (h > maxSize) { w = w * maxSize / h; h = maxSize; } }
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.75));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
   let chapterEditMode = false;
   let checkpointEditMode = false;
 
