@@ -11,7 +11,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250723';
+  const APP_VERSION = '20250724';
   // Force clear any old localStorage version keys
   ['app_version','appVersion','version'].forEach(k => {
     if (localStorage.getItem(k) && localStorage.getItem(k) !== APP_VERSION) {
@@ -2007,6 +2007,15 @@ img,video{max-width:100%;height:auto}
     const avatarHtml = m.avatarUrl
       ? `<img data-editable="img" data-edit-id="member-${id}" src="${m.avatarUrl}" alt="${m.name||''}" class="w-full h-full object-cover"/>`
       : `<div class="w-full h-full flex items-center justify-center bg-primary"><span class="text-on-primary font-bold text-lg">${initials}</span></div>`;
+    const avatarClickable = canEdit
+      ? `onclick='uploadMemberPhoto("${id}")' title="Click to change photo" style="cursor:pointer"`
+      : '';
+    const cameraOverlay = canEdit
+      ? `<div class="absolute inset-0 rounded-full bg-black/30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity pointer-events-none">
+           <span class="material-symbols-outlined text-white text-xl">photo_camera</span>
+         </div>
+         <input type="file" id="avatar-input-${id}" accept="image/*" class="hidden" onchange='handleMemberPhotoUpload("${id}",this)'/>`
+      : '';
     wrap.innerHTML = `
       ${isAdmin ? `<div class="member-admin-controls absolute top-2 right-2 z-20 flex gap-1">
         <div class="relative">
@@ -2023,8 +2032,9 @@ img,video{max-width:100%;height:auto}
       </div>` : ''}
       <div class="p-6 flex flex-col gap-4">
         <div class="flex items-center gap-4">
-          <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-surface-container-high shrink-0">
+          <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-surface-container-high shrink-0 relative" ${avatarClickable}>
             ${avatarHtml}
+            ${cameraOverlay}
           </div>
           <div class="flex-1 min-w-0">
             <p class="member-name font-headline-md text-primary ${efAdmin}" data-field="name" data-id="${id}">${m.name||'New Member'}</p>
@@ -2970,7 +2980,40 @@ img,video{max-width:100%;height:auto}
       bar.classList.add('hidden');
     }
   }
-  // ── Chapter Overview inline editing ───────────────────────────────────
+  // ── Member photo upload ────────────────────────────────────────────────
+  function uploadMemberPhoto(memberId) {
+    const input = document.getElementById(`avatar-input-${memberId}`);
+    if (input) input.click();
+  }
+  window.uploadMemberPhoto = uploadMemberPhoto;
+
+  async function handleMemberPhotoUpload(memberId, input) {
+    const file = input.files[0]; if (!file) return;
+    showSaveToast('Uploading photo…');
+    try {
+      // Read as data URL
+      const dataUrl = await new Promise(res => {
+        const reader = new FileReader();
+        reader.onload = e => res(e.target.result);
+        reader.readAsDataURL(file);
+      });
+      // Try Firebase Storage, fall back to base64
+      let photoUrl = dataUrl;
+      try {
+        const imgRef = storageRef(storage, `members/${memberId}_avatar.jpg`);
+        await uploadString(imgRef, dataUrl, 'data_url');
+        photoUrl = await getDownloadURL(imgRef);
+      } catch(e) { /* keep base64 if storage fails */ }
+      // Save to Firestore
+      await updateDoc(doc(db, 'members', memberId), { avatarUrl: photoUrl });
+      showSaveToast('Photo updated! 🌺');
+    } catch(e) {
+      console.error(e);
+      showSaveToast('Upload failed — please try again');
+    }
+    input.value = '';
+  }
+  window.handleMemberPhotoUpload = handleMemberPhotoUpload;
   let chapterEditMode = false;
   let checkpointEditMode = false;
 
