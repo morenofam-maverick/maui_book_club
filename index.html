@@ -11,7 +11,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250725';
+  const APP_VERSION = '20250726';
   // Force clear any old localStorage version keys
   ['app_version','appVersion','version'].forEach(k => {
     if (localStorage.getItem(k) && localStorage.getItem(k) !== APP_VERSION) {
@@ -2031,12 +2031,12 @@ img,video{max-width:100%;height:auto}
         </button>
       </div>` : ''}
       <div class="p-6 flex flex-col gap-4">
-        <div class="flex items-center gap-4">
-          <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-surface-container-high shrink-0 relative" ${avatarClickable}>
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-surface-container-high shrink-0 relative" ${avatarClickable}>
             ${avatarHtml}
             ${cameraOverlay}
           </div>
-          <div class="flex-1 min-w-0">
+          <div class="text-center">
             <p class="member-name font-headline-md text-primary ${efAdmin}" data-field="name" data-id="${id}">${m.name||'New Member'}</p>
             <p class="member-role font-label-md text-secondary uppercase tracking-widest text-xs mt-1 ${efAdmin}" data-field="role" data-id="${id}">${m.role||'Member'}</p>
           </div>
