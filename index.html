@@ -11,7 +11,7 @@
 <!-- v20250610 -->
 <script>
   // Force fresh load if cached version is outdated
-  const APP_VERSION = '20250726';
+  const APP_VERSION = '20250727';
   // Force clear any old localStorage version keys
   ['app_version','appVersion','version'].forEach(k => {
     if (localStorage.getItem(k) && localStorage.getItem(k) !== APP_VERSION) {
@@ -2870,12 +2870,8 @@ img,video{max-width:100%;height:auto}
   function renderProgressMarginalia(allPreds) {
     const section = document.getElementById('progress-marginalia-section');
     if (!section) return;
-    // Show up to 3 most recent revealed predictions as marginalia notes
-    const revealed = allPreds.filter(p => p.revealed && p.text).reverse().slice(0, 3);
-    if (revealed.length === 0) {
-      section.innerHTML = '';
-      return;
-    }
+    const revealed = allPreds.filter(p => p.revealed && (p.text || p.photoUrl)).reverse().slice(0, 3);
+    if (revealed.length === 0) { section.innerHTML = ''; return; }
     const rotations = ['-rotate-1', 'rotate-1', '-rotate-1'];
     section.innerHTML = `
       <h3 class="font-headline-md text-on-surface mb-6">Latest Predictions</h3>
@@ -2883,15 +2879,18 @@ img,video{max-width:100%;height:auto}
         ${revealed.map((p, i) => {
           const initials = (p.authorName||'?').slice(0,2).toUpperCase();
           const timeAgo = formatTimeAgo(p.createdAt);
+          const contentHtml = p.photoUrl
+            ? `<img src="${escHtml(p.photoUrl)}" class="w-full rounded-lg object-contain max-h-40 mt-2" alt="Prediction"/>`
+            : `<p class="font-body-md text-sm text-on-surface leading-relaxed italic mt-2">"${escHtml((p.text||'').slice(0,120))}${(p.text||'').length>120?'…':''}"</p>`;
           return `<div class="p-5 rounded-lg border border-surface-container-highest shadow-[2px_2px_0px_rgba(44,30,15,0.05)] transform ${rotations[i]||''} hover:rotate-0 transition-transform bg-[#fefcf0] relative">
-            <div class="flex items-center gap-2 mb-3">
+            <div class="flex items-center gap-2 mb-1">
               <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0">
                 <span class="text-on-primary font-bold" style="font-size:8px">${initials}</span>
               </div>
               <span class="font-label-md text-xs flex-1">${escHtml(p.authorName||'Member')}</span>
               <span class="text-[10px] text-outline">${timeAgo}</span>
             </div>
-            <p class="font-body-md text-sm text-on-surface leading-relaxed italic">"${escHtml((p.text||'').slice(0,120))}${(p.text||'').length>120?'…':''}"</p>
+            ${contentHtml}
             <div class="absolute -top-3 right-6 w-4 h-8 bg-secondary shadow-sm rounded-b-sm"></div>
           </div>`;
         }).join('')}
